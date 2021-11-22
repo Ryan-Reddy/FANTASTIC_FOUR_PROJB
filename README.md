@@ -1,6 +1,13 @@
-#Project Steam Fantastic Four
+#Project Steam Fantastic Four+1
 
 Een project om steam mogelijkheden uit te breiden door middel van get tracken van vrienden.
+
+#teamleden
+* Jeffrey
+* Ryan
+* Tuur
+* Soufian
+* Léon
 
 -----------------------------------------------------------------------------------------------------------------------
 
