@@ -3,4 +3,5 @@
 Een project om steam mogelijkheden uit te breiden door middel van get tracken van vrienden.
 
 -----------------------------------------------------------------------------------------------------------------------
-De 'steam.json' bevat 541302 regels.
+steam.json contains:  541302  records,
+divided over  17348935  lines.
