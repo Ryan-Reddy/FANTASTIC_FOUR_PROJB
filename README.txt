@@ -15,6 +15,7 @@ pw team_repo = be6q4usriamzyph4bnye wy4qkqw2tew7345bsg5ey3wqnkbxuira
 -----------------------------------------------------------------------------------------------------------------------
 Packages used:
 * tkinter(standard python3)
+* JSON(standard python3)
 
 
 
