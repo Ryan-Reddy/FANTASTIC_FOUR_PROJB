@@ -12,6 +12,7 @@ def startup_message():
     steam = stream.read()
     print('divided over ',len(steam), ' lines.')
 
+
 def GUI_function():
     root = Tk()
     root.geometry('1024x720')
