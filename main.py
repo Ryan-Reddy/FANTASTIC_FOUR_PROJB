@@ -1,6 +1,5 @@
 # Imported Packages:
 import json
-from tkinter import *
 
 # Functions:
 def startup_message():
