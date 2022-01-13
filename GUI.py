@@ -8,9 +8,10 @@ from steamFunctions import *
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
-back_color = '#393D47'
+back_color = 'black'
 font_color = 'white'
 font_choice =('Helvetica', 12)
+transparency = 0.55
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -24,7 +25,7 @@ root.title('Steam App Fantastic Five')
 root['bg'] = back_color
 # Wacht totdat de pagina zichtbaar is, en maakt dan pagina doorzichtig 90%
 root.wait_visibility(root)
-root.wm_attributes('-alpha', 0.8)
+root.wm_attributes('-alpha', transparency)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -41,7 +42,7 @@ def openNewWindow_readme():
     # Achtergrond kleur van de readme
     newWindow['bg'] = back_color
     # De data van de README.MD
-    Label(newWindow, fg=font_color, bg=back_color, text=get_readme()).pack()
+    Label(newWindow, font=font_choice, fg=font_color, bg=back_color, text=get_readme()).pack()
     B3 = Button(newWindow, text="Back ", command=newWindow.destroy).pack()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
