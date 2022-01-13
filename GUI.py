@@ -17,7 +17,7 @@ font_choice =('Helvetica', 12)
 # Mainscreen GUI settings:
 root = Tk()
 # Raam formaat:
-root.geometry('1024x720')
+root.geometry('1024x420')
 # title naam:
 root.title('Steam App Fantastic Five')
 # Achtergrond kleur:
