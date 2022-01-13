@@ -1,24 +1,27 @@
 #Project Steam Fantastic Four
 
-Een project om steam mogelijkheden uit te breiden door middel van get tracken van vrienden.
+#Omschrijving Project
+Een software module met GUI, die de huidige games in steam weer kan geven en sorteren.
+Eventueel met een sociaal netwerk capaciteit.
 
 #Teamleden
-* Jeffrey
-* Ryan
-* Tuur
-* Soufiane
-* Léon
+* Jeffrey 1789404 (Vizility)
+* Ryan 1818885 (Ryan Reddy, klugook)
+* Tuur 1780653
+* Souf 1785097
+* Léon 1809101 (Phj1969)
 
 -----------------------------------------------------------------------------------------------------------------------
 
 DEV_AZURE:
-user: <unchangable> (hbo-ict//)
-pw team_repo = be6q4usriamzyph4bnyewy4qkqw2tew7345bsg5ey3wqnkbxuira
+https://dev.azure.com/HU-HBO-ICT/_git/2021-Prop-B-KlasO-T3
+
+
 
 -----------------------------------------------------------------------------------------------------------------------
 Packages used:
 * tkinter(standard python3)
 * JSON(standard python3)
-
+* steamFunctions
 
 

@@ -31,5 +31,10 @@ L6 = Label(root, text=list_first_game_developers(), background='yellow', foregro
 # Knop om programma te eindigen
 B1 = Button(root, text="Quit Steam Dashboard", command=root.destroy).grid(column=1, row=4)
 
+# Knop voor about
+# TODO edit command:
+B2 = Button(root, text="About", command=root.destroy).grid(column=2, row=4)
+
+
 # Run het programma
 root.mainloop()
