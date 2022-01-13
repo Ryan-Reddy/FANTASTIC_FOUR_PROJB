@@ -68,24 +68,41 @@ B2 = Button(root, text="About", command=openNewWindow_readme).grid(column=2, row
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-# Treeview (tabel)
-treeview = ttk.Treeview(root, show="headings", columns=("Name","2","3","4","5","6","7"))
-treeview.heading('#1', text="Name")
+# Maakt een raamwerk in de root aan voor de tabel
+separator = PanedWindow(root,bd=0,bg=back_color, sashwidth=2)
+separator.grid(column=2, row=5)
+# rechter onderhoekje:
+_frame = Frame(root,bg="#383838")
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Treeview columns instellen
 treeview = ttk.Treeview(root, show="headings", columns=("Name", "Developer", "Platforms"))
 treeview.heading("#1", text="Name")
-treeview.heading("#2", text="Ryan")
-treeview.heading("#3", text="Marks")
+treeview.heading("#2", text="Developer")
+treeview.heading("#3", text="Platforms")
 treeview.grid()
 
 # Plaatst data van data_import(main) in treeview tabel
 for row in data_import:
     treeview.insert("", "end", values=(row["name"], row["developer"], row["platforms"]))
 
+ysb = ttk.Scrollbar(orient=VERTICAL, command= treeview.yview)
+xsb = ttk.Scrollbar(orient=HORIZONTAL, command= treeview.xview)
+treeview['yscroll'] = ysb.set
+treeview['xscroll'] = xsb.set
 
+ttk.Style().configure(treeview, background="#383838",foreground="white")
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
+ysb.grid(in_=_frame, row=0, column=1, sticky=NS)
+xsb.grid(in_=_frame, row=1, column=0, sticky=EW)
+_frame.rowconfigure(0, weight=1)
+_frame.columnconfigure(0, weight=1)
+
+separator.add(_frame)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 # Run het programma
