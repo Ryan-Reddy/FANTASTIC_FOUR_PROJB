@@ -36,11 +36,11 @@ def open_new_window_readme():
     # Open as a new window
     new_window = Toplevel(root)
 
-    # sets the title
+    # sets the title readme
     new_window.title("READ ME PLEASE")
 
-    # sets the geometry of toplevel
-    new_window.geometry('1024x820')
+    # sets the geometry of readme
+    new_window.geometry('1024x768')
 
     # Achtergrond kleur van de readme
     new_window['bg'] = back_color
