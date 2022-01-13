@@ -1,5 +1,6 @@
 # Imported Packages:
 import json
+import glob
 
 # Functions:
 def startup_message():
@@ -15,6 +16,29 @@ def startup_message():
     stream = open('steam.json', 'r')
     steam = stream.read()
     print('divided over ',len(steam), ' lines.')
+
+
+def get_readme():
+    """Get the README from the current directory.
+
+    **Args:**
+        None
+
+    **Returns:**
+        str:    String is empty if no README file exists.
+    """
+    all_readmes = sorted(glob.glob("README*"))
+    if len(all_readmes) > 1:
+        warnings.warn(
+            "There seems to be more than one README in this directory."
+            "Choosing the first in lexicographic order."
+        )
+    if len(all_readmes) > 0:
+        return open(all_readmes[0], 'r').read()
+
+    warnings.warn("There doesn't seem to be a README in this directory.")
+    return ""
+
 
 def get_gamename(steamy):
     return steamy.get('name')
