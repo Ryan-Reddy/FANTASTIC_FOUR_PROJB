@@ -1,15 +1,17 @@
 """Gui van de applicatie"""
 
-# import functionaliteit van main.py en packages
 from main import *
 from tkinter import *
+import tkinter.ttk as ttk
 from steamFunctions import *
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
 back_color = '#393D47'
 font_color = 'white'
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Mainscreen GUI settings:
 root = Tk()
@@ -23,6 +25,7 @@ root['bg'] = back_color
 root.wait_visibility(root)
 root.wm_attributes('-alpha', 0.9)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Readme scherm GUI:
 def openNewWindow_readme():
@@ -40,6 +43,7 @@ def openNewWindow_readme():
     Label(newWindow, fg=font_color, bg=back_color, text=get_readme()).pack()
     B3 = Button(newWindow, text="Back ", command=newWindow.destroy).pack()
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # De labels die je ziet op scherm
 # Label van eerste spel in lijst:
@@ -54,11 +58,34 @@ L4 = Label(root, text=average_game_price(), background='yellow', foreground='bla
 L5 = Label(root, text="First game developer:", background=back_color, foreground=font_color).grid(column=1, row=3)
 L6 = Label(root, text=list_first_game_developers(), background='yellow', foreground='black').grid(column=2, row=3)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # Knop om programma te eindigen
 B1 = Button(root, text="Quit Steam Dashboard", command=root.destroy).grid(column=1, row=4)
 
 # Knop voor about
 B2 = Button(root, text="About", command=openNewWindow_readme).grid(column=2, row=4)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# Treeview (tabel)
+treeview = ttk.Treeview(root, show="headings", columns=("Name","2","3","4","5","6","7"))
+treeview.heading('#1', text="Name")
+
+# Treeview columns instellen
+treeview = ttk.Treeview(root, show="headings", columns=("Name", "Developer", "Platforms"))
+treeview.heading("#1", text="Name")
+treeview.heading("#2", text="Ryan")
+treeview.heading("#3", text="Marks")
+treeview.grid()
+
+# Plaatst data van data_import(main) in treeview tabel
+for row in data_import:
+    treeview.insert("", "end", values=(row["name"], row["developer"], row["platforms"]))
+
+
+
 
 
 # Run het programma

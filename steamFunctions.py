@@ -51,4 +51,5 @@ def list_first_game_developers():
     # Lees de developer(s) uit het bestand in van de eerste game en sla deze op, geeft dit terug als resultaat.
     x = data[0]
     developers = x["developer"]
+    print(x)
     return developers
