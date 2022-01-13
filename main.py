@@ -2,6 +2,7 @@
 import json
 import glob
 
+
 # Functions:
 def startup_message():
     print('Starting up programme...'.format())
@@ -15,30 +16,17 @@ def startup_message():
     # read and count lines:
     stream = open('steam.json', 'r')
     steam = stream.read()
-    print('divided over ',len(steam), ' lines.')
+    print('divided over ', len(steam), ' lines.')
 
 
 def get_readme():
-    """Get the README from the current directory.
+    all_readmes = glob.glob("README.md")
+    # return first readme in list
+    return open(all_readmes[0], 'r', encoding='utf-8').read()
 
-    **Args:**
-        None
 
-    **Returns:**
-        str:    String is empty if no README file exists.
-    """
-    all_readmes = sorted(glob.glob("README*"))
-    if len(all_readmes) > 1:
-        warnings.warn(
-            "There seems to be more than one README in this directory."
-            "Choosing the first in lexicographic order."
-        )
-    if len(all_readmes) > 0:
-        return open(all_readmes[0], 'r').read()
-
-    warnings.warn("There doesn't seem to be a README in this directory.")
-    return ""
-
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Mainscreen functions:
 
 def get_gamename(steamy):
     return steamy.get('name')
@@ -62,9 +50,8 @@ print('first game in list', data_import[0]['name'])
 # reverse sort by gamename, print top, then resort list (normal)
 data_import.sort(key=get_gamename, reverse=True)
 print('last game in list', data_import[0]['name'])
-#
+# reverse to normal
 data_import.sort(key=get_gamename)
-
 
 # Main Program:
 startup_message()

@@ -10,15 +10,17 @@ from steamFunctions import *
 # Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
 back_color = 'black'
 font_color = 'white'
-font_choice =('Helvetica', 12)
-transparency = 0.55
+font_choice = ('Helvetica', 12)
+transparency = 0.75
+# main_GUI_size
+raam_formaat = '1024x420'
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Mainscreen GUI settings:
 root = Tk()
 # Raam formaat:
-root.geometry('1024x420')
+root.geometry(raam_formaat)
 # title naam:
 root.title('Steam App Fantastic Five')
 # Achtergrond kleur:
@@ -27,56 +29,76 @@ root['bg'] = back_color
 root.wait_visibility(root)
 root.wm_attributes('-alpha', transparency)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Readme scherm GUI:
-def openNewWindow_readme():
-    # Toplevel object which will
-    # be treated as a new window
-    newWindow = Toplevel(root)
-    # sets the title of the
-    # Toplevel widget
-    newWindow.title("New Window")
+def open_new_window_readme():
+    # Open as a new window
+    new_window = Toplevel(root)
+
+    # sets the title
+    new_window.title("READ ME PLEASE")
+
     # sets the geometry of toplevel
-    newWindow.geometry('1024x720')
+    new_window.geometry('1024x820')
+
     # Achtergrond kleur van de readme
-    newWindow['bg'] = back_color
+    new_window['bg'] = back_color
+    new_window.wait_visibility(new_window)
+    new_window.wm_attributes('-alpha', .99)
+
     # De data van de README.MD
-    Label(newWindow, font=font_choice, fg=font_color, bg=back_color, text=get_readme()).pack()
-    B3 = Button(newWindow, text="Back ", command=newWindow.destroy).pack()
+    Label(new_window, font='TkFixedFont', fg=font_color, bg=back_color,
+          text=get_readme(), anchor=W, justify=LEFT).grid(row=0)
+
+    # knop sluit de newwindow af
+    Button(new_window, text="Back", command=new_window.destroy).grid(row=1)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # De labels die je ziet op scherm
+
 # Label van eerste spel in lijst:
-L1 = Label(root, text="First game in list:", font=font_choice, background=back_color, foreground=font_color).grid(column=1, row=1)
-L2 = Label(root, text=first_game_in_json, font=font_choice, background='yellow', foreground='black').grid(column=2, row=1)
+Label(root, text="First game in list:", font=font_choice, background=back_color,
+      foreground=font_color).grid(column=1, row=1)
+Label(root, text=first_game_in_json, font=font_choice, background='yellow',
+      foreground='black').grid(column=2, row=1)
 
 # label van gemiddelde prijs van de games:
-L3 = Label(root, text="Average game price:", font=font_choice, background=back_color, foreground=font_color).grid(column=1, row=2)
-L4 = Label(root, text=average_game_price(), font=font_choice, background='yellow', foreground='black').grid(column=2, row=2)
+Label(root, text="Average game price:", font=font_choice, background=back_color,
+      foreground=font_color).grid(column=1, row=2)
+Label(root, text=average_game_price(), font=font_choice, background='yellow',
+      foreground='black').grid(column=2, row=2)
 
 # Label van eerste game dev in de lijst:
-L5 = Label(root, text="First game developer:",font=font_choice, background=back_color, foreground=font_color).grid(column=1, row=3)
-L6 = Label(root, text=list_first_game_developers(), font=font_choice, background='yellow', foreground='black').grid(column=2, row=3)
-
+Label(root, text="First game developer:", font=font_choice, background=back_color,
+      foreground=font_color).grid(column=1, row=3)
+Label(root, text=list_first_game_developers(), font=font_choice, background='yellow',
+      foreground='black').grid(column=2, row=3)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Knop om programma te eindigen
-B1 = Button(root, text="Quit Steam Dashboard", font=font_choice, background='red', foreground=font_color,
-            command=root.destroy).grid(column=1, row=4)
 
-# Knop voor about
-B2 = Button(root, text="About", font=font_choice, background='gray', foreground=font_color,
-            command=openNewWindow_readme).grid(column=2, row=4)
+# Knoppen in mainscreen
+# Knop om hoofdprogramma te eindigen
+Button(root, text="Quit Steam Dashboard", font=font_choice, background='red', foreground=font_color,
+       command=root.destroy).grid(column=1, row=4)
+
+# Knop voor about(readme.md) in een apart scherm
+Button(root, text="About", font=font_choice, background='gray', foreground=font_color,
+       command=open_new_window_readme).grid(column=2, row=4)
+
+# knop om te sorteren
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Maakt een raamwerk in de root aan voor de tabel
-separator = PanedWindow(root,bd=0,bg=back_color, sashwidth=2)
+separator = PanedWindow(root, bd=0, bg=back_color, sashwidth=2)
 separator.grid(column=2, row=5)
 # rechter onderhoekje:
-_frame = Frame(root,background=back_color, relief='ridge')
+_frame = Frame(root, background=back_color, relief='ridge')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Geeft aan welke data uit de dictionairy mee te nemen
-treeview = ttk.Treeview(root, show="headings", columns=("Name", "Developer", "Platforms", "Genre"), style="TVmystyle.Treeview")
+treeview = ttk.Treeview(root, show="headings",
+                        columns=("Name", "Developer", "Platforms", "Genre"))
 
 # Voegt Kolomkoppen toe
 treeview.heading("#1", text="Name")
@@ -89,8 +111,8 @@ for row in data_import:
     treeview.insert("", "end", values=(row["name"], row["developer"], row["platforms"], row["genres"]))
 
 # SCROLLBAR van tabel
-ysb = ttk.Scrollbar(orient=VERTICAL, command= treeview.yview)
-xsb = ttk.Scrollbar(orient=HORIZONTAL, command= treeview.xview)
+ysb = ttk.Scrollbar(orient=VERTICAL, command=treeview.yview)
+xsb = ttk.Scrollbar(orient=HORIZONTAL, command=treeview.xview)
 treeview['yscroll'] = ysb.set
 treeview['xscroll'] = xsb.set
 separator.add(_frame)
@@ -107,7 +129,6 @@ ysb.grid(in_=_frame, row=0, column=1, sticky=NS)
 xsb.grid(in_=_frame, row=1, column=0, sticky=EW)
 _frame.rowconfigure(0, weight=1)
 _frame.columnconfigure(0, weight=1)
-
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
