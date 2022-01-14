@@ -211,6 +211,6 @@ splashscreen.geometry("970x310+471+387")
 splashscreen['bg'] = 'red'
 
 
-splashscreen.after(10000, splashscreen.destroy)
+splashscreen.after(5000, splashscreen.destroy)
 splashscreen.mainloop()
 root.mainloop()
