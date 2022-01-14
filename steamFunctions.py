@@ -4,7 +4,7 @@ def average_game_price():
     import json
 
     # Het json bestand uitlezen en opslaan als variable.
-    source = open("steam.json")
+    source = open("steam_small.json")
     data = json.load(source)
 
     # Lees elk spel uit het bestand in en sla het aantal spellen en de totale prijs op.
@@ -27,7 +27,7 @@ def list_game_developers():
     import json
 
     # Het json bestand uitlezen en opslaan als variable.
-    source = open("steam.json")
+    source = open("steam_small.json")
     data = json.load(source)
 
     # Lees alle developers uit het bestand in en sla de namen op, geeft deze namen terug als resultaat.
@@ -45,7 +45,7 @@ def list_first_game_developers():
     import json
 
     # Het json bestand uitlezen en opslaan als variable.
-    source = open("steam.json")
+    source = open("steam_small.json")
     data = json.load(source)
 
     # Lees de developer(s) uit het bestand in van de eerste game en sla deze op, geeft dit terug als resultaat.
