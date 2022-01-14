@@ -69,10 +69,12 @@
 
 
                                         FANTASTIC FIVE is currently looking for
+
                                    ÜÛÛÜ                                         ÜÛÛÜ
                                   ²ÛÛ ßß  Ü    nothing but competition!     Ü  ßß ÛÛ²
                                    ²ÛÛÜ Ü²ß²                               ²ß²Ü ÜÛÛ²
                                  ÜÛÛÛÛÛÛ²ß   Greetings to TIJMEN & JEROEN    ß²ÛÛÛÛÛÛÜ
+
                                 ²ÛÛß  ßÛÛÜÜ ÜÜ                           ÜÜ ÜÜÛÛß  ßÛÛ²
                                 ÛÛ   Ü ßÛ²ÛÛ²ßÛÜÛßÛÜÜ   Ü  Ü  Ü   ÜÜÛßÛÜÛß²ÛÛ²Ûß Ü   ÛÛ
                                 ßÛÛÜÜß Ü Û Û Ü ßÜ  ßß²ÛÜ Û ² Û ÜÛ²ßß  Üß Ü Û Û Ü ßÜÜÛÛß
