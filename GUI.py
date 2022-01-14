@@ -105,7 +105,6 @@ separator = PanedWindow(root, bd=0, bg=back_color, sashwidth=2)
 separator.grid(column=1, row=5)
 # rechter onderhoekje:
 _frame = Frame(root, background=back_color, relief='ridge')
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Stijlen van de Tabel treeview:
 style = ttk.Style()
@@ -137,8 +136,8 @@ treeview['yscroll'] = ysb.set
 treeview['xscroll'] = xsb.set
 separator.add(_frame)
 # attempt to color scrollbar
-style.configure("Vertical.TScrollbar", background="black", bordercolor="black", arrowcolor="white")
-style.configure("Horizontal.TScrollbar", background="black", bordercolor="black", arrowcolor="white")
+style.configure("Vertical.Scrollbar", background="black", bordercolor="black", arrowcolor="white")
+style.configure("Horizontal.Scrollbar", background="black", bordercolor="black", arrowcolor="white")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # sorteerd columns naar klik op de headers TODO implementeer slimmere algoritmes
