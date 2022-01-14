@@ -10,6 +10,7 @@ img = Image.open(image)
 ph = ImageTk.PhotoImage(img)
 img.show()
 
+
 import sys
 print(sys.executable)
 

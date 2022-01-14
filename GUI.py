@@ -198,31 +198,29 @@ Flabel.after(1, moving_ascii)
 # Run het programma splashscreen eerst
 splashscreen = Tk()
 
-# change window attributes
-
-# Removes TITELBALK
-splashscreen.overrideredirect(1)
-# topmost screen
-splashscreen.call('wm', 'attributes', '.', '-topmost', 'true')
-# maat van screen + positie (steam-logo-large.jpg = 960x307)
-splashscreen.geometry("970x310+471+387")
-
-# Achtergrond kleur van de readme (inclusief transparency)
-splashscreen['bg'] = 'red'
+# # change window attributes
+#
+# # Removes TITELBALK
+# splashscreen.overrideredirect(1)
+# # topmost screen
+# splashscreen.call('wm', 'attributes', '.', '-topmost', 'true')
+# # maat van screen + positie (steam-logo-large.jpg = 960x307)
+# splashscreen.geometry("970x310+471+387")
+#
+# # Achtergrond kleur van de readme (inclusief transparency)
+# splashscreen['bg'] = 'red'
 
 
 from PIL import Image, ImageTk
-#
-# window = Tk()
-#
-# image = r"C:\Users\RyRy\PycharmProjects\FANTASTIC_FOUR_PROJB\steamlogolarge.jpg"
-#
-# img = Image.open(image)
-# ph = ImageTk.PhotoImage(img)
-# img.show()
-#
-# l1 = Label(splashscreen, image=ph).pack()
-#
+
+image = r"C:\Users\RyRy\PycharmProjects\FANTASTIC_FOUR_PROJB\steamlogolarge.jpg"
+
+img = Image.open(image)
+ph = ImageTk.PhotoImage(img)
+img.show()
+
+l1 = Label(splashscreen, image=ph).pack()
+
 
 
 splashscreen.after(5000, splashscreen.destroy)
