@@ -20,7 +20,6 @@ raam_formaat = ""
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 # Mainscreen GUI settings:
 root = Tk()
 # Raam formaat:
@@ -32,7 +31,6 @@ root['bg'] = back_color
 # Wacht totdat de pagina zichtbaar is, en maakt dan pagina doorzichtig 90%
 root.wait_visibility(root)
 root.wm_attributes('-alpha', transparency)
-
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Readme scherm GUI:
@@ -90,7 +88,6 @@ Label(root, text="First game developer:", font=font_choice, background=back_colo
 Label(root, text=list_first_game_developers(), font=font_choice, background='yellow',
       foreground='black').grid(column=3, row=3)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 # Knoppen in mainscreen
 # Knop om hoofdprogramma te eindigen
 Button(root, text="Quit Steam Dashboard", font=font_choice, background='red', foreground=font_color,
@@ -99,8 +96,8 @@ Button(root, text="Quit Steam Dashboard", font=font_choice, background='red', fo
 # Knop voor about(readme.md) in een apart scherm ~ start ook bij opstarten programma, vandaar  "" OR ""(self)
 Button(root, text="About", font=font_choice, background='gray', foreground=font_color,
        command=open_new_window_readme() or open_new_window_readme).grid(column=3, row=6)
-
 # knop om te sorteren
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Maakt een raamwerk in de root aan voor de tabel
@@ -114,11 +111,11 @@ _frame = Frame(root, background=back_color, relief='ridge')
 treeview = ttk.Treeview(root, show="headings",
                         columns=("Name", "Developer", "Platforms", "Genre"))
 
-# Voegt Kolomkoppen toe
-treeview.heading("#1", text="Name")
-treeview.heading("#2", text="Developer")
-treeview.heading("#3", text="Platforms")
-treeview.heading("#4", text="Genre")
+# Voegt Kolomkoppen toe, command = sorteerfunctie
+treeview.heading("#1", text="Name", command=lambda c="#1": sortby(treeview, c, 0))
+treeview.heading("#2", text="Developer", command=lambda c="#2": sortby(treeview, c, 0))
+treeview.heading("#3", text="Platforms", command=lambda c="#3": sortby(treeview, c, 0))
+treeview.heading("#4", text="Genre", command=lambda c="#4": sortby(treeview, c, 0))
 
 # Plaatst data van data_import(main) in treeview tabel
 for row in data_import:
@@ -131,9 +128,24 @@ treeview['yscroll'] = ysb.set
 treeview['xscroll'] = xsb.set
 separator.add(_frame)
 
-# Geeft de stijl van de tabel aan
-ttk.Style().configure("treeview", font=font_choice, background=back_color, foreground=font_color, fieldbackground="red")
+# sorteerd columns naar klik op de headers TODO implementeer slimmere algoritmes
+def sortby(tree, col, descending):
+    # grab values to sort
+    data = [(tree.set(child, col), child)
+            for child in tree.get_children('')]
+    data.sort(reverse=descending)
+    for ix, item in enumerate(data):
+        tree.move(item[1], '', ix)
+    # switch the heading so it will sort in the opposite direction
+    tree.heading(col, command=lambda col=col: sortby(tree, col, \
+                                                     int(not descending)))
 
+
+# Geeft de stijl van de headers van tabel aan
+style = ttk.Style()
+style.configure(".", font=('Helvetica', 8), foreground="red")
+style.configure("Treeview", foreground='red')
+style.configure("Treeview.Heading", foreground='green') #<----
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Geeft aan waar de tabel in het grid moet
 treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
