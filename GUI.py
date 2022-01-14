@@ -14,7 +14,7 @@ font_color = 'white'
 font_choice_logo = ('FF Din OT', 14, 'bold')
 font_choice = ('Arial'or'Helvetica', 12)
 # transparency mainscreen
-transparency = 0.75
+transparency = 0.8
 # main_GUI_size = "" zodat deze aanpast aan de widgets die ik erin probeer te passen
 raam_formaat = ""
 
@@ -107,19 +107,28 @@ separator.grid(column=1, row=5)
 _frame = Frame(root, background=back_color, relief='ridge')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Stijlen van de Tabel treeview:
+style = ttk.Style()
+style.configure("Treeview.Scrollbar", foreground='red', background=back_color)
+style.configure("Treeview.Heading", foreground='green', background=back_color) #<----
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Geeft aan welke data uit de dictionairy mee te nemen
 treeview = ttk.Treeview(root, show="headings",
-                        columns=("Name", "Developer", "Platforms", "Genre"))
+                        columns=("Name", "Developer", "Platforms", "Genre"), style="Treeview.Heading")
 
-# Voegt Kolomkoppen toe, command = sorteerfunctie
+# Voegt Kolomkoppen toe, command = sorteerfunctie(sortby)
 treeview.heading("#1", text="Name", command=lambda c="#1": sortby(treeview, c, 0))
 treeview.heading("#2", text="Developer", command=lambda c="#2": sortby(treeview, c, 0))
 treeview.heading("#3", text="Platforms", command=lambda c="#3": sortby(treeview, c, 0))
 treeview.heading("#4", text="Genre", command=lambda c="#4": sortby(treeview, c, 0))
 
 # Plaatst data van data_import(main) in treeview tabel
+# Plaatst ook tag = 'body' om later stijl toe te voegen
 for row in data_import:
-    treeview.insert("", "end", values=(row["name"], row["developer"], row["platforms"], row["genres"]))
+    treeview.insert("", "end", values=(row["name"], row["developer"], row["platforms"], row["genres"]), tags = 'body')
+# stijlchoice body text
+treeview.tag_configure('body', background=back_color)
+
 
 # SCROLLBAR van tabel
 ysb = ttk.Scrollbar(orient=VERTICAL, command=treeview.yview)
@@ -139,13 +148,6 @@ def sortby(tree, col, descending):
     # switch the heading so it will sort in the opposite direction
     tree.heading(col, command=lambda col=col: sortby(tree, col, \
                                                      int(not descending)))
-
-
-# Geeft de stijl van de headers van tabel aan
-style = ttk.Style()
-style.configure(".", font=('Helvetica', 8), foreground="red")
-style.configure("Treeview", foreground='red')
-style.configure("Treeview.Heading", foreground='green') #<----
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Geeft aan waar de tabel in het grid moet
 treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
