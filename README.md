@@ -44,9 +44,10 @@
 
                     * Jeffrey 1789404 (Vizility)
                     * Ryan 1818885 (Ryan Reddy, klugook)
-                    * Tuur 1780653
+                    * Tuur 1780653 (Neex219)
                     * Souf 1785097
                     * Léon 1809101 (Phj1969)
+
                     
                       ÜÛÛÜ                                                                   ÜÛÛÜ
                      ²ßßÛÛÛ²   ÜÜ      Ûßß ÛßÛ ÛßÛ Û Û ÛßÛ   ÛßÛ ÛßÛ ßÛß Ûßß Ûßß      ÜÜ   ²ÛÛÛßß²
@@ -56,7 +57,9 @@
                        Ûß ÜÛÛßßß      ßßÛÛÛ²  ÛÛÜ  ßß²ÛÜ ÛÛ ÛÛ ÜÛ²ßß  ÜÛÛ  ²ÛÛÛßß      ßßßÛÛÜ ßÛ
                         ß ÛÛÜ  Ü      Ü ÜÛß    ßÛß     ßÛÛß ßÛÛß     ßÛß    ßÛÜ Ü      Ü  ÜÛÛ ß
                           ßÛÛÛß        ßß         ß                 ß         ßß        ßÛÛÛß
-                                        Fantastic Five is currently looking for
+
+
+                                        FANTASTIC FIVE is currently looking for
                                    ÜÛÛÜ                                         ÜÛÛÜ
                                   ²ÛÛ ßß  Ü    nothing but competition!     Ü  ßß ÛÛ²
                                    ²ÛÛÜ Ü²ß²                               ²ß²Ü ÜÛÛ²

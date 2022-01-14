@@ -15,6 +15,7 @@ transparency = 0.75
 # main_GUI_size
 raam_formaat = '1024x420'
 
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Mainscreen GUI settings:
@@ -40,7 +41,10 @@ def open_new_window_readme():
     new_window.title("READ ME PLEASE")
 
     # sets the geometry of readme
-    new_window.geometry('1024x768')
+    # new_window.geometry('1024x768')
+    # new_window.resizable(False, False)
+
+
 
     # Achtergrond kleur van de readme
     new_window['bg'] = back_color
@@ -48,11 +52,21 @@ def open_new_window_readme():
     new_window.wm_attributes('-alpha', .99)
 
     # De data van de README.MD
-    Label(new_window, font='TkFixedFont', fg=font_color, bg=back_color,
-          text=get_readme(), anchor=W, justify=LEFT).grid(row=0)
+    text = Text(new_window, width=120, height=40, font='TkFixedFont', fg=font_color, bg=back_color,)
+    # plaatsen van grid (moet apart anders herkent de scrollbar m niet
+    text.grid(row=0)
+    text.insert(END, get_readme())
+
+    # Scrollbar
+    scrollbar = ttk.Scrollbar(new_window, orient='vertical', command=text.yview)
+    scrollbar.grid(row=0, column=1, sticky='ns')
+    # scrollbar style
+    style = ttk.Style()
+    style.theme_use('classic')
+    style.configure("Vertical.TScrollbar", background="black", bordercolor="black", arrowcolor="white")
 
     # knop sluit de newwindow af
-    Button(new_window, text="Back", command=new_window.destroy).grid(row=1)
+    Button(new_window, text="Back", bg='red', command=new_window.destroy).grid(row=1)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,7 +98,7 @@ Button(root, text="Quit Steam Dashboard", font=font_choice, background='red', fo
 
 # Knop voor about(readme.md) in een apart scherm
 Button(root, text="About", font=font_choice, background='gray', foreground=font_color,
-       command=open_new_window_readme).grid(column=2, row=4)
+       command=open_new_window_readme()).grid(column=2, row=4)
 
 # knop om te sorteren
 
