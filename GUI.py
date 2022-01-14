@@ -10,10 +10,13 @@ from steamFunctions import *
 # Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
 back_color = 'black'
 font_color = 'white'
-font_choice = ('Helvetica', 12)
+# Steam logo font FF Din OT Bold:
+font_choice_logo = ('FF Din OT', 14, 'bold')
+font_choice = ('Arial'or'Helvetica', 12)
 transparency = 0.75
-# main_GUI_size
-raam_formaat = '1024x420'
+# main_GUI_size = "" zodat deze aanpast aan de widgets die ik erin probeer te passen
+raam_formaat = ""
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -36,62 +39,72 @@ def open_new_window_readme():
     # Open as a new window
     new_window = Toplevel(root)
 
-    # sets the title
+    # sets the title readme
     new_window.title("READ ME PLEASE")
 
-    # sets the geometry of toplevel
-    new_window.geometry('1024x820')
-
-    # Achtergrond kleur van de readme
+    # Achtergrond kleur van de readme (inclusief transparency)
     new_window['bg'] = back_color
     new_window.wait_visibility(new_window)
     new_window.wm_attributes('-alpha', .99)
 
     # De data van de README.MD
-    Label(new_window, font='TkFixedFont', fg=font_color, bg=back_color,
-          text=get_readme(), anchor=W, justify=LEFT).grid(row=0)
+    text = Text(new_window, width=120, height=40, font='TkFixedFont', fg=font_color, bg=back_color,)
+    # plaatsen van grid (moet apart anders herkent de scrollbar m niet)
+    text.grid(row=0)
+    text.insert(END, get_readme())
+
+    # Scrollbar
+    scrollbar = ttk.Scrollbar(new_window, orient='vertical', command=text.yview)
+    scrollbar.grid(row=0, column=1, sticky='ns')
+    # Readme scrollbar style
+    style = ttk.Style()
+    style.theme_use('classic')
+    style.configure("Vertical.TScrollbar", background="black", bordercolor="black", arrowcolor="white")
 
     # knop sluit de newwindow af
-    Button(new_window, text="Back", command=new_window.destroy).grid(row=1)
-
+    Button(new_window, text="Back", bg='red', command=new_window.destroy).grid(row=1)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # De labels die je ziet op scherm
 
+# TITEL
+Label(root, text="Steam APP Fantastic Five", font=font_choice_logo, background=back_color,
+      foreground=font_color, anchor=N, justify=CENTER).grid(column=1, row=0)
+
 # Label van eerste spel in lijst:
 Label(root, text="First game in list:", font=font_choice, background=back_color,
-      foreground=font_color).grid(column=1, row=1)
+      foreground=font_color).grid(column=0, row=1)
 Label(root, text=first_game_in_json, font=font_choice, background='yellow',
-      foreground='black').grid(column=2, row=1)
+      foreground='black').grid(column=3, row=1)
 
 # label van gemiddelde prijs van de games:
 Label(root, text="Average game price:", font=font_choice, background=back_color,
-      foreground=font_color).grid(column=1, row=2)
+      foreground=font_color).grid(column=0, row=2)
 Label(root, text=average_game_price(), font=font_choice, background='yellow',
-      foreground='black').grid(column=2, row=2)
+      foreground='black').grid(column=3, row=2)
 
 # Label van eerste game dev in de lijst:
 Label(root, text="First game developer:", font=font_choice, background=back_color,
-      foreground=font_color).grid(column=1, row=3)
+      foreground=font_color).grid(column=0, row=3)
 Label(root, text=list_first_game_developers(), font=font_choice, background='yellow',
-      foreground='black').grid(column=2, row=3)
+      foreground='black').grid(column=3, row=3)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Knoppen in mainscreen
 # Knop om hoofdprogramma te eindigen
 Button(root, text="Quit Steam Dashboard", font=font_choice, background='red', foreground=font_color,
-       command=root.destroy).grid(column=1, row=4)
+       command=root.destroy).grid(column=0, row=6)
 
-# Knop voor about(readme.md) in een apart scherm
+# Knop voor about(readme.md) in een apart scherm ~ start ook bij opstarten programma, vandaar  "" OR ""(self)
 Button(root, text="About", font=font_choice, background='gray', foreground=font_color,
-       command=open_new_window_readme).grid(column=2, row=4)
+       command=open_new_window_readme() or open_new_window_readme).grid(column=3, row=6)
 
 # knop om te sorteren
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Maakt een raamwerk in de root aan voor de tabel
 separator = PanedWindow(root, bd=0, bg=back_color, sashwidth=2)
-separator.grid(column=2, row=5)
+separator.grid(column=1, row=5)
 # rechter onderhoekje:
 _frame = Frame(root, background=back_color, relief='ridge')
 
