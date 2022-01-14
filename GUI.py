@@ -40,20 +40,14 @@ def open_new_window_readme():
     # sets the title readme
     new_window.title("READ ME PLEASE")
 
-    # sets the geometry of readme
-    # new_window.geometry('1024x768')
-    # new_window.resizable(False, False)
-
-
-
-    # Achtergrond kleur van de readme
+    # Achtergrond kleur van de readme (inclusief transparency)
     new_window['bg'] = back_color
     new_window.wait_visibility(new_window)
     new_window.wm_attributes('-alpha', .99)
 
     # De data van de README.MD
     text = Text(new_window, width=120, height=40, font='TkFixedFont', fg=font_color, bg=back_color,)
-    # plaatsen van grid (moet apart anders herkent de scrollbar m niet
+    # plaatsen van grid (moet apart anders herkent de scrollbar m niet)
     text.grid(row=0)
     text.insert(END, get_readme())
 
@@ -96,9 +90,9 @@ Label(root, text=list_first_game_developers(), font=font_choice, background='yel
 Button(root, text="Quit Steam Dashboard", font=font_choice, background='red', foreground=font_color,
        command=root.destroy).grid(column=1, row=4)
 
-# Knop voor about(readme.md) in een apart scherm
+# Knop voor about(readme.md) in een apart scherm ~ start ook bij opstarten programma, vandaar  "" OR ""(self)
 Button(root, text="About", font=font_choice, background='gray', foreground=font_color,
-       command=open_new_window_readme()).grid(column=2, row=4)
+       command=open_new_window_readme() or open_new_window_readme).grid(column=2, row=4)
 
 # knop om te sorteren
 

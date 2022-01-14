@@ -14,20 +14,27 @@
                                 |  _| (_| | | | | || (_| \__ \ |_| | (__|  _| |\ V /  __/
                                 |_|  \__,_|_| |_|\__\__,_|___/\__|_|\___|_| |_| \_/ \___|
 
+
                                          Fantastic Five (c) Hogeschool Utrecht
+
                                02/2022 :..... RELEASE.DATE .. PROTECTION .......: PW
                                      0 :.......... DISC(S) .. GAME.TYPE ........: STEAM
+
+
    
                                        ▄▀▀  ▄▀▀▄ ▄▀▄▀▄ ▄▀▀  ▀ ▄▀▀▄ ▄▀▀▄ ▄▀▀▄ ▄▀
                       ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀ █ ▀▓ █▀▀▓ █   ▓ ▓▀ ▄ █ █  ▓ ▓▀   █  ▓ ▀▀▀█ ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
                                         ▀▀  ▀    ▀   ▀ ▀▀▀▀ ▀ ▀    ▀     ▀▀   ▀▀                                                         
 
+
                     Een software module met GUI, die de huidige games in steam weer kan geven en sorteren.
                     Eventueel met een sociaal netwerk capaciteit.
  
+
                                  ▀ ▄▀▀▄ ▄▀   ▓▄▄  ▄▀▀▄ ▓   ▓   ▄▀▀▄ ▄▀▀▄ ▓▄▄  ▄▀▀  ▄▀
                       ▀▀▀▀▀▀▀▀▀▀ █ █  ▓ ▀▀▀█ █  ▄ █▀▀▓ █   █   █  ▓ █  ▓ █  ▄ ▓▀ ▄ ▀▀▀█ ▀▀▀▀▀▀▀▀▀▀
                                  ▀ ▀     ▀▀   ▀▀▀ ▀    ▀▀▀ ▀▀▀ ▀     ▀▀   ▀▀▀ ▀▀▀▀  ▀▀
+
 
                     DEV_AZURE:
                     https://dev.azure.com/HU-HBO-ICT/_git/2021-Prop-B-KlasO-T3
@@ -38,9 +45,11 @@
                     * steamFunctions
                     * glob
 
+
                                    ▄▀▀  ▄▀▀█ ▄▀▀▄ ▓  ▄ ▄▀▀█ ▄▀▀▄ ▄▀▀▄ ▓▄▄  ▄▀▀  ▄▀
                       ▀▀▀▀▀▀▀▀▀▀▀▀ █ ▀▓ █▀▓  █  ▓ █  ▓ █▀▀  █  ▓ █  ▓ █  ▄ ▓▀ ▄ ▀▀▀█ ▀▀▀▀▀▀▀▀▀▀▀▀▀
                                     ▀▀    █   ▀▀   ▀▀  ▀    ▀     ▀▀   ▀▀▀ ▀▀▀▀  ▀▀
+
 
                     * Jeffrey 1789404 (Vizility)
                     * Ryan 1818885 (Ryan Reddy, klugook)
