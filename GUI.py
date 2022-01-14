@@ -146,7 +146,7 @@ _frame.columnconfigure(0, weight=1)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # FIRE
-Flabel = Label(root, text='a', font='TkFixedFont', bg='black', fg='yellow')
+Flabel = Label(root, text='a', font='TkFixedFont', bg='black', fg='gold')
 
 def get_txt1():
     fire1= glob.glob("fire1.txt")
