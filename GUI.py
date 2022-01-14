@@ -1,9 +1,9 @@
 """Gui van de applicatie"""
-
 from main import *
 from tkinter import *
 import tkinter.ttk as ttk
 from steamFunctions import *
+import time
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # TODO add tkinter styles
@@ -193,5 +193,24 @@ Flabel.after(1, moving_ascii)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Run het programma
+
+
+# Run het programma splashscreen eerst
+splashscreen = Tk()
+
+# change window attributes
+
+# Removes TITELBALK
+splashscreen.overrideredirect(1)
+# topmost screen
+splashscreen.call('wm', 'attributes', '.', '-topmost', 'true')
+# maat van screen + positie (steam-logo-large.jpg = 960x307)
+splashscreen.geometry("970x310+471+387")
+
+# Achtergrond kleur van de readme (inclusief transparency)
+splashscreen['bg'] = 'red'
+
+
+splashscreen.after(10000, splashscreen.destroy)
+splashscreen.mainloop()
 root.mainloop()
