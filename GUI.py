@@ -211,6 +211,20 @@ splashscreen.geometry("970x310+471+387")
 splashscreen['bg'] = 'red'
 
 
+from PIL import Image, ImageTk
+#
+# window = Tk()
+#
+# image = r"C:\Users\RyRy\PycharmProjects\FANTASTIC_FOUR_PROJB\steamlogolarge.jpg"
+#
+# img = Image.open(image)
+# ph = ImageTk.PhotoImage(img)
+# img.show()
+#
+# l1 = Label(splashscreen, image=ph).pack()
+#
+
+
 splashscreen.after(5000, splashscreen.destroy)
 splashscreen.mainloop()
 root.mainloop()
