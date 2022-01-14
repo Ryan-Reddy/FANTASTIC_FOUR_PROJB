@@ -6,13 +6,14 @@ import tkinter.ttk as ttk
 from steamFunctions import *
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# TODO add tkinter styles
 # Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
 back_color = 'black'
 font_color = 'white'
 # Steam logo font FF Din OT Bold:
 font_choice_logo = ('FF Din OT', 14, 'bold')
 font_choice = ('Arial'or'Helvetica', 12)
+# transparency mainscreen
 transparency = 0.75
 # main_GUI_size = "" zodat deze aanpast aan de widgets die ik erin probeer te passen
 raam_formaat = ""
@@ -144,7 +145,6 @@ _frame.rowconfigure(0, weight=1)
 _frame.columnconfigure(0, weight=1)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 # Run het programma
 root.mainloop()
