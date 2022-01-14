@@ -145,6 +145,36 @@ _frame.rowconfigure(0, weight=1)
 _frame.columnconfigure(0, weight=1)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# FIRE
+Flabel = Label(root, text='a', font='TkFixedFont', bg='black', fg='yellow')
+
+def get_txt1():
+    fire1= glob.glob("fire1.txt")
+    return open(fire1[0], 'r', encoding='utf-8').read()
+
+def get_txt2():
+    fire2= glob.glob("fire2.txt")
+    return open(fire2[0], 'r', encoding='utf-8').read()
+
+text1= get_txt1()
+text2= get_txt2()
+
+
+def moving_ascii():
+    Flabel.configure(text=text1)
+    print(root.geometry())
+    Flabel.after(512, moving_ascii2)
+
+
+def moving_ascii2():
+    Flabel.configure(text=text2)
+    print(root.geometry())
+    Flabel.after(512, moving_ascii)
+
+Flabel.grid(column=1, row=7)
+Flabel.after(1, moving_ascii)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Run het programma
 root.mainloop()
