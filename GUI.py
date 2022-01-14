@@ -136,7 +136,11 @@ xsb = ttk.Scrollbar(orient=HORIZONTAL, command=treeview.xview)
 treeview['yscroll'] = ysb.set
 treeview['xscroll'] = xsb.set
 separator.add(_frame)
+# attempt to color scrollbar
+style.configure("Vertical.TScrollbar", background="black", bordercolor="black", arrowcolor="white")
+style.configure("Horizontal.TScrollbar", background="black", bordercolor="black", arrowcolor="white")
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # sorteerd columns naar klik op de headers TODO implementeer slimmere algoritmes
 def sortby(tree, col, descending):
     # grab values to sort
