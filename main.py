@@ -8,13 +8,13 @@ def startup_message():
     print('Starting up programme...'.format())
 
     # count records in list:
-    num = sum(1 for element in open('steam.json'))
+    num = sum(1 for element in open('steam_small.json'))
 
     # print amount datapoints
-    print('steam.json contains: ', num, ' records,')
+    print('steam_small.json contains: ', num, ' records,')
 
     # read and count lines:
-    stream = open('steam.json', 'r')
+    stream = open('steam_small.json', 'r')
     steam = stream.read()
     print('divided over ', len(steam), ' lines.')
 
@@ -35,7 +35,7 @@ def get_gamename(steamy):
 
 
 # Laadt het .json bestand in een list
-f = open('steam.json')
+f = open('steam_small.json')
 data = json.load(f)
 data_import = []
 for line in data:
