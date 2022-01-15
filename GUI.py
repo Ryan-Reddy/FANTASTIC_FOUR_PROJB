@@ -18,7 +18,6 @@ font_color = "white"
 font_choice_logo = ("FF Din OT", 14, "bold")
 font_choice = ("Arial" or "Helvetica", 12)
 transparency = 0.8  # <--- transparency mainscreen
-theme = "classic"  # <--- Change default to whichever theme you want to use.
 # main_GUI_size = "" zodat deze aanpast aan de widgets die ik erin probeer te passen
 raam_formaat = ""
 # ******************************************************************************************************************
@@ -71,8 +70,9 @@ Slabel = Label(splashscreen, text="loading", bg=back_color, fg="gold")
 Slabel.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
-"""set to 0 this one to skip splashscreen"""
-splashscreen.after(12000, splashscreen.destroy)  # ~12000ms
+splashscreen.after(
+    0, splashscreen.destroy
+)  # ~12000ms set to 0 this one to skip splashscreen
 # function should be "delayedstart":
 splashscreen.after(2000, delayedstart)
 splashscreen.after(0, print("startingsplashscreen"))
@@ -302,37 +302,47 @@ style.configure(
 )
 
 # ******************************************************************************************************************
-"""# FIRE ~setup, programma, plaatsing"""
+"""# FIRE ~setup, pickup data, programme, placing"""
 # setup
 Flabel = Label(root, text="a", font="TkFixedFont", bg="black", fg="gold")
 
 
 def get_txt1():
     fire1 = glob.glob("fire1.txt")
-    return open(fire1[0], "r", encoding="utf-8").read()
+    text1 = open(fire1[0], "r", encoding="utf-8").read()
+    return text1
 
 
 def get_txt2():
     fire2 = glob.glob("fire2.txt")
-    return open(fire2[0], "r", encoding="utf-8").read()
+    text2 = open(fire2[0], "r", encoding="utf-8").read()
+    return text2
 
 
-text1 = get_txt1()
-text2 = get_txt2()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # FIRE programma zelf
 
 
+# def moving_ascii():  # <--- Flame one direction.
+#     Flabel.configure(text=get_txt1())
+#     print(root.geometry())
+#     Flabel.after(512, moving_ascii2)
+#
+#
+# def moving_ascii2():  # <--- Flame other direction.
+#     Flabel.configure(text=get_txt2())
+#     print(root.geometry())
+#     Flabel.after(512, moving_ascii)
+
+
 def moving_ascii():
-    Flabel.configure(text=text1)
-    print(root.geometry())
-    Flabel.after(512, moving_ascii2)
-
-
-def moving_ascii2():
-    Flabel.configure(text=text2)
-    print(root.geometry())
-    Flabel.after(512, moving_ascii)
+    Flabel.configure(text=get_txt1())
+    root.update_idletasks()
+    time.sleep(0.512)
+    Flabel.configure(text=get_txt2())
+    root.update_idletasks()
+    time.sleep(0.512)
+    moving_ascii()
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
