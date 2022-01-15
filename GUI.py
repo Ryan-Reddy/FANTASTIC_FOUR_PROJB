@@ -32,7 +32,7 @@ splashscreen.overrideredirect(True)  # <--- Removes TITELBALK
 splashscreen.call("wm", "attributes", ".", "-topmost", "true")  # <--- # topmost screen
 
 splashscreen.geometry(
-    "960x307+471+387"
+    "960x307"
 )  # <--- # size of screen + positie (steam-logo-large.jpg = 960x307)
 splashscreen.geometry("")  # <--- autoadjust overrides upper geometry
 # Achtergrond kleur van de readme (inclusief transparency)
@@ -44,6 +44,20 @@ with open(r"splashscreen\splash.txt") as splash_loader_filelist:
     splash_order = splash_loader_filelist.read().splitlines()
     splash_loader_filelist.close()
 print(splash_order)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#  Calculates center of active screen
+w = 980  # width for the readme root
+h = 680  # height for the readme root
+
+
+# get screen width and height
+SPLASH_WIDTH = splashscreen.winfo_screenwidth()  # width of the screen
+SPLASH_HEIGHT = splashscreen.winfo_screenheight()  # height of the screen
+
+# calculate x and y coordinates for the Tk root window
+WINDOW_xMIDDLE = (SPLASH_WIDTH / 2) - (w / 2)
+WINDOW_yMIDDLE = (SPLASH_HEIGHT / 2) - (h / 2)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen IMAGER/motion sequence:
 
@@ -76,11 +90,13 @@ splash_label.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    10, splashscreen.destroy
-)  # <--- 12000ms set to 0 this one to skip splashscreen
+    10, splashscreen.destroy  # <--- 12000ms set to 0 this one to skip splashscreen
+)
 # function should be "delayedstart":
 splashscreen.after(2000, delayed_start)
 splashscreen.after(0, print("starting splashscreen"))
+
+splashscreen.eval("tk::PlaceWindow . center")  # <--- center screen
 
 splashscreen.mainloop()
 # ******************************************************************************************************************
@@ -88,13 +104,23 @@ splashscreen.mainloop()
 
 
 def open_new_window_readme():
-    new_window = Toplevel(root)  # <---     open new window
-    new_window.title("READ ME PLEASE")  # <---     sets the title readme
+    new_window = Tk()  # <---     open new window
+    new_window.overrideredirect(True)  # <--- Removes Title bar
+
+    # set the dimensions of the screen based upon earlier code
+    # and where it is placed
+    new_window.geometry("%dx%d+%d+%d" % (w, h, WINDOW_xMIDDLE, WINDOW_yMIDDLE))
+
+    # new_window.title("READ ME PLEASE")  # <---     sets the title readme
+    new_window.call(
+        "wm", "attributes", ".", "-topmost", "true"
+    )  # <--- # topmost screen
 
     # Achtergrond kleur van de readme (inclusief transparency)
     new_window["bg"] = BACK_COLOR
     new_window.wait_visibility(new_window)
     new_window.wm_attributes("-alpha", 0.99)
+
     # De data van de README.MD
     text = Text(
         new_window,
@@ -129,13 +155,18 @@ def open_new_window_readme():
 root = Tk()
 # Raam formaat:
 root.geometry(WINDOW_SIZE)
+
+root.eval("tk::PlaceWindow . center")
+
 # title naam:
 root.title("Steam App Fantastic Five")
 # Achtergrond kleur:
 root["bg"] = BACK_COLOR
 # Wacht totdat de pagina zichtbaar is, en maakt dan pagina doorzichtig 90%
 root.wait_visibility(root)
-root.wm_attributes("-alpha", TRANSPARENCY_BACKGROUND)
+root.wm_attributes("-alpha", TRANSPARENCY_BACKGROUND, "-fullscreen", True)
+# window_name.attributes('-fullscreen',True)
+
 # ******************************************************************************************************************
 """# MAIN SCREEN ~ Labels and Buttons:"""
 
@@ -199,8 +230,8 @@ Label(
     foreground="black",
 ).grid(column=3, row=3)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Knoppen in mainscreen
-# Knop om hoofdprogramma te eindigen
+# Buttons in the mainscreen
+# Button to terminate mainscreen
 Button(
     root,
     text="Quit Steam Dashboard",
@@ -210,14 +241,14 @@ Button(
     command=root.destroy,
 ).grid(column=0, row=6)
 
-# Knop voor about(readme.md) in een apart scherm ~ start ook bij opstarten programma, vandaar  "" OR ""(self)
+# Button to open readme, also calls itself at start of programme after splash
 Button(
     root,
     text="About",
     font=FONT_MAIN,
     background="gray",
     foreground=FONT_COLOR,
-    command=open_new_window_readme or open_new_window_readme,
+    command=open_new_window_readme(),
 ).grid(column=3, row=6)
 
 # knop om te sorteren
@@ -225,7 +256,7 @@ Button(
 """# TREEVIEW ~ window, style, data, scrollbar, column-sorting-function """
 # Maakt een raamwerk in de root aan voor de tabel
 
-separator = PanedWindow(root, bd=0, bg=BACK_COLOR, sashwidth=2)
+separator = PanedWindow(root, bd=0, bg=BACK_COLOR, sashwidth=2, height=600, width=1280)
 separator.grid(column=1, row=5)
 # rechter onderhoekje:
 _frame = Frame(root, background=BACK_COLOR, relief="ridge")
@@ -298,6 +329,9 @@ treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
 
 
 def sort_by(tree, col, descending):
+    print("beginning at 0")
+    t0 = time.clock()
+
     # grab values to sort
     header_data = [(tree.set(child, col), child) for child in tree.get_children("")]
     header_data.sort(reverse=descending)
@@ -308,6 +342,9 @@ def sort_by(tree, col, descending):
     for ix, item in enumerate(header_data):
         tree.move(item[1], "", ix)
     # switch the heading, so it will sort in the opposite direction.
+
+    t1 = time.clock() - t0
+    print("endtime = ", t1, " ms")
     tree.heading(
         col, command=lambda local_col=col: sort_by(tree, local_col, int(not descending))
     )
@@ -384,5 +421,7 @@ FIRE_LABEL.grid(column=1, row=7)
 FIRE_LABEL.after(1, moving_ascii)
 # ******************************************************************************************************************
 """ Run main GUI"""
+root.eval("tk::PlaceWindow . center")  # <--- center screen
+
 root.mainloop()
 # ******************************************************************************************************************
