@@ -18,6 +18,7 @@ font_color = "white"
 font_choice_logo = ("FF Din OT", 14, "bold")
 font_choice = ("Arial" or "Helvetica", 12)
 transparency = 0.8  # <--- transparency mainscreen
+flame_speed = 256
 # main_GUI_size = "" zodat deze aanpast aan de widgets die ik erin probeer te passen
 raam_formaat = ""
 # ******************************************************************************************************************
@@ -323,26 +324,19 @@ def get_txt2():
 # FIRE programma zelf
 
 
-# def moving_ascii():  # <--- Flame one direction.
-#     Flabel.configure(text=get_txt1())
-#     print(root.geometry())
-#     Flabel.after(512, moving_ascii2)
-#
-#
-# def moving_ascii2():  # <--- Flame other direction.
-#     Flabel.configure(text=get_txt2())
-#     print(root.geometry())
-#     Flabel.after(512, moving_ascii)
-
-
-def moving_ascii():
+def moving_ascii():  # <--- Flame one direction.
     Flabel.configure(text=get_txt1())
-    root.update_idletasks()
-    time.sleep(0.512)
+    print(root.geometry())
+    Flabel.after(flame_speed, moving_ascii2)
+
+
+def moving_ascii2():  # <--- Flame other direction.
     Flabel.configure(text=get_txt2())
-    root.update_idletasks()
-    time.sleep(0.512)
-    moving_ascii()
+    print(root.geometry())
+    Flabel.after(flame_speed, moving_ascii)
+
+
+#
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
