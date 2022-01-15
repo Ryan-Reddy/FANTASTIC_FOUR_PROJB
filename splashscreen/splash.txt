@@ -1,0 +1,8 @@
+splashscreen\steamlogolarge40.jpg
+splashscreen\steamlogolarge48.jpg
+splashscreen\steamlogolarge54.jpg
+splashscreen\steamlogolarge60.jpg
+splashscreen\steamlogolarge80.jpg
+splashscreen\steamlogolarge85.jpg
+splashscreen\steamlogolarge92.jpg
+splashscreen\steamlogolarge100.jpg

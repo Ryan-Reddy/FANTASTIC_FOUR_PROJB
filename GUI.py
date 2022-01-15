@@ -8,11 +8,9 @@ import tkinter.ttk as ttk
 from steamFunctions import *
 from PIL import Image, ImageTk
 
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# ******************************************************************************************************************
 # TODO add tkinter styles
-
+"""#STYLE/COLOR CHOICES"""
 # Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
 back_color = 'black'
 font_color = 'white'
@@ -23,7 +21,9 @@ font_choice = ('Arial'or'Helvetica', 12)
 transparency = 0.8
 # main_GUI_size = "" zodat deze aanpast aan de widgets die ik erin probeer te passen
 raam_formaat = ""
-# Run het programma splashscreen eerst
+# ******************************************************************************************************************
+"""# SPLASHSCREEN ~ setup, load list, motion seq., initial fill, main programme"""
+# setup splashscreen
 splashscreen = Tk()
 # change window attributes
 # Removes TITELBALK
@@ -35,23 +35,18 @@ splashscreen.geometry("960x307+471+387")
 splashscreen.geometry('')
 # Achtergrond kleur van de readme (inclusief transparency)
 splashscreen['bg'] = back_color
-
-# IMAGER: TODO get working
-
-image = "steamlogolarge40.jpg"
-
-lst = [r"steamlogolarge40.jpg",
-r"steamlogolarge48.jpg",
-r"steamlogolarge54.jpg",
-r"steamlogolarge60.jpg",
-r"steamlogolarge80.jpg",
-r"steamlogolarge85.jpg",
-r"steamlogolarge92.jpg",
-r"steamlogolarge100.jpg"]
-
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# load splashscreen picture order file:
+with open("splashscreen\splash.txt") as l:
+    print(l)
+    splash_order = l.read().splitlines()
+    l.close()
+print(splash_order)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# splashscreen IMAGER/motion sequence:
 def change_label():
         Slabel.configure(text='sdasdasdasd')
-        for i in lst:
+        for i in splash_order:
             Slabel.configure(text=i)
             filename = i
             img = Image.open(filename)
@@ -62,39 +57,23 @@ def change_label():
 
 def delayedstart():
     change_label()
-
-# initial opvulling splashscreen
-filename = str(lst[0])
-img = Image.open(filename)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# initial fill splashscreen
+img = Image.open(splash_order[0])
 ph = ImageTk.PhotoImage(img)
 img_label = Label(splashscreen, image=ph)
 img_label.pack()
 Slabel = Label(splashscreen, text='loading', bg=back_color, fg='gold')
 Slabel.pack()
-
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# splashscreen programme:
 splashscreen.after(12000, splashscreen.destroy)
 # function should be "delayedstart":
 splashscreen.after(2000, delayedstart)
 splashscreen.after(0, print('startingsplashscreen'))
 splashscreen.mainloop()
-
-
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Mainscreen GUI settings:
-root = Tk()
-# Raam formaat:
-root.geometry(raam_formaat)
-# title naam:
-root.title('Steam App Fantastic Five')
-# Achtergrond kleur:
-root['bg'] = back_color
-# Wacht totdat de pagina zichtbaar is, en maakt dan pagina doorzichtig 90%
-root.wait_visibility(root)
-root.wm_attributes('-alpha', transparency)
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Readme scherm GUI:
+# ******************************************************************************************************************
+"""# Readme scherm GUI:"""
 def open_new_window_readme():
     # Open as a new window
     new_window = Toplevel(root)
@@ -123,10 +102,22 @@ def open_new_window_readme():
 
     # knop sluit de newwindow af
     Button(new_window, text="Back", bg='red', command=new_window.destroy).grid(row=1)
+# ******************************************************************************************************************
+"""# MAINSCREEN ~ GUI settings:"""
+root = Tk()
+# Raam formaat:
+root.geometry(raam_formaat)
+# title naam:
+root.title('Steam App Fantastic Five')
+# Achtergrond kleur:
+root['bg'] = back_color
+# Wacht totdat de pagina zichtbaar is, en maakt dan pagina doorzichtig 90%
+root.wait_visibility(root)
+root.wm_attributes('-alpha', transparency)
+# ******************************************************************************************************************
+"""# MAINSCREEN ~ Labels and Buttons:"""
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # De labels die je ziet op scherm
-
 # TITEL
 Label(root, text="Steam APP Fantastic Five", font=font_choice_logo, background=back_color,
       foreground=font_color, anchor=N, justify=CENTER).grid(column=1, row=0)
@@ -158,8 +149,10 @@ Button(root, text="Quit Steam Dashboard", font=font_choice, background='red', fo
 Button(root, text="About", font=font_choice, background='gray', foreground=font_color,
        command=open_new_window_readme or open_new_window_readme).grid(column=3, row=6)
 # knop om te sorteren
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ******************************************************************************************************************
+"""# TREEVIEW ~ window, stijl, data, scrollbar, kolomsorteerfunctie, """
 # Maakt een raamwerk in de root aan voor de tabel
+
 separator = PanedWindow(root, bd=0, bg=back_color, sashwidth=2)
 separator.grid(column=1, row=5)
 # rechter onderhoekje:
@@ -219,8 +212,9 @@ ysb.grid(in_=_frame, row=0, column=1, sticky=NS)
 xsb.grid(in_=_frame, row=1, column=0, sticky=EW)
 _frame.rowconfigure(0, weight=1)
 _frame.columnconfigure(0, weight=1)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# FIRE
+# ******************************************************************************************************************
+"""# FIRE ~setup, programma, plaatsing"""
+# setup
 Flabel = Label(root, text='a', font='TkFixedFont', bg='black', fg='gold')
 def get_txt1():
     fire1= glob.glob("fire1.txt")
@@ -232,7 +226,8 @@ def get_txt2():
 
 text1= get_txt1()
 text2= get_txt2()
-
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# FIRE programma zelf
 
 def moving_ascii():
     Flabel.configure(text=text1)
@@ -244,12 +239,14 @@ def moving_ascii2():
     Flabel.configure(text=text2)
     print(root.geometry())
     Flabel.after(512, moving_ascii)
-
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# PLaatsting FIRE
 Flabel.grid(column=1, row=7)
 Flabel.after(1, moving_ascii)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# ******************************************************************************************************************
+"""# Running main GUI"""
 root.mainloop()
+# ******************************************************************************************************************
 
 
 
