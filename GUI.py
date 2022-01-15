@@ -76,8 +76,8 @@ splash_label.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    12000, splashscreen.destroy
-)  # ~12000ms set to 0 this one to skip splashscreen
+    10, splashscreen.destroy
+)  # <--- 12000ms set to 0 this one to skip splashscreen
 # function should be "delayedstart":
 splashscreen.after(2000, delayed_start)
 splashscreen.after(0, print("starting splashscreen"))
@@ -240,7 +240,16 @@ style.configure("Treeview.Heading", foreground="green", background=BACK_COLOR)
 treeview = ttk.Treeview(
     root,
     show="headings",
-    columns=("Name", "Developer", "Platforms", "Genre"),
+    columns=(
+        "Name",
+        "Developer",
+        "Platforms",
+        "Genre",
+        "Positive Ratings",
+        "Negative Ratings",
+        "Required Age",
+        "Publisher",
+    ),
     style="Treeview.Heading",
 )
 
@@ -249,6 +258,16 @@ treeview.heading("#1", text="Name", command=lambda c="#1": sort_by(treeview, c, 
 treeview.heading("#2", text="Developer", command=lambda c="#2": sort_by(treeview, c, 0))
 treeview.heading("#3", text="Platforms", command=lambda c="#3": sort_by(treeview, c, 0))
 treeview.heading("#4", text="Genre", command=lambda c="#4": sort_by(treeview, c, 0))
+treeview.heading(
+    "#5", text="Positive Ratings", command=lambda c="#5": sort_by(treeview, c, 0)
+)
+treeview.heading(
+    "#7", text="Required Age", command=lambda c="#7": sort_by(treeview, c, 0)
+)
+treeview.heading("#8", text="Publisher", command=lambda c="#8": sort_by(treeview, c, 0))
+treeview.heading(
+    "#6", text="Negative Ratings", command=lambda c="#6": sort_by(treeview, c, 0)
+)
 
 
 # Plaatst data van data_import(main) in treeview tabel
@@ -257,7 +276,16 @@ for row in data_import:
     treeview.insert(
         "",
         "end",
-        values=(row["name"], row["developer"], row["platforms"], row["genres"]),
+        values=(
+            row["name"],
+            row["developer"],
+            row["platforms"],
+            row["genres"],
+            row["positive_ratings"],
+            row["negative_ratings"],
+            row["required_age"],
+            row["publisher"],
+        ),
         tags="body",
     )
 # stijlchoice body text
@@ -273,6 +301,10 @@ def sort_by(tree, col, descending):
     # grab values to sort
     header_data = [(tree.set(child, col), child) for child in tree.get_children("")]
     header_data.sort(reverse=descending)
+    # TODO if the data to be sorted is numeric change to float
+    # data =  change_numeric(data)
+
+    # now sort the data in place
     for ix, item in enumerate(header_data):
         tree.move(item[1], "", ix)
     # switch the heading, so it will sort in the opposite direction.
@@ -351,6 +383,6 @@ def moving_ascii2():  # <--- Flame other direction.
 FIRE_LABEL.grid(column=1, row=7)
 FIRE_LABEL.after(1, moving_ascii)
 # ******************************************************************************************************************
-"""# Running main GUI"""
+""" Run main GUI"""
 root.mainloop()
 # ******************************************************************************************************************
