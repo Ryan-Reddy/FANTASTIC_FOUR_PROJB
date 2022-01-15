@@ -1,0 +1,4 @@
+1. Coverage
+2. Black
+3. pylint
+4. PEP8

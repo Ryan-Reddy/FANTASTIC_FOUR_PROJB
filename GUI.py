@@ -12,41 +12,41 @@ from PIL import Image, ImageTk
 # TODO add tkinter styles
 """#STYLE/COLOR CHOICES"""
 # Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
-back_color = "black"
-font_color = "white"
-# Steam logo font FF Din OT Bold:
-font_choice_logo = ("FF Din OT", 14, "bold")
-font_choice = ("Arial" or "Helvetica", 12)
-transparency = 0.8  # <--- transparency mainscreen
-flame_speed = 256
-# main_GUI_size = "" zodat deze aanpast aan de widgets die ik erin probeer te passen
-raam_formaat = ""
+BACK_COLOR = "black"
+FONT_COLOR = "white"
+FONT_LOGO = ("FF Din OT", 14, "bold")  # <--- (STEAM_OFFICIAL)
+FONT_MAIN = (
+    "Arial" or "Helvetica",
+    12,
+)  # <--- Arial-standard, helvetica for MAC systems (STEAM_OFFICIAL)
+TRANSPARENCY_BACKGROUND = 0.8  # <--- transparency mainscreen
+FLAME_SPEED = 256
+WINDOW_SIZE = ""  # <--- Autoadjusts to content
 # ******************************************************************************************************************
 # TODO: change changeable text at bottom to commits, last minute change
 """# SPLASHSCREEN ~ setup, load list, motion seq., initial fill, main programme"""
-# setup splashscreen
-splashscreen = Tk()
-# change window attributes
-# Removes TITELBALK
-splashscreen.overrideredirect(1)
-# topmost screen
-splashscreen.call("wm", "attributes", ".", "-topmost", "true")
-# maat van screen + positie (steam-logo-large.jpg = 960x307)
-splashscreen.geometry("960x307+471+387")
-splashscreen.geometry("")
+
+splashscreen = Tk()  # <--- setup splashscreen
+splashscreen.overrideredirect(1)  # <--- Removes TITELBALK
+
+splashscreen.call("wm", "attributes", ".", "-topmost", "true")  # <--- # topmost screen
+
+splashscreen.geometry(
+    "960x307+471+387"
+)  # <--- # size of screen + positie (steam-logo-large.jpg = 960x307)
+splashscreen.geometry("")  # <--- autoadjust overrides upper geometry
 # Achtergrond kleur van de readme (inclusief transparency)
-splashscreen["bg"] = back_color
+splashscreen["bg"] = BACK_COLOR
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # load splashscreen picture order file:
-with open(r"splashscreen\splash.txt") as l:
-    print(l)
-    splash_order = l.read().splitlines()
-    l.close()
+with open(r"splashscreen\splash.txt") as splashloader_filelist:
+    print(splashloader_filelist)
+    splash_order = splashloader_filelist.read().splitlines()
+    splashloader_filelist.close()
 print(splash_order)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen IMAGER/motion sequence:
 def change_label():
-    Slabel.configure(text="sdasdasdasd")
     for i in splash_order:
         Slabel.configure(text=i)  # <--- change bottom screen text each imagechange
         filename = i
@@ -67,12 +67,12 @@ img = Image.open(splash_order[0])
 ph = ImageTk.PhotoImage(img)
 img_label = Label(splashscreen, image=ph)
 img_label.pack()
-Slabel = Label(splashscreen, text="loading", bg=back_color, fg="gold")
+Slabel = Label(splashscreen, text="loading", bg=BACK_COLOR, fg="gold")
 Slabel.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    0, splashscreen.destroy
+    12000, splashscreen.destroy
 )  # ~12000ms set to 0 this one to skip splashscreen
 # function should be "delayedstart":
 splashscreen.after(2000, delayedstart)
@@ -88,7 +88,7 @@ def open_new_window_readme():
     new_window.title("READ ME PLEASE")  # <---     sets the title readme
 
     # Achtergrond kleur van de readme (inclusief transparency)
-    new_window["bg"] = back_color
+    new_window["bg"] = BACK_COLOR
     new_window.wait_visibility(new_window)
     new_window.wm_attributes("-alpha", 0.99)
     # De data van de README.MD
@@ -97,8 +97,8 @@ def open_new_window_readme():
         width=120,
         height=40,
         font="TkFixedFont",
-        fg=font_color,
-        bg=back_color,
+        fg=FONT_COLOR,
+        bg=BACK_COLOR,
     )
     # plaatsen van grid (moet apart anders herkent de scrollbar m niet)
     text.grid(row=0)
@@ -124,14 +124,14 @@ def open_new_window_readme():
 """# MAINSCREEN ~ GUI settings:"""
 root = Tk()
 # Raam formaat:
-root.geometry(raam_formaat)
+root.geometry(WINDOW_SIZE)
 # title naam:
 root.title("Steam App Fantastic Five")
 # Achtergrond kleur:
-root["bg"] = back_color
+root["bg"] = BACK_COLOR
 # Wacht totdat de pagina zichtbaar is, en maakt dan pagina doorzichtig 90%
 root.wait_visibility(root)
-root.wm_attributes("-alpha", transparency)
+root.wm_attributes("-alpha", TRANSPARENCY_BACKGROUND)
 # ******************************************************************************************************************
 """# MAINSCREEN ~ Labels and Buttons:"""
 
@@ -140,9 +140,9 @@ root.wm_attributes("-alpha", transparency)
 Label(
     root,
     text="Steam APP Fantastic Five",
-    font=font_choice_logo,
-    background=back_color,
-    foreground=font_color,
+    font=FONT_LOGO,
+    background=BACK_COLOR,
+    foreground=FONT_COLOR,
     anchor=N,
     justify=CENTER,
 ).grid(column=1, row=0)
@@ -151,14 +151,14 @@ Label(
 Label(
     root,
     text="First game in list:",
-    font=font_choice,
-    background=back_color,
-    foreground=font_color,
+    font=FONT_MAIN,
+    background=BACK_COLOR,
+    foreground=FONT_COLOR,
 ).grid(column=0, row=1)
 Label(
     root,
     text=first_game_in_json,
-    font=font_choice,
+    font=FONT_MAIN,
     background="yellow",
     foreground="black",
 ).grid(column=3, row=1)
@@ -167,14 +167,14 @@ Label(
 Label(
     root,
     text="Average game price:",
-    font=font_choice,
-    background=back_color,
-    foreground=font_color,
+    font=FONT_MAIN,
+    background=BACK_COLOR,
+    foreground=FONT_COLOR,
 ).grid(column=0, row=2)
 Label(
     root,
     text=average_game_price(),
-    font=font_choice,
+    font=FONT_MAIN,
     background="yellow",
     foreground="black",
 ).grid(column=3, row=2)
@@ -183,14 +183,14 @@ Label(
 Label(
     root,
     text="First game developer:",
-    font=font_choice,
-    background=back_color,
-    foreground=font_color,
+    font=FONT_MAIN,
+    background=BACK_COLOR,
+    foreground=FONT_COLOR,
 ).grid(column=0, row=3)
 Label(
     root,
     text=list_first_game_developers(),
-    font=font_choice,
+    font=FONT_MAIN,
     background="yellow",
     foreground="black",
 ).grid(column=3, row=3)
@@ -200,9 +200,9 @@ Label(
 Button(
     root,
     text="Quit Steam Dashboard",
-    font=font_choice,
+    font=FONT_MAIN,
     background="red",
-    foreground=font_color,
+    foreground=FONT_COLOR,
     command=root.destroy,
 ).grid(column=0, row=6)
 
@@ -210,26 +210,27 @@ Button(
 Button(
     root,
     text="About",
-    font=font_choice,
+    font=FONT_MAIN,
     background="gray",
-    foreground=font_color,
+    foreground=FONT_COLOR,
     command=open_new_window_readme or open_new_window_readme,
 ).grid(column=3, row=6)
+
 # knop om te sorteren
 # ******************************************************************************************************************
 """# TREEVIEW ~ window, stijl, data, scrollbar, kolomsorteerfunctie, """
 # Maakt een raamwerk in de root aan voor de tabel
 
-separator = PanedWindow(root, bd=0, bg=back_color, sashwidth=2)
+separator = PanedWindow(root, bd=0, bg=BACK_COLOR, sashwidth=2)
 separator.grid(column=1, row=5)
 # rechter onderhoekje:
-_frame = Frame(root, background=back_color, relief="ridge")
+_frame = Frame(root, background=BACK_COLOR, relief="ridge")
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Stijlen van de Tabel treeview:
 style = ttk.Style()
 style.theme_use("classic")
 # style.configure("Treeview.Scrollbar", foreground='red', background=back_color)
-style.configure("Treeview.Heading", foreground="green", background=back_color)
+style.configure("Treeview.Heading", foreground="green", background=BACK_COLOR)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Geeft aan welke data uit de dictionairy mee te nemen
 treeview = ttk.Treeview(
@@ -256,7 +257,7 @@ for row in data_import:
         tags="body",
     )
 # stijlchoice body text
-treeview.tag_configure("body", background=back_color)
+treeview.tag_configure("body", background=BACK_COLOR)
 
 # Geeft aan waar de tabel in het grid moet
 treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
@@ -264,9 +265,9 @@ treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
 # sorteert columns naar klik op de headers TODO implementeer slimmere algoritmes
 def sortby(tree, col, descending):
     # grab values to sort
-    data = [(tree.set(child, col), child) for child in tree.get_children("")]
-    data.sort(reverse=descending)
-    for ix, item in enumerate(data):
+    data_tree = [(tree.set(child, col), child) for child in tree.get_children("")]
+    data_tree.sort(reverse=descending)
+    for ix, item in enumerate(data_tree):
         tree.move(item[1], "", ix)
     # switch the heading so it will sort in the opposite direction
     tree.heading(col, command=lambda col=col: sortby(tree, col, int(not descending)))
@@ -326,14 +327,12 @@ def get_txt2():
 
 def moving_ascii():  # <--- Flame one direction.
     Flabel.configure(text=get_txt1())
-    print(root.geometry())
-    Flabel.after(flame_speed, moving_ascii2)
+    Flabel.after(FLAME_SPEED, moving_ascii2)
 
 
 def moving_ascii2():  # <--- Flame other direction.
     Flabel.configure(text=get_txt2())
-    print(root.geometry())
-    Flabel.after(flame_speed, moving_ascii)
+    Flabel.after(FLAME_SPEED, moving_ascii)
 
 
 #

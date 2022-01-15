@@ -35,9 +35,9 @@ def get_gamename(steamy):
 
 # Laadt het .json bestand in een list
 f = open("steam_small.json")
-data = json.load(f)
+data_tree = json.load(f)
 data_import = []
-for line in data:
+for line in data_tree:
     data_import.append(line)
 
 # return first_game_in_json
