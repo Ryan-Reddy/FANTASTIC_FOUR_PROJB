@@ -68,9 +68,9 @@ Slabel.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 """set to 0 this one to skip splashscreen"""
-splashscreen.after(00, splashscreen.destroy) #~12000ms
+splashscreen.after(12000, splashscreen.destroy) #~12000ms
 # function should be "delayedstart":
-# splashscreen.after(2000, delayedstart)
+splashscreen.after(2000, delayedstart)
 splashscreen.after(0, print('startingsplashscreen'))
 
 splashscreen.mainloop()
