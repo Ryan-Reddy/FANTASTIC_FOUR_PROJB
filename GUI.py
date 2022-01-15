@@ -16,8 +16,8 @@ font_color = 'white'
 # Steam logo font FF Din OT Bold:
 font_choice_logo = ('FF Din OT', 14, 'bold')
 font_choice = ('Arial'or'Helvetica', 12)
-# transparency mainscreen
-transparency = 0.8
+transparency = 0.8                              # <--- transparency mainscreen
+theme = 'classic'                # <--- Change default to whichever theme you want to use.
 # main_GUI_size = "" zodat deze aanpast aan de widgets die ik erin probeer te passen
 raam_formaat = ""
 # ******************************************************************************************************************
@@ -37,7 +37,7 @@ splashscreen.geometry('')
 splashscreen['bg'] = back_color
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # load splashscreen picture order file:
-with open("splashscreen\splash.txt") as l:
+with open(r"splashscreen\splash.txt") as l:
     print(l)
     splash_order = l.read().splitlines()
     l.close()
@@ -47,12 +47,12 @@ print(splash_order)
 def change_label():
         Slabel.configure(text='sdasdasdasd')
         for i in splash_order:
-            Slabel.configure(text=i)
+            Slabel.configure(text=i)                    # <--- change bottom screen text each imagechange
             filename = i
-            img = Image.open(filename)
+            img = Image.open(filename)                  # <--- load next image
             ph = ImageTk.PhotoImage(img)
-            img_label.configure(image=ph)
-            splashscreen.update_idletasks()
+            img_label.configure(image=ph)               # <--- swap current image with next
+            splashscreen.update_idletasks()             # <--- run configure task while still in loop !!!!
             time.sleep(random.uniform(1, 2.2))
 
 def delayedstart():
@@ -67,25 +67,23 @@ Slabel = Label(splashscreen, text='loading', bg=back_color, fg='gold')
 Slabel.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
-splashscreen.after(12000, splashscreen.destroy)
+"""set to 0 this one to skip splashscreen"""
+splashscreen.after(00, splashscreen.destroy) #~12000ms
 # function should be "delayedstart":
-splashscreen.after(2000, delayedstart)
+# splashscreen.after(2000, delayedstart)
 splashscreen.after(0, print('startingsplashscreen'))
+
 splashscreen.mainloop()
 # ******************************************************************************************************************
-"""# Readme scherm GUI:"""
+""" README SCHERM GUI:"""
 def open_new_window_readme():
-    # Open as a new window
-    new_window = Toplevel(root)
+    new_window = Toplevel(root)                                 # <---     open new window
+    new_window.title("READ ME PLEASE")                          # <---     sets the title readme
 
-    # sets the title readme
-    new_window.title("READ ME PLEASE")
-
-    # Achtergrond kleur van de readme (inclusief transparency)
+    #Achtergrond kleur van de readme (inclusief transparency)
     new_window['bg'] = back_color
     new_window.wait_visibility(new_window)
     new_window.wm_attributes('-alpha', .99)
-
     # De data van de README.MD
     text = Text(new_window, width=120, height=40, font='TkFixedFont', fg=font_color, bg=back_color,)
     # plaatsen van grid (moet apart anders herkent de scrollbar m niet)
@@ -97,7 +95,6 @@ def open_new_window_readme():
     scrollbar.grid(row=0, column=1, sticky='ns')
     # Readme scrollbar style
     style = ttk.Style()
-    style.theme_use('classic')
     style.configure("Vertical.TScrollbar", background="black", bordercolor="black", arrowcolor="white")
 
     # knop sluit de newwindow af
@@ -160,8 +157,9 @@ _frame = Frame(root, background=back_color, relief='ridge')
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Stijlen van de Tabel treeview:
 style = ttk.Style()
+style.theme_use('classic')
 # style.configure("Treeview.Scrollbar", foreground='red', background=back_color)
-style.configure("Treeview.Heading", foreground='green', background=back_color) #<----
+style.configure("Treeview.Heading", foreground='green', background=back_color)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Geeft aan welke data uit de dictionairy mee te nemen
 treeview = ttk.Treeview(root, show="headings",
@@ -173,6 +171,7 @@ treeview.heading("#2", text="Developer", command=lambda c="#2": sortby(treeview,
 treeview.heading("#3", text="Platforms", command=lambda c="#3": sortby(treeview, c, 0))
 treeview.heading("#4", text="Genre", command=lambda c="#4": sortby(treeview, c, 0))
 
+
 # Plaatst data van data_import(main) in treeview tabel
 # Plaatst ook tag = 'body' om later stijl toe te voegen
 for row in data_import:
@@ -180,19 +179,10 @@ for row in data_import:
 # stijlchoice body text
 treeview.tag_configure('body', background=back_color)
 
-
-# SCROLLBAR van tabel
-ysb = ttk.Scrollbar(orient=VERTICAL, command=treeview.yview)
-xsb = ttk.Scrollbar(orient=HORIZONTAL, command=treeview.xview)
-treeview['yscroll'] = ysb.set
-treeview['xscroll'] = xsb.set
-separator.add(_frame)
-# attempt to color scrollbar
-# style.configure("Vertical.Scrollbar", background="black", bordercolor="black", arrowcolor="white")
-# style.configure("Horizontal.Scrollbar", background="black", bordercolor="black", arrowcolor="white")
-
+# Geeft aan waar de tabel in het grid moet
+treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# sorteerd columns naar klik op de headers TODO implementeer slimmere algoritmes
+# sorteert columns naar klik op de headers TODO implementeer slimmere algoritmes
 def sortby(tree, col, descending):
     # grab values to sort
     data = [(tree.set(child, col), child)
@@ -204,14 +194,23 @@ def sortby(tree, col, descending):
     tree.heading(col, command=lambda col=col: sortby(tree, col, \
                                                      int(not descending)))
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Geeft aan waar de tabel in het grid moet
-treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
+# SCROLLBAR van tabel
+ysb = ttk.Scrollbar(orient=VERTICAL, command=treeview.yview)
+xsb = ttk.Scrollbar(orient=HORIZONTAL, command=treeview.xview)
+treeview['yscroll'] = ysb.set
+treeview['xscroll'] = xsb.set
+separator.add(_frame)
 
 # plaatst de scrollbar
 ysb.grid(in_=_frame, row=0, column=1, sticky=NS)
 xsb.grid(in_=_frame, row=1, column=0, sticky=EW)
 _frame.rowconfigure(0, weight=1)
 _frame.columnconfigure(0, weight=1)
+# attempt to color scrollbar
+
+style.configure("Vertical.TScrollbar", background="black", bordercolor="black", troughcolor='black', highlightcolor='white')
+style.configure("Horizontal.TScrollbar", background="black", bordercolor="black", troughcolor='black', highlightcolor='white')
+
 # ******************************************************************************************************************
 """# FIRE ~setup, programma, plaatsing"""
 # setup

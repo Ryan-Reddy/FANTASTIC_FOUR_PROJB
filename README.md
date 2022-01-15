@@ -28,7 +28,7 @@
 
 
                     Een software module met GUI, die de huidige games in steam weer kan geven en sorteren.
-                    Eventueel met een sociaal netwerk capaciteit.
+                    Eventueel met een bijpassende "steam-indicator"
  
 
                                  ▀ ▄▀▀▄ ▄▀   ▓▄▄  ▄▀▀▄ ▓   ▓   ▄▀▀▄ ▄▀▀▄ ▓▄▄  ▄▀▀  ▄▀
@@ -36,14 +36,15 @@
                                  ▀ ▀     ▀▀   ▀▀▀ ▀    ▀▀▀ ▀▀▀ ▀     ▀▀   ▀▀▀ ▀▀▀▀  ▀▀
 
 
-                    DEV_AZURE:
-                    https://dev.azure.com/HU-HBO-ICT/_git/2021-Prop-B-KlasO-T3
-
-                    Packages used:
-                    * tkinter(standard python3)
-                    * JSON(standard python3)
-                    * steamFunctions
-                    * glob
+                        1.  Clone the repository from GitHub or dev_azure.
+                        2.  Create a virtual environment.
+[//]: # (                    TODO update requirements.txt (tools>sync python requirements)
+                        3.  Install all dependencies. (noted in requirements.txt)
+                        3.  Play.
+                        3.  Support the software developers. If you like this game, BUY IT!
+    
+                        DEV_AZURE:
+                        https://dev.azure.com/HU-HBO-ICT/_git/2021-Prop-B-KlasO-T3
 
 
                                    ▄▀▀  ▄▀▀█ ▄▀▀▄ ▓  ▄ ▄▀▀█ ▄▀▀▄ ▄▀▀▄ ▓▄▄  ▄▀▀  ▄▀
@@ -51,12 +52,15 @@
                                     ▀▀    █   ▀▀   ▀▀  ▀    ▀     ▀▀   ▀▀▀ ▀▀▀▀  ▀▀
 
 
-                    * Jeffrey 1789404 (Vizility)
-                    * Ryan 1818885 (Ryan Reddy, klugook)
-                    * Tuur 1780653 (Neex219)
-                    * Souf 1785097
-                    * Léon 1809101 (Phj1969)
-
+                                    * Jeffrey 1789404 (Vizility)
+                                    * Ryan 1818885 (Ryan Reddy, klugook)
+                                    * Tuur 1780653 (Neex219)
+                                    * Souf 1785097
+                                    * Léon 1809101 (Phj1969)
+                
+                                    License:
+                                    [MIT](https://choosealicense.com/licenses/mit/)
+                    
                     
                       ÜÛÛÜ                                                                   ÜÛÛÜ
                      ²ßßÛÛÛ²   ÜÜ      Ûßß ÛßÛ ÛßÛ Û Û ÛßÛ   ÛßÛ ÛßÛ ßÛß Ûßß Ûßß      ÜÜ   ²ÛÛÛßß²
