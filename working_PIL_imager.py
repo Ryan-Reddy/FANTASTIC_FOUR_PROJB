@@ -14,6 +14,6 @@ img.show()
 import sys
 print(sys.executable)
 
-l1 = Label(window, image=ph).pack()
+Label(window, image=ph).pack()
 window.mainloop()
 

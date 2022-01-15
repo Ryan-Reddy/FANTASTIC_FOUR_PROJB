@@ -1,12 +1,16 @@
 """Gui van de applicatie"""
+
+import time
+import random
 from main import *
 from tkinter import *
 import tkinter.ttk as ttk
 from steamFunctions import *
-import time
-
+from PIL import Image, ImageTk
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # TODO add tkinter styles
+
 # Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
 back_color = 'black'
 font_color = 'white'
@@ -17,6 +21,30 @@ font_choice = ('Arial'or'Helvetica', 12)
 transparency = 0.8
 # main_GUI_size = "" zodat deze aanpast aan de widgets die ik erin probeer te passen
 raam_formaat = ""
+# Run het programma splashscreen eerst
+splashscreen = Tk()
+# change window attributes
+# Removes TITELBALK
+splashscreen.overrideredirect(1)
+# topmost screen
+splashscreen.call('wm', 'attributes', '.', '-topmost', 'true')
+# maat van screen + positie (steam-logo-large.jpg = 960x307)
+splashscreen.geometry("960x307+471+387")
+# Achtergrond kleur van de readme (inclusief transparency)
+splashscreen['bg'] = 'red'
+
+# IMAGER: TODO get working
+
+image = "steamlogolarge40.jpg"
+
+img = Image.open(image)
+ph = ImageTk.PhotoImage(img)
+Label(splashscreen, image=ph).pack()
+
+
+splashscreen.after(1500, splashscreen.destroy)
+# splashscreen.after(1200, startmainscreen)
+splashscreen.mainloop()
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,10 +123,8 @@ Button(root, text="Quit Steam Dashboard", font=font_choice, background='red', fo
 
 # Knop voor about(readme.md) in een apart scherm ~ start ook bij opstarten programma, vandaar  "" OR ""(self)
 Button(root, text="About", font=font_choice, background='gray', foreground=font_color,
-       command=open_new_window_readme() or open_new_window_readme).grid(column=3, row=6)
+       command=open_new_window_readme or open_new_window_readme).grid(column=3, row=6)
 # knop om te sorteren
-
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Maakt een raamwerk in de root aan voor de tabel
 separator = PanedWindow(root, bd=0, bg=back_color, sashwidth=2)
@@ -108,7 +134,7 @@ _frame = Frame(root, background=back_color, relief='ridge')
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Stijlen van de Tabel treeview:
 style = ttk.Style()
-style.configure("Treeview.Scrollbar", foreground='red', background=back_color)
+# style.configure("Treeview.Scrollbar", foreground='red', background=back_color)
 style.configure("Treeview.Heading", foreground='green', background=back_color) #<----
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Geeft aan welke data uit de dictionairy mee te nemen
@@ -136,8 +162,8 @@ treeview['yscroll'] = ysb.set
 treeview['xscroll'] = xsb.set
 separator.add(_frame)
 # attempt to color scrollbar
-style.configure("Vertical.Scrollbar", background="black", bordercolor="black", arrowcolor="white")
-style.configure("Horizontal.Scrollbar", background="black", bordercolor="black", arrowcolor="white")
+# style.configure("Vertical.Scrollbar", background="black", bordercolor="black", arrowcolor="white")
+# style.configure("Horizontal.Scrollbar", background="black", bordercolor="black", arrowcolor="white")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # sorteerd columns naar klik op de headers TODO implementeer slimmere algoritmes
@@ -160,11 +186,9 @@ ysb.grid(in_=_frame, row=0, column=1, sticky=NS)
 xsb.grid(in_=_frame, row=1, column=0, sticky=EW)
 _frame.rowconfigure(0, weight=1)
 _frame.columnconfigure(0, weight=1)
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # FIRE
 Flabel = Label(root, text='a', font='TkFixedFont', bg='black', fg='gold')
-
 def get_txt1():
     fire1= glob.glob("fire1.txt")
     return open(fire1[0], 'r', encoding='utf-8').read()
@@ -190,39 +214,10 @@ def moving_ascii2():
 
 Flabel.grid(column=1, row=7)
 Flabel.after(1, moving_ascii)
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-
-# Run het programma splashscreen eerst
-splashscreen = Tk()
-
-# # change window attributes
-#
-# # Removes TITELBALK
-# splashscreen.overrideredirect(1)
-# # topmost screen
-# splashscreen.call('wm', 'attributes', '.', '-topmost', 'true')
-# # maat van screen + positie (steam-logo-large.jpg = 960x307)
-# splashscreen.geometry("970x310+471+387")
-#
-# # Achtergrond kleur van de readme (inclusief transparency)
-# splashscreen['bg'] = 'red'
-
-
-from PIL import Image, ImageTk
-
-image = r"C:\Users\RyRy\PycharmProjects\FANTASTIC_FOUR_PROJB\steamlogolarge.jpg"
-
-img = Image.open(image)
-ph = ImageTk.PhotoImage(img)
-img.show()
-
-l1 = Label(splashscreen, image=ph).pack()
-
-
-
-splashscreen.after(5000, splashscreen.destroy)
-splashscreen.mainloop()
 root.mainloop()
+
+
+
+
