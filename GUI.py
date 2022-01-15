@@ -7,6 +7,8 @@ from tkinter import *
 import tkinter.ttk as ttk
 from steamFunctions import *
 from PIL import Image, ImageTk
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # TODO add tkinter styles
@@ -30,6 +32,7 @@ splashscreen.overrideredirect(1)
 splashscreen.call('wm', 'attributes', '.', '-topmost', 'true')
 # maat van screen + positie (steam-logo-large.jpg = 960x307)
 splashscreen.geometry("960x307+471+387")
+splashscreen.geometry('')
 # Achtergrond kleur van de readme (inclusief transparency)
 splashscreen['bg'] = 'red'
 
@@ -37,14 +40,45 @@ splashscreen['bg'] = 'red'
 
 image = "steamlogolarge40.jpg"
 
-img = Image.open(image)
+lst = [r"steamlogolarge40.jpg",
+r"steamlogolarge48.jpg",
+r"steamlogolarge54.jpg",
+r"steamlogolarge60.jpg",
+r"steamlogolarge80.jpg",
+r"steamlogolarge85.jpg",
+r"steamlogolarge92.jpg",
+r"steamlogolarge100.jpg"]
+
+def change_label():
+        Slabel.configure(text='sdasdasdasd')
+        for i in lst:
+            Slabel.configure(text=i)
+            filename = i
+            img = Image.open(filename)
+            ph = ImageTk.PhotoImage(img)
+            img_label.configure(image=ph)
+            splashscreen.update_idletasks()
+            time.sleep(random.uniform(1, 2.2))
+
+def delayedstart():
+    change_label()
+
+filename = str(lst[0])
+img = Image.open(filename)
 ph = ImageTk.PhotoImage(img)
-Label(splashscreen, image=ph).pack()
+img_label = Label(splashscreen, image=ph)
+img_label.pack()
 
+Slabel = Label(splashscreen, text='loading', bg='black', fg='gold')
+Slabel.pack()
 
-splashscreen.after(1500, splashscreen.destroy)
-# splashscreen.after(1200, startmainscreen)
+splashscreen.after(20000, splashscreen.destroy)
+# function should be "delayedstart":
+splashscreen.after(299, delayedstart)
+splashscreen.after(0, print('startingsplashscreen'))
 splashscreen.mainloop()
+
+
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
