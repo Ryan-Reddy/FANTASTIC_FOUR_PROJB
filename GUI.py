@@ -34,7 +34,7 @@ splashscreen.call('wm', 'attributes', '.', '-topmost', 'true')
 splashscreen.geometry("960x307+471+387")
 splashscreen.geometry('')
 # Achtergrond kleur van de readme (inclusief transparency)
-splashscreen['bg'] = 'red'
+splashscreen['bg'] = back_color
 
 # IMAGER: TODO get working
 
@@ -63,18 +63,18 @@ def change_label():
 def delayedstart():
     change_label()
 
+# initial opvulling splashscreen
 filename = str(lst[0])
 img = Image.open(filename)
 ph = ImageTk.PhotoImage(img)
 img_label = Label(splashscreen, image=ph)
 img_label.pack()
-
-Slabel = Label(splashscreen, text='loading', bg='black', fg='gold')
+Slabel = Label(splashscreen, text='loading', bg=back_color, fg='gold')
 Slabel.pack()
 
-splashscreen.after(20000, splashscreen.destroy)
+splashscreen.after(12000, splashscreen.destroy)
 # function should be "delayedstart":
-splashscreen.after(299, delayedstart)
+splashscreen.after(2000, delayedstart)
 splashscreen.after(0, print('startingsplashscreen'))
 splashscreen.mainloop()
 
