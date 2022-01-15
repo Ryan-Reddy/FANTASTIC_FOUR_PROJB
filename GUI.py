@@ -22,6 +22,7 @@ transparency = 0.8
 # main_GUI_size = "" zodat deze aanpast aan de widgets die ik erin probeer te passen
 raam_formaat = ""
 # ******************************************************************************************************************
+# TODO: change changeable text at bottom to commits, last minute change
 """# SPLASHSCREEN ~ setup, load list, motion seq., initial fill, main programme"""
 # setup splashscreen
 splashscreen = Tk()
