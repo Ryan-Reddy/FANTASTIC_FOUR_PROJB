@@ -1,4 +1,4 @@
-"""Gui van de applicatie"""
+"""GUI of the Application"""
 
 import time
 import random
@@ -19,7 +19,7 @@ FONT_MAIN = (
     "Arial" or "Helvetica",
     12,
 )  # <--- Arial-standard, helvetica for MAC systems (STEAM_OFFICIAL)
-TRANSPARENCY_BACKGROUND = 0.8  # <--- transparency mainscreen
+TRANSPARENCY_BACKGROUND = 0.9  # <--- transparency mainscreen
 FLAME_SPEED = 256
 WINDOW_SIZE = ""  # <--- Autoadjusts to content
 # ******************************************************************************************************************
@@ -27,7 +27,7 @@ WINDOW_SIZE = ""  # <--- Autoadjusts to content
 """# SPLASHSCREEN ~ setup, load list, motion seq., initial fill, main programme"""
 
 splashscreen = Tk()  # <--- setup splashscreen
-splashscreen.overrideredirect(1)  # <--- Removes TITELBALK
+splashscreen.overrideredirect(True)  # <--- Removes TITELBALK
 
 splashscreen.call("wm", "attributes", ".", "-topmost", "true")  # <--- # topmost screen
 
@@ -39,25 +39,29 @@ splashscreen.geometry("")  # <--- autoadjust overrides upper geometry
 splashscreen["bg"] = BACK_COLOR
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # load splashscreen picture order file:
-with open(r"splashscreen\splash.txt") as splashloader_filelist:
-    print(splashloader_filelist)
-    splash_order = splashloader_filelist.read().splitlines()
-    splashloader_filelist.close()
+with open(r"splashscreen\splash.txt") as splash_loader_filelist:
+    print(splash_loader_filelist)
+    splash_order = splash_loader_filelist.read().splitlines()
+    splash_loader_filelist.close()
 print(splash_order)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen IMAGER/motion sequence:
+
+
 def change_label():
     for i in splash_order:
-        Slabel.configure(text=i)  # <--- change bottom screen text each imagechange
+        splash_label.configure(
+            text=i
+        )  # <--- change bottom screen text each imagechange
         filename = i
-        img = Image.open(filename)  # <--- load next image
-        ph = ImageTk.PhotoImage(img)
-        img_label.configure(image=ph)  # <--- swap current image with next
+        img_var = Image.open(filename)  # <--- load next image
+        photo_image = ImageTk.PhotoImage(img_var)
+        img_label.configure(image=photo_image)  # <--- swap current image with next
         splashscreen.update_idletasks()  # <--- run configure task while still in loop !!!!
         time.sleep(random.uniform(1, 2.2))
 
 
-def delayedstart():
+def delayed_start():
     change_label()
 
 
@@ -67,20 +71,20 @@ img = Image.open(splash_order[0])
 ph = ImageTk.PhotoImage(img)
 img_label = Label(splashscreen, image=ph)
 img_label.pack()
-Slabel = Label(splashscreen, text="loading", bg=BACK_COLOR, fg="gold")
-Slabel.pack()
+splash_label = Label(splashscreen, text="loading", bg=BACK_COLOR, fg="gold")
+splash_label.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
     12000, splashscreen.destroy
 )  # ~12000ms set to 0 this one to skip splashscreen
 # function should be "delayedstart":
-splashscreen.after(2000, delayedstart)
-splashscreen.after(0, print("startingsplashscreen"))
+splashscreen.after(2000, delayed_start)
+splashscreen.after(0, print("starting splashscreen"))
 
 splashscreen.mainloop()
 # ******************************************************************************************************************
-""" README SCHERM GUI:"""
+""" README SCREEN GUI:"""
 
 
 def open_new_window_readme():
@@ -108,8 +112,8 @@ def open_new_window_readme():
     scrollbar = ttk.Scrollbar(new_window, orient="vertical", command=text.yview)
     scrollbar.grid(row=0, column=1, sticky="ns")
     # Readme scrollbar style
-    style = ttk.Style()
-    style.configure(
+    my_style = ttk.Style()
+    my_style.configure(
         "Vertical.TScrollbar",
         background="black",
         bordercolor="black",
@@ -121,7 +125,7 @@ def open_new_window_readme():
 
 
 # ******************************************************************************************************************
-"""# MAINSCREEN ~ GUI settings:"""
+"""# MAIN-SCREEN ~ GUI settings:"""
 root = Tk()
 # Raam formaat:
 root.geometry(WINDOW_SIZE)
@@ -133,7 +137,7 @@ root["bg"] = BACK_COLOR
 root.wait_visibility(root)
 root.wm_attributes("-alpha", TRANSPARENCY_BACKGROUND)
 # ******************************************************************************************************************
-"""# MAINSCREEN ~ Labels and Buttons:"""
+"""# MAIN SCREEN ~ Labels and Buttons:"""
 
 # De labels die je ziet op scherm
 # TITEL
@@ -218,7 +222,7 @@ Button(
 
 # knop om te sorteren
 # ******************************************************************************************************************
-"""# TREEVIEW ~ window, stijl, data, scrollbar, kolomsorteerfunctie, """
+"""# TREEVIEW ~ window, style, data, scrollbar, column-sorting-function """
 # Maakt een raamwerk in de root aan voor de tabel
 
 separator = PanedWindow(root, bd=0, bg=BACK_COLOR, sashwidth=2)
@@ -241,10 +245,10 @@ treeview = ttk.Treeview(
 )
 
 # Voegt Kolomkoppen toe, command = sorteerfunctie(sortby)
-treeview.heading("#1", text="Name", command=lambda c="#1": sortby(treeview, c, 0))
-treeview.heading("#2", text="Developer", command=lambda c="#2": sortby(treeview, c, 0))
-treeview.heading("#3", text="Platforms", command=lambda c="#3": sortby(treeview, c, 0))
-treeview.heading("#4", text="Genre", command=lambda c="#4": sortby(treeview, c, 0))
+treeview.heading("#1", text="Name", command=lambda c="#1": sort_by(treeview, c, 0))
+treeview.heading("#2", text="Developer", command=lambda c="#2": sort_by(treeview, c, 0))
+treeview.heading("#3", text="Platforms", command=lambda c="#3": sort_by(treeview, c, 0))
+treeview.heading("#4", text="Genre", command=lambda c="#4": sort_by(treeview, c, 0))
 
 
 # Plaatst data van data_import(main) in treeview tabel
@@ -263,14 +267,18 @@ treeview.tag_configure("body", background=BACK_COLOR)
 treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # sorteert columns naar klik op de headers TODO implementeer slimmere algoritmes
-def sortby(tree, col, descending):
+
+
+def sort_by(tree, col, descending):
     # grab values to sort
-    data_tree = [(tree.set(child, col), child) for child in tree.get_children("")]
-    data_tree.sort(reverse=descending)
-    for ix, item in enumerate(data_tree):
+    header_data = [(tree.set(child, col), child) for child in tree.get_children("")]
+    header_data.sort(reverse=descending)
+    for ix, item in enumerate(header_data):
         tree.move(item[1], "", ix)
-    # switch the heading so it will sort in the opposite direction
-    tree.heading(col, command=lambda col=col: sortby(tree, col, int(not descending)))
+    # switch the heading, so it will sort in the opposite direction.
+    tree.heading(
+        col, command=lambda local_col=col: sort_by(tree, local_col, int(not descending))
+    )
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -306,7 +314,7 @@ style.configure(
 # ******************************************************************************************************************
 """# FIRE ~setup, pickup data, programme, placing"""
 # setup
-Flabel = Label(root, text="a", font="TkFixedFont", bg="black", fg="gold")
+FIRE_LABEL = Label(root, text="a", font="TkFixedFont", bg="black", fg="gold")
 
 
 def get_txt1():
@@ -326,13 +334,13 @@ def get_txt2():
 
 
 def moving_ascii():  # <--- Flame one direction.
-    Flabel.configure(text=get_txt1())
-    Flabel.after(FLAME_SPEED, moving_ascii2)
+    FIRE_LABEL.configure(text=get_txt1())
+    FIRE_LABEL.after(FLAME_SPEED, moving_ascii2)
 
 
 def moving_ascii2():  # <--- Flame other direction.
-    Flabel.configure(text=get_txt2())
-    Flabel.after(FLAME_SPEED, moving_ascii)
+    FIRE_LABEL.configure(text=get_txt2())
+    FIRE_LABEL.after(FLAME_SPEED, moving_ascii)
 
 
 #
@@ -340,8 +348,8 @@ def moving_ascii2():  # <--- Flame other direction.
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # PLaatsting FIRE
-Flabel.grid(column=1, row=7)
-Flabel.after(1, moving_ascii)
+FIRE_LABEL.grid(column=1, row=7)
+FIRE_LABEL.after(1, moving_ascii)
 # ******************************************************************************************************************
 """# Running main GUI"""
 root.mainloop()

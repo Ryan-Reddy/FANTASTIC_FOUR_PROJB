@@ -8,7 +8,7 @@ def startup_message():
     print("Starting up programme...".format())
 
     # count records in list:
-    num = sum(1 for element in open("steam_small.json"))
+    num = sum(1 for element in open("steam_small.json"))  # <--- element not used
 
     # print amount datapoints
     print("steam_small.json contains: ", num, " records,")
@@ -29,7 +29,7 @@ def get_readme():
 # Mainscreen functions:
 
 
-def get_gamename(steamy):
+def get_game(steamy):
     return steamy.get("name")
 
 
@@ -45,14 +45,14 @@ first_game_in_json = data_import[0]["name"]
 print(data_import[0]["name"])
 
 # sort by gamename, print top
-data_import.sort(key=get_gamename)
+data_import.sort(key=get_game)
 print("first game in list", data_import[0]["name"])
 
 # reverse sort by gamename, print top, then resort list (normal)
-data_import.sort(key=get_gamename, reverse=True)
+data_import.sort(key=get_game, reverse=True)
 print("last game in list", data_import[0]["name"])
 # reverse to normal
-data_import.sort(key=get_gamename)
+data_import.sort(key=get_game)
 
 # Main Program:
 startup_message()

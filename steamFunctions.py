@@ -16,7 +16,7 @@ def average_game_price():
 
     # Bepaal de gemiddelde prijs van alle spellen en geeft deze waarde terug als getal met 2 decimalen.
     average = total / count
-    #average = "{:.2f}".format(total/count)
+    # average = "{:.2f}".format(total/count)
     formatting = "{average_price:.2f}"
     return formatting.format(average_price=average)
 

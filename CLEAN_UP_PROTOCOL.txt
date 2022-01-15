@@ -1,4 +1,4 @@
-1. Coverage
-2. Black
-3. pylint
-4. PEP8
+1. Coverage (cutout redundant code)
+2. Black (formatting)
+3. pylint (including PEP8)
+4.
