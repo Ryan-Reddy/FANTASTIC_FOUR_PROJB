@@ -7,7 +7,6 @@ from tkinter import *
 import tkinter.ttk as ttk
 from steamFunctions import *
 from PIL import Image, ImageTk
-
 # ******************************************************************************************************************
 # TODO add tkinter styles
 """#STYLE/COLOR CHOICES"""
