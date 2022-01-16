@@ -147,8 +147,8 @@ def open_new_window_readme():
         arrowcolor="white",
     )
 
-    # knop sluit de newwindow af
-    Button(new_window, text="Back", bg="red", command=new_window.destroy).grid(row=1)
+    # close readme
+    Button(new_window, text="close", bg="red", command=new_window.destroy).grid(row=1)
 
 
 # ******************************************************************************************************************
@@ -157,12 +157,11 @@ root = Tk()
 # Raam formaat:
 root.geometry(WINDOW_SIZE)
 
-root.eval("tk::PlaceWindow . center")  # <--- places window in center of any screen
+root.eval("tk::PlaceWindow . center")  # <--- window to center screen
 
 # Achtergrond kleur:
 root["bg"] = BACK_COLOR
-# Wacht totdat de pagina zichtbaar is, en maakt dan pagina doorzichtig 90%
-root.wait_visibility(root)
+root.wait_visibility(root)  # <---waits, then makes page translucent
 root.wm_attributes("-alpha", TRANSPARENCY_BACKGROUND, "-fullscreen", True)
 # window_name.attributes('-fullscreen',True)
 
@@ -241,7 +240,8 @@ Button(
     font=FONT_MAIN,
     background="gray",
     foreground=FONT_COLOR,
-    command=open_new_window_readme(),  # <--- change to open_new_window_readme() to auto start upon launch
+    command=open_new_window_readme()
+    or open_new_window_readme,  # <--- change to open_new_window_readme() to auto start upon launch
 ).grid(column=0, row=5, sticky=W, padx=20)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
