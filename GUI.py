@@ -1,5 +1,5 @@
 """GUI of the Application"""
-
+import os
 import time
 import random
 from main import *
@@ -39,7 +39,8 @@ splashscreen.geometry("")  # <--- autoadjust overrides upper geometry
 splashscreen["bg"] = BACK_COLOR
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # input splashscreen picture order file:
-with open(r"splashscreen\splash.txt") as splash_loader_filelist:
+splashpath = os.path.join("splashscreen", "splash.txt")
+with open(splashpath) as splash_loader_filelist:
     splash_order = splash_loader_filelist.read().splitlines()
     splash_loader_filelist.close()
 
