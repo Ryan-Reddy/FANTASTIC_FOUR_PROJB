@@ -4,11 +4,11 @@ import time
 import random
 from main import *
 from tkinter import *
-import tkinter.ttk as ttk
+from tkinter import ttk
 from steamFunctions import *
 from PIL import Image, ImageTk
 
-# ******************************************************************************************************************
+# *************************************************************************************************
 # TODO add tkinter styles
 """#STYLE/COLOR CHOICES"""
 # Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
@@ -22,7 +22,7 @@ FONT_MAIN = (
 TRANSPARENCY_BACKGROUND = 1  # <--- transparency mainscreen
 FLAME_SPEED = 256
 WINDOW_SIZE = ""  # <--- Autoadjusts to content
-# ******************************************************************************************************************
+# *************************************************************************************************
 # TODO: change changeable text at bottom to commits, last minute change
 """# SPLASHSCREEN ~ setup, load list, motion seq., initial fill, main programme"""
 
@@ -37,28 +37,26 @@ splashscreen.geometry(
 splashscreen.geometry("")  # <--- autoadjust overrides upper geometry
 # Achtergrond kleur van de readme (inclusief transparency)
 splashscreen["bg"] = BACK_COLOR
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# load splashscreen picture order file:
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# input splashscreen picture order file:
 with open(r"splashscreen\splash.txt") as splash_loader_filelist:
-    print(splash_loader_filelist)
     splash_order = splash_loader_filelist.read().splitlines()
     splash_loader_filelist.close()
-print(splash_order)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#  Calculates center of active screen
-w = 980  # width for the readme root
-h = 680  # height for the readme root
-
-
-# get screen width and height
-SPLASH_WIDTH = splashscreen.winfo_screenwidth()  # width of the screen
-SPLASH_HEIGHT = splashscreen.winfo_screenheight()  # height of the screen
-
-# calculate x and y coordinates for the Tk root window
-WINDOW_xMIDDLE = (SPLASH_WIDTH / 2) - (w / 2)
-WINDOW_yMIDDLE = (SPLASH_HEIGHT / 2) - (h / 2)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# #  Calculates center of active screen
+# w = 980  # width for the readme root
+# h = 680  # height for the readme root
+#
+#
+# # get screen width and height
+# SPLASH_WIDTH = splashscreen.winfo_screenwidth()  # width of the screen
+# SPLASH_HEIGHT = splashscreen.winfo_screenheight()  # height of the screen
+#
+# # calculate x and y coordinates for the Tk root window
+# WINDOW_xMIDDLE = (SPLASH_WIDTH / 2) - (w / 2)
+# WINDOW_yMIDDLE = (SPLASH_HEIGHT / 2) - (h / 2)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen IMAGER/motion sequence:
 
 
@@ -79,7 +77,7 @@ def delayed_start():
     change_label()
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # initial fill splashscreen
 img = Image.open(splash_order[0])
 ph = ImageTk.PhotoImage(img)
@@ -87,10 +85,10 @@ img_label = Label(splashscreen, image=ph)
 img_label.pack()
 splash_label = Label(splashscreen, text="loading", bg=BACK_COLOR, fg="gold")
 splash_label.pack()
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    2000,
+    12000,
     splashscreen.destroy,  # TODO <--- 12000ms set to 0 this one to skip splashscreen
 )
 # function should be "delayedstart":
@@ -100,7 +98,8 @@ splashscreen.after(0, print("starting splashscreen"))
 splashscreen.eval("tk::PlaceWindow . center")  # <--- center splashscreen
 
 splashscreen.mainloop()
-# ******************************************************************************************************************
+# *************************************************************************************************
+
 """ README SCREEN GUI:"""
 
 
@@ -131,8 +130,7 @@ def open_new_window_readme():
         fg=FONT_COLOR,
         bg=BACK_COLOR,
     )
-    # plaatsen van grid (moet apart anders herkent de scrollbar m niet)
-    text.grid(row=0)
+    text.grid(row=0)  # <--- placement of .grid seperate or scrollbar doesnt compute
     text.insert(END, get_readme())
 
     # Scrollbar
@@ -142,10 +140,10 @@ def open_new_window_readme():
     my_style = ttk.Style()
     my_style.theme_use("classic")
     my_style.configure(
-        "Vertical.TScrollbar",
+        "Scrollbar",
         background="black",
         bordercolor="black",
-        arrowcolor="white",
+        arrowcolor="black",
     )
 
     # close readme
@@ -154,7 +152,7 @@ def open_new_window_readme():
     )
 
 
-# ******************************************************************************************************************
+# *************************************************************************************************
 """# MAIN-SCREEN ~ GUI settings:"""
 root = Tk()
 # Raam formaat:
@@ -168,30 +166,19 @@ root.wait_visibility(root)  # <---waits, then makes page translucent
 root.wm_attributes("-alpha", TRANSPARENCY_BACKGROUND, "-fullscreen", True)
 # window_name.attributes('-fullscreen',True)
 
-# ******************************************************************************************************************
+# *************************************************************************************************
+
 """# MAIN SCREEN ~ Labels and Buttons:"""
 # TODO build a frame to rule them all, and then center on screen
 centering_frame = Frame(
     root,
-    bg="white",
+    bg=BACK_COLOR,
     width=600,
     height=600,
     relief=GROOVE,
     borderwidth=7,
 )
-centering_frame.place(relx=0.5, rely=0.5, anchor="w")
-
-
-w = Listbox(
-    master=centering_frame,
-    bg=BACK_COLOR,
-    fg=FONT_COLOR,
-    width=10,
-    height=10,
-    listvariable=splash_order,
-)
-w.grid()
-
+centering_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 # lefttop frame (frame in root)
 frame_lefttop = Frame(
@@ -205,7 +192,22 @@ frame_lefttop = Frame(
 frame_lefttop.grid(row=1, column=0)
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# lefttop frame contents
+
+# buttonframe for in lefttop frame
+w = Listbox(
+    master=frame_lefttop,
+    bg=BACK_COLOR,
+    fg=FONT_COLOR,
+    setgrid=True,
+    width=10,
+    height=10,
+    listvariable=splash_order,
+)
+w.grid(row=1, column=1, sticky=E)
+
+
 # buttonframe for in lefttop frame
 button_frame = Frame(
     master=frame_lefttop,
@@ -222,7 +224,7 @@ button_frame.grid(row=1, column=0, pady=50, padx=50, sticky="W")
 # one for each column
 
 for i in range(10):
-    for j in range(1):
+    for j in range(2):
         frame = Frame(master=button_frame, bg="gray", relief=GROOVE, borderwidth=7)
         frame.grid(row=i, column=j, padx=5, pady=5)
         label = Button(
@@ -234,49 +236,41 @@ for i in range(10):
             width=30,
         )
         label.pack()
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# textlist for in lefttop frame
-textlist_frame = Frame(
-    master=frame_lefttop,
-    bg=BACK_COLOR,
-    # width=800,
-    # height=600,
-    relief=GROOVE,
-    borderwidth=7,
-)
-textlist_frame.grid(row=1, column=0, pady=50, padx=50, sticky="SE")
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# # textlist for in lefttop frame
+# textlist_frame = Frame(
+#     master=frame_lefttop,
+#     bg=BACK_COLOR,
+#     # width=800,
+#     # height=600,
+#     relief=GROOVE,
+#     borderwidth=7,
+# )
+# textlist_frame.grid(row=1, column=0, pady=50, padx=50, sticky="SE")
 
-w = Listbox(
-    master=textlist_frame,
-    bg=BACK_COLOR,
-    fg=FONT_COLOR,
-    width=10,
-    height=10,
-    listvariable=splash_order,
-).pack()
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Buttons in the mainscreen
 # Button to terminate mainscreen
 Button(
-    root,
+    centering_frame,
     text="Quit Steam Dashboard",
     font=FONT_MAIN,
     background="red",
     foreground="white",
     command=root.destroy,
-).grid(column=1, row=5, sticky=E, padx=20)
+).grid(column=1, row=7, sticky=E, padx=20)
 
 # Button to open readme, also calls itself at start of programme after splash
 Button(
-    root,
+    centering_frame,
     text="About",
     font=FONT_MAIN,
     background="gray",
     foreground=FONT_COLOR,
     command=open_new_window_readme()
     or open_new_window_readme,  # <--- change to open_new_window_readme() to auto start upon launch
-).grid(column=0, row=5, sticky=W, padx=20)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+).grid(column=0, row=7, sticky=W, pady=10, padx=20)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 # Label van eerste spel in lijst:
@@ -342,7 +336,8 @@ Label(
 ).grid(row=0, column=0, columnspan=(2))
 
 
-# ******************************************************************************************************************
+# *************************************************************************************************
+
 """# TREEVIEW ~ window, style, data, scrollbar, column-sorting-function """
 # Maakt een raamwerk in de root aan voor de tabel
 separator = PanedWindow(
@@ -351,14 +346,14 @@ separator = PanedWindow(
 separator.grid(row=1, column=1)
 # rechter onderhoekje:
 _frame = Frame(centering_frame, background=BACK_COLOR, relief="ridge")
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Stijlen van de Tabel treeview:
 style = ttk.Style()
 style.theme_use("classic")
 # style.configure("Treeview.Scrollbar", foreground='red', background=back_color)
 style.configure("Treeview.Heading", foreground="green", background=BACK_COLOR)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Geeft aan welke data uit de dictionairy mee te nemen
 treeview = ttk.Treeview(
     root,
@@ -416,13 +411,12 @@ treeview.tag_configure("body", background=BACK_COLOR)
 
 # Geeft aan waar de tabel in het grid moet
 treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # sorteert columns naar klik op de headers TODO implementeer slimmere algoritmes
 
 
 def sort_by(tree, col, descending):
     print("beginning at 0")
-    t0 = time.perf_counter_ns()
 
     # grab values to sort
     header_data = [(tree.set(child, col), child) for child in tree.get_children("")]
@@ -434,16 +428,12 @@ def sort_by(tree, col, descending):
     for ix, item in enumerate(header_data):
         tree.move(item[1], "", ix)
     # switch the heading, so it will sort in the opposite direction.
-
-    t1 = time.perf_counter_ns() - t0
-
-    print("endtime = ", t1, " ms")
     tree.heading(
         col, command=lambda local_col=col: sort_by(tree, local_col, int(not descending))
     )
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # SCROLLBAR van tabel
 ysb = ttk.Scrollbar(orient=VERTICAL, command=treeview.yview)
 xsb = ttk.Scrollbar(orient=HORIZONTAL, command=treeview.xview)
@@ -473,27 +463,34 @@ style.configure(
     highlightcolor="white",
 )
 
-# ******************************************************************************************************************
+# *************************************************************************************************
+
 """# FIRE ~setup, pickup data, programme, placing"""
 # setup
-FIRE_LABEL = Label(root, text="a", font="TkFixedFont", bg="black", fg="green")
-FIRE_LABEL2 = Label(root, text="a", font="TkFixedFont", bg="black", fg="green")
-FIRE_LABEL3 = Label(root, text="a", font="TkFixedFont", bg="black", fg="green")
+FIRE_LABEL = Label(
+    centering_frame, text="a", font="TkFixedFont", bg="black", fg="green"
+)
+FIRE_LABEL2 = Label(
+    centering_frame, text="a", font="TkFixedFont", bg="black", fg="green"
+)
+FIRE_LABEL3 = Label(
+    centering_frame, text="a", font="TkFixedFont", bg="black", fg="green"
+)
+fire1 = glob.glob("fire1.txt")
+fire2 = glob.glob("fire2.txt")
 
 
 def get_txt1():
-    fire1 = glob.glob("fire1.txt")
     text1 = open(fire1[0], "r", encoding="utf-8").read()
     return text1
 
 
 def get_txt2():
-    fire2 = glob.glob("fire2.txt")
     text2 = open(fire2[0], "r", encoding="utf-8").read()
     return text2
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # FIRE programma zelf
 
 
@@ -511,17 +508,18 @@ def moving_ascii2():  # <--- Flame other direction.
     FIRE_LABEL.after(FLAME_SPEED, moving_ascii)
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # PLaatsting FIRE
-FIRE_LABEL.grid(column=0, row=8)
-FIRE_LABEL3.grid(column=1, row=8)
+FIRE_LABEL.grid(column=0, row=2)
+FIRE_LABEL3.grid(column=1, row=2)
 FIRE_LABEL.after(1, moving_ascii)
 FIRE_LABEL3.after(1, moving_ascii)
 
 
-# ******************************************************************************************************************
+# *************************************************************************************************
+
 """ Run main GUI"""
 root.eval("tk::PlaceWindow . center")  # <--- center screen
 
 root.mainloop()
-# ******************************************************************************************************************
+# *************************************************************************************************
