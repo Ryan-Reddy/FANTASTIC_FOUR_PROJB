@@ -105,11 +105,11 @@ splashscreen.mainloop()
 
 def open_new_window_readme():
     new_window = Tk()  # <---     open new window
-    new_window.overrideredirect(True)  # <--- Removes Title bar
+    # new_window.overrideredirect(True)  # <--- Removes Title bar
 
     # set the dimensions of the screen based upon earlier code
     # and where it is placed
-    new_window.geometry("%dx%d+%d+%d" % (w, h, WINDOW_xMIDDLE, WINDOW_yMIDDLE))
+    new_window.geometry("")
 
     # new_window.title("READ ME PLEASE")  # <---     sets the title readme
     new_window.call(
@@ -139,6 +139,7 @@ def open_new_window_readme():
     scrollbar.grid(row=0, column=1, sticky="ns")
     # Readme scrollbar style
     my_style = ttk.Style()
+    my_style.theme_use("classic")
     my_style.configure(
         "Vertical.TScrollbar",
         background="black",
@@ -240,7 +241,7 @@ Button(
     font=FONT_MAIN,
     background="gray",
     foreground=FONT_COLOR,
-    command=open_new_window_readme,  # <--- change to open_new_window_readme() to auto start upon launch
+    command=open_new_window_readme(),  # <--- change to open_new_window_readme() to auto start upon launch
 ).grid(column=0, row=5, sticky=W, padx=20)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -321,6 +322,7 @@ style = ttk.Style()
 style.theme_use("classic")
 # style.configure("Treeview.Scrollbar", foreground='red', background=back_color)
 style.configure("Treeview.Heading", foreground="green", background=BACK_COLOR)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Geeft aan welke data uit de dictionairy mee te nemen
 treeview = ttk.Treeview(
