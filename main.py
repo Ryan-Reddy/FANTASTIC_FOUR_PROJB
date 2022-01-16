@@ -2,19 +2,21 @@
 import json
 import glob
 
+DATABASE_STEAM = "steam.json"
+
 
 # Functions:
 def startup_message():
     print("Starting up programme...".format())
 
     # count records in list:
-    num = sum(1 for element in open("steam.json"))  # <--- element not used
+    num = sum(1 for element in open(DATABASE_STEAM))  # <--- element not used
 
     # print amount datapoints
     print("steam.json contains: ", num, " records,")
 
     # read and count lines:
-    stream = open("steam.json", "r")
+    stream = open(DATABASE_STEAM, "r")
     steam = stream.read()
     print("divided over ", len(steam), " lines.")
 
@@ -34,7 +36,7 @@ def get_game(steamy):
 
 
 # Laadt het .json bestand in een list
-f = open("steam.json")
+f = open(DATABASE_STEAM)
 data_tree = json.load(f)
 data_import = []
 for line in data_tree:

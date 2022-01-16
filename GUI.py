@@ -90,7 +90,8 @@ splash_label.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    2000, splashscreen.destroy  # <--- 12000ms set to 0 this one to skip splashscreen
+    2000,
+    splashscreen.destroy,  # TODO <--- 12000ms set to 0 this one to skip splashscreen
 )
 # function should be "delayedstart":
 splashscreen.after(2000, delayed_start)
@@ -148,7 +149,9 @@ def open_new_window_readme():
     )
 
     # close readme
-    Button(new_window, text="close", bg="red", command=new_window.destroy).grid(row=1)
+    Button(new_window, text="close", bg="red", command=new_window.destroy).grid(
+        row=1, sticky=W + E, padx=20, pady=10
+    )
 
 
 # ******************************************************************************************************************
@@ -167,20 +170,45 @@ root.wm_attributes("-alpha", TRANSPARENCY_BACKGROUND, "-fullscreen", True)
 
 # ******************************************************************************************************************
 """# MAIN SCREEN ~ Labels and Buttons:"""
+# TODO build a frame to rule them all, and then center on screen
+centering_frame = Frame(
+    root,
+    bg="white",
+    width=600,
+    height=600,
+    relief=GROOVE,
+    borderwidth=7,
+)
+centering_frame.place(relx=0.5, rely=0.5, anchor="w")
+
+
+w = Listbox(
+    master=centering_frame,
+    bg=BACK_COLOR,
+    fg=FONT_COLOR,
+    width=10,
+    height=10,
+    listvariable=splash_order,
+)
+w.grid()
+
 
 # lefttop frame (frame in root)
 frame_lefttop = Frame(
-    root,
+    centering_frame,
     bg=BACK_COLOR,
     width=800,
     height=600,
     relief=GROOVE,
     borderwidth=7,
-).grid(row=1, column=0)
+)
+frame_lefttop.grid(row=1, column=0)
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # buttonframe for in lefttop frame
 button_frame = Frame(
-    master=root,
+    master=frame_lefttop,
     bg=BACK_COLOR,
     width=800,
     height=600,
@@ -188,6 +216,11 @@ button_frame = Frame(
     borderwidth=7,
 )
 button_frame.grid(row=1, column=0, pady=50, padx=50, sticky="W")
+
+# TODO button ideas,
+# filters based upon values: ex foldout menu with all the platforms, changes the table to show only all the windows games
+# one for each column
+
 for i in range(10):
     for j in range(1):
         frame = Frame(master=button_frame, bg="gray", relief=GROOVE, borderwidth=7)
@@ -204,14 +237,14 @@ for i in range(10):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # textlist for in lefttop frame
 textlist_frame = Frame(
-    master=root,
+    master=frame_lefttop,
     bg=BACK_COLOR,
     # width=800,
     # height=600,
     relief=GROOVE,
     borderwidth=7,
 )
-textlist_frame.grid(row=1, column=0, pady=50, padx=50, sticky="E")
+textlist_frame.grid(row=1, column=0, pady=50, padx=50, sticky="SE")
 
 w = Listbox(
     master=textlist_frame,
@@ -229,7 +262,7 @@ Button(
     text="Quit Steam Dashboard",
     font=FONT_MAIN,
     background="red",
-    foreground=FONT_COLOR,
+    foreground="white",
     command=root.destroy,
 ).grid(column=1, row=5, sticky=E, padx=20)
 
@@ -266,14 +299,14 @@ Label(
 
 # label van gemiddelde prijs van de games:
 Label(
-    root,
+    frame_lefttop,
     text="Average game price:",
     font=FONT_MAIN,
     background=BACK_COLOR,
     foreground=FONT_COLOR,
 ).grid(column=0, row=3, sticky=W, padx=20)
 Label(
-    root,
+    frame_lefttop,
     text=average_game_price(),
     font=FONT_MAIN,
     background="yellow",
@@ -282,14 +315,14 @@ Label(
 
 # Label van eerste game dev in de lijst:
 Label(
-    root,
+    frame_lefttop,
     text="First game developer:",
     font=FONT_MAIN,
     background=BACK_COLOR,
     foreground=FONT_COLOR,
 ).grid(column=0, row=4, sticky=W, padx=20)
 Label(
-    root,
+    frame_lefttop,
     text=list_first_game_developers(),
     font=FONT_MAIN,
     background="yellow",
@@ -299,7 +332,7 @@ Label(
 # De labels die je ziet op scherm
 # TITEL
 Label(
-    root,
+    frame_lefttop,
     text="Steam APP Fantastic Five",
     font=FONT_LOGO,
     background=BACK_COLOR,
@@ -312,10 +345,12 @@ Label(
 # ******************************************************************************************************************
 """# TREEVIEW ~ window, style, data, scrollbar, column-sorting-function """
 # Maakt een raamwerk in de root aan voor de tabel
-separator = PanedWindow(root, bd=0, bg=BACK_COLOR, sashwidth=2, height=600, width=800)
+separator = PanedWindow(
+    centering_frame, bd=0, bg=BACK_COLOR, sashwidth=2, height=600, width=800
+)
 separator.grid(row=1, column=1)
 # rechter onderhoekje:
-_frame = Frame(root, background=BACK_COLOR, relief="ridge")
+_frame = Frame(centering_frame, background=BACK_COLOR, relief="ridge")
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Stijlen van de Tabel treeview:
 style = ttk.Style()

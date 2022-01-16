@@ -39,7 +39,6 @@
 
                         1.  Clone the repository from GitHub or dev_azure.
                         2.  Create a virtual environment.
-[//]: # (                    TODO update requirements.txt (tools>sync python requirements)
                         3.  Install all dependencies. (noted in requirements.txt)
                         3.  Play.
                         3.  Support the software developers. If you like this game, BUY IT!
