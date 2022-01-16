@@ -89,7 +89,7 @@ splash_label.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    12000,
+    0,
     splashscreen.destroy,  # TODO <--- 12000ms set to 0 this one to skip splashscreen
 )
 # function should be "delayedstart":
@@ -110,7 +110,7 @@ def open_new_window_readme():
 
     # set the dimensions of the screen based upon earlier code
     # and where it is placed
-    new_window.geometry("")
+    new_window.geometry("700x600")
 
     # new_window.title("READ ME PLEASE")  # <---     sets the title readme
     new_window.call(
