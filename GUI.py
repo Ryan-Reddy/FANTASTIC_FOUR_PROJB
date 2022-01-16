@@ -19,7 +19,7 @@ FONT_MAIN = (
     "Arial" or "Helvetica",
     12,
 )  # <--- Arial-standard, helvetica for MAC systems (STEAM_OFFICIAL)
-TRANSPARENCY_BACKGROUND = 0.95  # <--- transparency mainscreen
+TRANSPARENCY_BACKGROUND = 1  # <--- transparency mainscreen
 FLAME_SPEED = 256
 WINDOW_SIZE = ""  # <--- Autoadjusts to content
 # ******************************************************************************************************************
@@ -90,13 +90,13 @@ splash_label.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    0, splashscreen.destroy  # <--- 12000ms set to 0 this one to skip splashscreen
+    2000, splashscreen.destroy  # <--- 12000ms set to 0 this one to skip splashscreen
 )
 # function should be "delayedstart":
 splashscreen.after(2000, delayed_start)
 splashscreen.after(0, print("starting splashscreen"))
 
-splashscreen.eval("tk::PlaceWindow . center")  # <--- center screen
+splashscreen.eval("tk::PlaceWindow . center")  # <--- center splashscreen
 
 splashscreen.mainloop()
 # ******************************************************************************************************************
@@ -246,14 +246,14 @@ Button(
 
 
 # Label van eerste spel in lijst:
-"""
+
 Label(
     frame_lefttop,
     text="First game in list:",
     font=FONT_MAIN,
     background=BACK_COLOR,
     foreground=FONT_COLOR,
-).place()
+).grid(column=0, row=2, sticky=W, padx=20)
 
 Label(
     frame_lefttop,
@@ -261,7 +261,7 @@ Label(
     font=FONT_MAIN,
     background="yellow",
     foreground="black",
-).place()
+).grid(column=0, row=2, sticky=E, padx=20)
 
 # label van gemiddelde prijs van de games:
 Label(
@@ -270,14 +270,14 @@ Label(
     font=FONT_MAIN,
     background=BACK_COLOR,
     foreground=FONT_COLOR,
-).grid(column=0, row=2)
+).grid(column=0, row=3, sticky=W, padx=20)
 Label(
     root,
     text=average_game_price(),
     font=FONT_MAIN,
     background="yellow",
     foreground="black",
-).grid(column=2, row=2)
+).grid(column=0, row=3, sticky=E, padx=20)
 
 # Label van eerste game dev in de lijst:
 Label(
@@ -286,14 +286,14 @@ Label(
     font=FONT_MAIN,
     background=BACK_COLOR,
     foreground=FONT_COLOR,
-).grid(column=0, row=3)
+).grid(column=0, row=4, sticky=W, padx=20)
 Label(
     root,
     text=list_first_game_developers(),
     font=FONT_MAIN,
     background="yellow",
     foreground="black",
-).grid(column=2, row=3)
+).grid(column=0, row=4, sticky=E, padx=20)
 
 # De labels die je ziet op scherm
 # TITEL
@@ -305,8 +305,7 @@ Label(
     foreground=FONT_COLOR,
     anchor=N,
     justify=CENTER,
-).grid(row=0, column=0)
-"""
+).grid(row=0, column=0, columnspan=(2))
 
 
 # ******************************************************************************************************************
@@ -440,9 +439,9 @@ style.configure(
 # ******************************************************************************************************************
 """# FIRE ~setup, pickup data, programme, placing"""
 # setup
-FIRE_LABEL = Label(root, text="a", font="TkFixedFont", bg="black", fg="gold")
-FIRE_LABEL2 = Label(root, text="a", font="TkFixedFont", bg="black", fg="gold")
-FIRE_LABEL3 = Label(root, text="a", font="TkFixedFont", bg="black", fg="gold")
+FIRE_LABEL = Label(root, text="a", font="TkFixedFont", bg="black", fg="green")
+FIRE_LABEL2 = Label(root, text="a", font="TkFixedFont", bg="black", fg="green")
+FIRE_LABEL3 = Label(root, text="a", font="TkFixedFont", bg="black", fg="green")
 
 
 def get_txt1():
