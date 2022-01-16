@@ -52,8 +52,8 @@
                                     ▀▀    █   ▀▀   ▀▀  ▀    ▀     ▀▀   ▀▀▀ ▀▀▀▀  ▀▀
 
 
-                                    * Jeffrey 1789404 (Vizility)
                                     * Ryan 1818885 (Ryan Reddy, klugook)
+                                    * Jeffrey 1789404 (Vizility)
                                     * Tuur 1780653 (Neex219)
                                     * Souf 1785097
                                     * Léon 1809101 (Phj1969)
