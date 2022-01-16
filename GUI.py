@@ -19,7 +19,7 @@ FONT_MAIN = (
     "Arial" or "Helvetica",
     12,
 )  # <--- Arial-standard, helvetica for MAC systems (STEAM_OFFICIAL)
-TRANSPARENCY_BACKGROUND = 0.9  # <--- transparency mainscreen
+TRANSPARENCY_BACKGROUND = 0.95  # <--- transparency mainscreen
 FLAME_SPEED = 256
 WINDOW_SIZE = ""  # <--- Autoadjusts to content
 # ******************************************************************************************************************
@@ -90,7 +90,7 @@ splash_label.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    10, splashscreen.destroy  # <--- 12000ms set to 0 this one to skip splashscreen
+    0, splashscreen.destroy  # <--- 12000ms set to 0 this one to skip splashscreen
 )
 # function should be "delayedstart":
 splashscreen.after(2000, delayed_start)
@@ -156,10 +156,8 @@ root = Tk()
 # Raam formaat:
 root.geometry(WINDOW_SIZE)
 
-root.eval("tk::PlaceWindow . center")
+root.eval("tk::PlaceWindow . center")  # <--- places window in center of any screen
 
-# title naam:
-root.title("Steam App Fantastic Five")
 # Achtergrond kleur:
 root["bg"] = BACK_COLOR
 # Wacht totdat de pagina zichtbaar is, en maakt dan pagina doorzichtig 90%
@@ -170,33 +168,100 @@ root.wm_attributes("-alpha", TRANSPARENCY_BACKGROUND, "-fullscreen", True)
 # ******************************************************************************************************************
 """# MAIN SCREEN ~ Labels and Buttons:"""
 
-# De labels die je ziet op scherm
-# TITEL
-Label(
+# lefttop frame (frame in root)
+frame_lefttop = Frame(
     root,
-    text="Steam APP Fantastic Five",
-    font=FONT_LOGO,
-    background=BACK_COLOR,
+    bg=BACK_COLOR,
+    width=800,
+    height=600,
+    relief=GROOVE,
+    borderwidth=7,
+).grid(row=1, column=0)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# buttonframe for in lefttop frame
+button_frame = Frame(
+    master=root,
+    bg=BACK_COLOR,
+    width=800,
+    height=600,
+    relief=GROOVE,
+    borderwidth=7,
+)
+button_frame.grid(row=1, column=0, pady=50, padx=50, sticky="W")
+for i in range(10):
+    for j in range(1):
+        frame = Frame(master=button_frame, bg="gray", relief=GROOVE, borderwidth=7)
+        frame.grid(row=i, column=j, padx=5, pady=5)
+        label = Button(
+            master=frame,
+            text=f"Button {i}x{j}",
+            bg=BACK_COLOR,
+            fg=FONT_COLOR,
+            font=("roboto", 10),
+            width=30,
+        )
+        label.pack()
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# textlist for in lefttop frame
+textlist_frame = Frame(
+    master=root,
+    bg=BACK_COLOR,
+    # width=800,
+    # height=600,
+    relief=GROOVE,
+    borderwidth=7,
+)
+textlist_frame.grid(row=1, column=0, pady=50, padx=50, sticky="E")
+
+w = Listbox(
+    master=textlist_frame,
+    bg=BACK_COLOR,
+    fg=FONT_COLOR,
+    width=10,
+    height=10,
+    listvariable=splash_order,
+).pack()
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Buttons in the mainscreen
+# Button to terminate mainscreen
+Button(
+    root,
+    text="Quit Steam Dashboard",
+    font=FONT_MAIN,
+    background="red",
     foreground=FONT_COLOR,
-    anchor=N,
-    justify=CENTER,
-).grid(column=1, row=0)
+    command=root.destroy,
+).grid(column=1, row=5, sticky=E, padx=20)
+
+# Button to open readme, also calls itself at start of programme after splash
+Button(
+    root,
+    text="About",
+    font=FONT_MAIN,
+    background="gray",
+    foreground=FONT_COLOR,
+    command=open_new_window_readme,  # <--- change to open_new_window_readme() to auto start upon launch
+).grid(column=0, row=5, sticky=W, padx=20)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 # Label van eerste spel in lijst:
+"""
 Label(
-    root,
+    frame_lefttop,
     text="First game in list:",
     font=FONT_MAIN,
     background=BACK_COLOR,
     foreground=FONT_COLOR,
-).grid(column=0, row=1)
+).place()
+
 Label(
-    root,
+    frame_lefttop,
     text=first_game_in_json,
     font=FONT_MAIN,
     background="yellow",
     foreground="black",
-).grid(column=3, row=1)
+).place()
 
 # label van gemiddelde prijs van de games:
 Label(
@@ -212,7 +277,7 @@ Label(
     font=FONT_MAIN,
     background="yellow",
     foreground="black",
-).grid(column=3, row=2)
+).grid(column=2, row=2)
 
 # Label van eerste game dev in de lijst:
 Label(
@@ -228,36 +293,27 @@ Label(
     font=FONT_MAIN,
     background="yellow",
     foreground="black",
-).grid(column=3, row=3)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Buttons in the mainscreen
-# Button to terminate mainscreen
-Button(
-    root,
-    text="Quit Steam Dashboard",
-    font=FONT_MAIN,
-    background="red",
-    foreground=FONT_COLOR,
-    command=root.destroy,
-).grid(column=0, row=6)
+).grid(column=2, row=3)
 
-# Button to open readme, also calls itself at start of programme after splash
-Button(
+# De labels die je ziet op scherm
+# TITEL
+Label(
     root,
-    text="About",
-    font=FONT_MAIN,
-    background="gray",
+    text="Steam APP Fantastic Five",
+    font=FONT_LOGO,
+    background=BACK_COLOR,
     foreground=FONT_COLOR,
-    command=open_new_window_readme(),
-).grid(column=3, row=6)
+    anchor=N,
+    justify=CENTER,
+).grid(row=0, column=0)
+"""
 
-# knop om te sorteren
+
 # ******************************************************************************************************************
 """# TREEVIEW ~ window, style, data, scrollbar, column-sorting-function """
 # Maakt een raamwerk in de root aan voor de tabel
-
-separator = PanedWindow(root, bd=0, bg=BACK_COLOR, sashwidth=2, height=600, width=1280)
-separator.grid(column=1, row=5)
+separator = PanedWindow(root, bd=0, bg=BACK_COLOR, sashwidth=2, height=600, width=800)
+separator.grid(row=1, column=1)
 # rechter onderhoekje:
 _frame = Frame(root, background=BACK_COLOR, relief="ridge")
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -330,7 +386,7 @@ treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
 
 def sort_by(tree, col, descending):
     print("beginning at 0")
-    t0 = time.clock()
+    t0 = time.perf_counter_ns()
 
     # grab values to sort
     header_data = [(tree.set(child, col), child) for child in tree.get_children("")]
@@ -343,7 +399,8 @@ def sort_by(tree, col, descending):
         tree.move(item[1], "", ix)
     # switch the heading, so it will sort in the opposite direction.
 
-    t1 = time.clock() - t0
+    t1 = time.perf_counter_ns() - t0
+
     print("endtime = ", t1, " ms")
     tree.heading(
         col, command=lambda local_col=col: sort_by(tree, local_col, int(not descending))
@@ -384,6 +441,8 @@ style.configure(
 """# FIRE ~setup, pickup data, programme, placing"""
 # setup
 FIRE_LABEL = Label(root, text="a", font="TkFixedFont", bg="black", fg="gold")
+FIRE_LABEL2 = Label(root, text="a", font="TkFixedFont", bg="black", fg="gold")
+FIRE_LABEL3 = Label(root, text="a", font="TkFixedFont", bg="black", fg="gold")
 
 
 def get_txt1():
@@ -404,21 +463,26 @@ def get_txt2():
 
 def moving_ascii():  # <--- Flame one direction.
     FIRE_LABEL.configure(text=get_txt1())
+    FIRE_LABEL3.configure(text=get_txt1())
+
     FIRE_LABEL.after(FLAME_SPEED, moving_ascii2)
 
 
 def moving_ascii2():  # <--- Flame other direction.
     FIRE_LABEL.configure(text=get_txt2())
+    FIRE_LABEL3.configure(text=get_txt2())
+
     FIRE_LABEL.after(FLAME_SPEED, moving_ascii)
-
-
-#
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # PLaatsting FIRE
-FIRE_LABEL.grid(column=1, row=7)
+FIRE_LABEL.grid(column=0, row=8)
+FIRE_LABEL3.grid(column=1, row=8)
 FIRE_LABEL.after(1, moving_ascii)
+FIRE_LABEL3.after(1, moving_ascii)
+
+
 # ******************************************************************************************************************
 """ Run main GUI"""
 root.eval("tk::PlaceWindow . center")  # <--- center screen
