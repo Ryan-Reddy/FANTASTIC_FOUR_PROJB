@@ -92,7 +92,7 @@
                                     * Léon 1809101 (Phj1969)
                 
                                     License:
-                                    [MIT](https://choosealicense.com/licenses/mit/)
+                                    MIT License(c) [2022]
                     
                     
                       ÜÛÛÜ                                                                   ÜÛÛÜ

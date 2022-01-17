@@ -179,7 +179,7 @@ centering_frame = Frame(
     relief=GROOVE,
     borderwidth=7,
 )
-centering_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+centering_frame.place(relx=0.5, rely=0.4, anchor=CENTER)
 
 # lefttop frame (frame in root)
 frame_lefttop = Frame(
@@ -213,8 +213,8 @@ w.grid(row=1, column=1, sticky=E)
 button_frame = Frame(
     master=frame_lefttop,
     bg=BACK_COLOR,
-    width=800,
-    height=600,
+    width=20,
+    height=10,
     relief=GROOVE,
     borderwidth=7,
 )
@@ -224,8 +224,8 @@ button_frame.grid(row=1, column=0, pady=50, padx=50, sticky="W")
 # filters based upon values: ex foldout menu with all the platforms, changes the table to show only all the windows games
 # one for each column
 
-for i in range(10):
-    for j in range(2):
+for i in range(2):
+    for j in range(1):
         frame = Frame(master=button_frame, bg="gray", relief=GROOVE, borderwidth=7)
         frame.grid(row=i, column=j, padx=5, pady=5)
         label = Button(
@@ -342,7 +342,7 @@ Label(
 """# TREEVIEW ~ window, style, data, scrollbar, column-sorting-function """
 # Maakt een raamwerk in de root aan voor de tabel
 separator = PanedWindow(
-    centering_frame, bd=0, bg=BACK_COLOR, sashwidth=2, height=600, width=800
+    centering_frame, bd=0, bg=BACK_COLOR, sashwidth=2, height=320, width=400
 )
 separator.grid(row=1, column=1)
 # rechter onderhoekje:
@@ -468,14 +468,15 @@ style.configure(
 
 """# FIRE ~setup, pickup data, programme, placing"""
 # setup
+
 FIRE_LABEL = Label(
-    centering_frame, text="a", font="TkFixedFont", bg="black", fg="green"
+    root, text="a", font=("TkFixedFont"), bg="black", fg="green"
 )
 FIRE_LABEL2 = Label(
-    centering_frame, text="a", font="TkFixedFont", bg="black", fg="green"
+    root, text="a", font=("TkFixedFont"), bg="black", fg="green"
 )
 FIRE_LABEL3 = Label(
-    centering_frame, text="a", font="TkFixedFont", bg="black", fg="green"
+    root, text="a", font=("TkFixedFont"), bg="black", fg="green"
 )
 fire1 = glob.glob("fire1.txt")
 fire2 = glob.glob("fire2.txt")
@@ -511,8 +512,8 @@ def moving_ascii2():  # <--- Flame other direction.
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # PLaatsting FIRE
-FIRE_LABEL.grid(column=0, row=2)
-FIRE_LABEL3.grid(column=1, row=2)
+FIRE_LABEL.place(relx=0.25, rely=1, anchor=S)
+FIRE_LABEL3.place(relx=0.75, rely=1, anchor=S)
 FIRE_LABEL.after(1, moving_ascii)
 FIRE_LABEL3.after(1, moving_ascii)
 

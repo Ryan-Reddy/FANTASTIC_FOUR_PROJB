@@ -18,7 +18,7 @@ def average_game_price():
     average = total / count
     # average = "{:.2f}".format(total/count)
     formatting = "{average_price:.2f}"
-    return formatting.format(average_price=average)
+    return formatting.format(average_price=average) # TODO implement this "quantitative variable" to mainscreen
 
 
 # Functie voor ophalen van alle game developers.
@@ -52,4 +52,4 @@ def list_first_game_developers():
     x = data[0]
     developers = x["developer"]
     print(x)
-    return developers
+    return developers # TODO implement this "qualitative variable" to mainscreen
