@@ -79,6 +79,7 @@ def delayed_start():
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # initial fill splashscreen
 img = Image.open(splash_order[0])
 ph = ImageTk.PhotoImage(img)
@@ -190,154 +191,10 @@ frame_lefttop = Frame(
     relief=GROOVE,
     borderwidth=7,
 )
-frame_lefttop.grid(row=1, column=0)
+frame_lefttop.grid(row=1, column=0, pady=10, padx=5)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# lefttop frame contents
-
-# buttonframe for in lefttop frame
-w = Listbox(
-    master=frame_lefttop,
-    bg=BACK_COLOR,
-    fg=FONT_COLOR,
-    setgrid=True,
-    width=10,
-    height=10,
-    listvariable=splash_order,
-)
-w.grid(row=1, column=1, sticky=E)
-
-
-# buttonframe for in lefttop frame
-button_frame = Frame(
-    master=frame_lefttop,
-    bg=BACK_COLOR,
-    width=20,
-    height=10,
-    relief=GROOVE,
-    borderwidth=7,
-)
-button_frame.grid(row=1, column=0, pady=50, padx=50, sticky="W")
-
-# TODO button ideas,
-# filters based upon values: ex foldout menu with all the platforms, changes the table to show only all the windows games
-# one for each column
-
-for i in range(2):
-    for j in range(1):
-        frame = Frame(master=button_frame, bg="gray", relief=GROOVE, borderwidth=7)
-        frame.grid(row=i, column=j, padx=5, pady=5)
-        label = Button(
-            master=frame,
-            text=f"Button {i}x{j}",
-            bg=BACK_COLOR,
-            fg=FONT_COLOR,
-            font=("roboto", 10),
-            width=30,
-        )
-        label.pack()
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# # textlist for in lefttop frame
-# textlist_frame = Frame(
-#     master=frame_lefttop,
-#     bg=BACK_COLOR,
-#     # width=800,
-#     # height=600,
-#     relief=GROOVE,
-#     borderwidth=7,
-# )
-# textlist_frame.grid(row=1, column=0, pady=50, padx=50, sticky="SE")
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Buttons in the mainscreen
-# Button to terminate mainscreen
-Button(
-    centering_frame,
-    text="Quit Steam Dashboard",
-    font=FONT_MAIN,
-    background="red",
-    foreground="white",
-    command=root.destroy,
-).grid(column=1, row=7, sticky=E, padx=20)
-
-# Button to open readme, also calls itself at start of programme after splash
-Button(
-    centering_frame,
-    text="About",
-    font=FONT_MAIN,
-    background="gray",
-    foreground=FONT_COLOR,
-    command=open_new_window_readme()
-    or open_new_window_readme,  # <--- change to open_new_window_readme() to auto start upon launch
-).grid(column=0, row=7, sticky=W, pady=10, padx=20)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-# Label van eerste spel in lijst:
-
-Label(
-    frame_lefttop,
-    text="First game in list:",
-    font=FONT_MAIN,
-    background=BACK_COLOR,
-    foreground=FONT_COLOR,
-).grid(column=0, row=2, sticky=W, padx=20)
-
-Label(
-    frame_lefttop,
-    text=first_game_in_json,
-    font=FONT_MAIN,
-    background="yellow",
-    foreground="black",
-).grid(column=0, row=2, sticky=E, padx=20)
-
-# label van gemiddelde prijs van de games:
-Label(
-    frame_lefttop,
-    text="Average game price:",
-    font=FONT_MAIN,
-    background=BACK_COLOR,
-    foreground=FONT_COLOR,
-).grid(column=0, row=3, sticky=W, padx=20)
-Label(
-    frame_lefttop,
-    text=average_game_price(),
-    font=FONT_MAIN,
-    background="yellow",
-    foreground="black",
-).grid(column=0, row=3, sticky=E, padx=20)
-
-# Label van eerste game dev in de lijst:
-Label(
-    frame_lefttop,
-    text="First game developer:",
-    font=FONT_MAIN,
-    background=BACK_COLOR,
-    foreground=FONT_COLOR,
-).grid(column=0, row=4, sticky=W, padx=20)
-Label(
-    frame_lefttop,
-    text=list_first_game_developers(),
-    font=FONT_MAIN,
-    background="yellow",
-    foreground="black",
-).grid(column=0, row=4, sticky=E, padx=20)
-
-# De labels die je ziet op scherm
-# TITEL
-Label(
-    frame_lefttop,
-    text="Steam APP Fantastic Five",
-    font=FONT_LOGO,
-    background=BACK_COLOR,
-    foreground=FONT_COLOR,
-    anchor=N,
-    justify=CENTER,
-).grid(row=0, column=0, columnspan=(2))
-
-
-# *************************************************************************************************
 
 """# TREEVIEW ~ window, style, data, scrollbar, column-sorting-function """
 # Maakt een raamwerk in de root aan voor de tabel
@@ -411,7 +268,7 @@ for row in data_import:
 treeview.tag_configure("body", background=BACK_COLOR)
 
 # Geeft aan waar de tabel in het grid moet
-treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
+treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW, pady=10, padx=(5,0))
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # sorteert columns naar klik op de headers TODO implementeer slimmere algoritmes
 
@@ -433,7 +290,6 @@ def sort_by(tree, col, descending):
         col, command=lambda local_col=col: sort_by(tree, local_col, int(not descending))
     )
 
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # SCROLLBAR van tabel
 ysb = ttk.Scrollbar(orient=VERTICAL, command=treeview.yview)
@@ -443,7 +299,7 @@ treeview["xscroll"] = xsb.set
 separator.add(_frame)
 
 # plaatst de scrollbar
-ysb.grid(in_=_frame, row=0, column=1, sticky=NS)
+ysb.grid(in_=_frame, row=0, column=1, sticky=NS, pady=10, padx=(0,10))
 xsb.grid(in_=_frame, row=1, column=0, sticky=EW)
 _frame.rowconfigure(0, weight=1)
 _frame.columnconfigure(0, weight=1)
@@ -465,6 +321,189 @@ style.configure(
 )
 
 # *************************************************************************************************
+# Grab info selected row treeview
+
+def cur_treeview(a):
+    curItem = treeview.focus()
+    title_game = treeview.item(curItem)
+    info_item = treeview.item(curItem)
+    total_info = info_item.get('values')
+    print(f'sel onscr. in table : total_info = {total_info}')
+    sel_item_label.config(text = f'title = {total_info[0]}')
+    print(f'title = {total_info[0]}')
+
+    selectNegRat_label.config(text = f'neg ratings = {total_info[5]}')
+    print(f'positive ratings = {total_info[4]}')
+
+    selectPosRat_label.config(text = f'pos ratings = {total_info[4]}')
+    print(f'negative ratings = {total_info[5]}')
+
+
+treeview.bind('<ButtonRelease-1>', cur_treeview) # <--- grab data from clicked row
+
+
+# *************************************************************************************************
+# lefttop frame contents
+
+# buttonframe for in lefttop frame
+button_frame = Frame(
+    master=frame_lefttop,
+    bg=BACK_COLOR,
+    width=20,
+    height=10,
+    relief=GROOVE,
+    borderwidth=7,
+)
+button_frame.grid(row=0, column=0, pady=50, padx=50, sticky="W")
+
+# TODO button ideas,
+# filters based upon values: ex foldout menu with all the platforms, changes the table to show only all the windows games
+# one for each column
+
+frame = Frame(master=button_frame, bg="gray", relief=GROOVE, borderwidth=7)
+frame.grid(row=0, column=0, padx=5, pady=5)
+button = Button(
+    master=frame,
+    text=f"Button 0 0",
+    bg=BACK_COLOR,
+    fg=FONT_COLOR,
+    command=print('clicked a button, well done'),
+    font=("roboto", 10),
+    width=30
+
+)
+button.pack()
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Buttons in the mainscreen
+# Button to terminate mainscreen
+Button(
+    centering_frame,
+    text="Quit Steam Dashboard",
+    font=FONT_MAIN,
+    background="red",
+    foreground="white",
+    command=root.destroy,
+).grid(column=1, row=7, sticky=E, padx=20)
+
+# Button to open readme, also calls itself at start of programme after splash
+Button(
+    centering_frame,
+    text="About",
+    font=FONT_MAIN,
+    background="gray",
+    foreground=FONT_COLOR,
+    command=open_new_window_readme
+    or open_new_window_readme,  # <--- change to open_new_window_readme() to auto start upon launch
+).grid(column=0, row=7, sticky=W, pady=10, padx=20)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Labels
+
+sel_item_label = Label(
+    frame_lefttop,
+    text= 'click on a game to show title',
+    font=FONT_MAIN,
+    background='green',
+    foreground=FONT_COLOR,
+)
+sel_item_label.grid(column=0, row=1, columnspan=2, padx=20)
+
+selectPosRat_label = Label(
+    frame_lefttop,
+    text= 'click on a game to show total positive ratings',
+    font=FONT_MAIN,
+    background='green',
+    foreground=FONT_COLOR,
+)
+selectPosRat_label.grid(column=0, row=2, columnspan=2, padx=20)
+
+
+selectNegRat_label =Label(
+    frame_lefttop,
+    text= 'click on a game to show total negative ratings',
+    font=FONT_MAIN,
+    background='green',
+    foreground=FONT_COLOR,
+)
+selectNegRat_label.grid(column=0, row=3, columnspan=2, padx=20)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Label van eerste spel in lijst:
+
+Label(
+    frame_lefttop,
+    text="First game in list:",
+    font=FONT_MAIN,
+    background=BACK_COLOR,
+    foreground=FONT_COLOR,
+).grid(column=0, row=4, sticky=W, padx=20)
+
+Label(
+    frame_lefttop,
+    text=first_game_in_json,
+    font=FONT_MAIN,
+    background="yellow",
+    foreground="black",
+).grid(column=0, row=4, sticky=E, padx=20)
+
+# label van gemiddelde prijs van de games:
+Label(
+    frame_lefttop,
+    text="Average game price in USD:",
+    font=FONT_MAIN,
+    background=BACK_COLOR,
+    foreground=FONT_COLOR,
+).grid(column=0, row=5, sticky=W, padx=20)
+Label(
+    frame_lefttop,
+    text=average_game_price(),
+    font=FONT_MAIN,
+    background="yellow",
+    foreground="black",
+).grid(column=0, row=5, sticky=E, padx=20)
+
+# Label van eerste game dev in de lijst:
+Label(
+    frame_lefttop,
+    text="First game developer:",
+    font=FONT_MAIN,
+    background=BACK_COLOR,
+    foreground=FONT_COLOR,
+).grid(column=0, row=6, sticky=W, padx=20)
+Label(
+    frame_lefttop,
+    text=list_first_game_developers(),
+    font=FONT_MAIN,
+    background="yellow",
+    foreground="black",
+).grid(column=0, row=6, sticky=E, padx=20)
+
+# De labels die je ziet op scherm
+# TITEL
+Label(
+    root,
+    text="Steam APP Fantastic Five",
+    font=FONT_LOGO,
+    background=BACK_COLOR,
+    foreground=FONT_COLOR,
+    anchor=N,
+    justify=CENTER,
+).grid(row=0, column=0, columnspan=(2))
+
+
+# *************************************************************************************************
+
 
 """# FIRE ~setup, pickup data, programme, placing"""
 # setup
