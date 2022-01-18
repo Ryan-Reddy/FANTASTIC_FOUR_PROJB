@@ -9,19 +9,51 @@ from steamFunctions import *
 from PIL import Image, ImageTk
 
 # *************************************************************************************************
-# TODO add tkinter styles
-"""#STYLE/COLOR CHOICES"""
-# Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
-BACK_COLOR = "black"
-FONT_COLOR = "white"
-FONT_LOGO = ("FF Din OT", 14, "bold")  # <--- (STEAM_OFFICIAL)
-FONT_MAIN = (
-    "Arial" or "Helvetica",
-    12,
-)  # <--- Arial-standard, helvetica for MAC systems (STEAM_OFFICIAL)
-TRANSPARENCY_BACKGROUND = 1  # <--- transparency mainscreen
+"""STYLE/COLOR CHOICES
+
+Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
+"""
+
+
+class Style_Class:
+    def __init__(
+        self,
+        back_color,
+        font_color,
+        font_title,
+        font_main,
+        window_transparency,
+        window_size,
+    ):
+        self.back_color = back_color
+        self.font_color = font_color
+        self.font_title = font_title
+        self.font_main = font_main
+        self.window_transparency = window_transparency
+        self.window_size = window_size  # <--- auto adjusting frame size to needs
+        # self.pack = pack
+
+
+my_style_class = Style_Class(
+    "black",
+    "white",
+    ("FF Din OT", 14, "bold"),
+    (
+        "Arial" or "Helvetica",
+        12,
+    ),
+    0.9,
+    "",  # <--- auto adjusting frame size to needs
+)
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# TODO: edit following styles out.
+
+
 FLAME_SPEED = 256
-WINDOW_SIZE = ""  # <--- Autoadjusts to content
+
+
 # *************************************************************************************************
 # TODO: change changeable text at bottom to commits, last minute change
 """# SPLASHSCREEN ~ setup, load list, motion seq., initial fill, main programme"""
@@ -34,9 +66,11 @@ splashscreen.call("wm", "attributes", ".", "-topmost", "true")  # <--- # topmost
 splashscreen.geometry(
     "960x307"
 )  # <--- # size of screen + positie (steam-logo-large.jpg = 960x307)
-splashscreen.geometry("")  # <--- autoadjust overrides upper geometry
+splashscreen.geometry(
+    my_style_class.window_size
+)  # <--- autoadjust overrides upper geometry
 # Achtergrond kleur van de readme (inclusief transparency)
-splashscreen["bg"] = BACK_COLOR
+splashscreen["bg"] = my_style_class.back_color
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # input splashscreen picture order file:
 splashpath = os.path.join("splashscreen", "splash.txt")
@@ -85,7 +119,9 @@ img = Image.open(splash_order[0])
 ph = ImageTk.PhotoImage(img)
 img_label = Label(splashscreen, image=ph)
 img_label.pack()
-splash_label = Label(splashscreen, text="loading", bg=BACK_COLOR, fg="gold")
+splash_label = Label(
+    splashscreen, text="loading", bg=my_style_class.back_color, fg="gold"
+)
 splash_label.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
@@ -119,7 +155,7 @@ def open_new_window_readme():
     )  # <--- # topmost screen
 
     # Achtergrond kleur van de readme (inclusief transparency)
-    new_window["bg"] = BACK_COLOR
+    new_window["bg"] = my_style_class.back_color
     new_window.wait_visibility(new_window)
     new_window.wm_attributes("-alpha", 0.99)
 
@@ -129,8 +165,8 @@ def open_new_window_readme():
         width=120,
         height=40,
         font="TkFixedFont",
-        fg=FONT_COLOR,
-        bg=BACK_COLOR,
+        fg=my_style_class.font_color,
+        bg=my_style_class.back_color,
     )
     text.grid(row=0)  # <--- placement of .grid seperate or scrollbar doesnt compute
     text.insert(END, get_readme())
@@ -158,14 +194,16 @@ def open_new_window_readme():
 """# MAIN-SCREEN ~ GUI settings:"""
 root = Tk()
 # Raam formaat:
-root.geometry(WINDOW_SIZE)
+root.geometry(my_style_class.window_size)
 
 root.eval("tk::PlaceWindow . center")  # <--- window to center screen
 
 # Achtergrond kleur:
-root["bg"] = BACK_COLOR
+root["bg"] = my_style_class.back_color
 root.wait_visibility(root)  # <---waits, then makes page translucent
-root.wm_attributes("-alpha", TRANSPARENCY_BACKGROUND, "-fullscreen", True)
+root.wm_attributes("-alpha", my_style_class.window_transparency, "-fullscreen", True)
+
+
 # window_name.attributes('-fullscreen',True)
 
 # *************************************************************************************************
@@ -174,7 +212,7 @@ root.wm_attributes("-alpha", TRANSPARENCY_BACKGROUND, "-fullscreen", True)
 # TODO build a frame to rule them all, and then center on screen
 centering_frame = Frame(
     root,
-    bg=BACK_COLOR,
+    bg=my_style_class.back_color,
     width=600,
     height=600,
     relief=GROOVE,
@@ -185,7 +223,7 @@ centering_frame.place(relx=0.5, rely=0.4, anchor=CENTER)
 # lefttop frame (frame in root)
 frame_lefttop = Frame(
     centering_frame,
-    bg=BACK_COLOR,
+    bg=my_style_class.back_color,
     width=800,
     height=600,
     relief=GROOVE,
@@ -199,17 +237,24 @@ frame_lefttop.grid(row=1, column=0, pady=10, padx=5)
 """# TREEVIEW ~ window, style, data, scrollbar, column-sorting-function """
 # Maakt een raamwerk in de root aan voor de tabel
 separator = PanedWindow(
-    centering_frame, bd=0, bg=BACK_COLOR, sashwidth=2, height=320, width=400
+    centering_frame,
+    bd=0,
+    bg=my_style_class.back_color,
+    sashwidth=2,
+    height=320,
+    width=400,
 )
 separator.grid(row=1, column=1)
 # rechter onderhoekje:
-_frame = Frame(centering_frame, background=BACK_COLOR, relief="ridge")
+_frame = Frame(centering_frame, background=my_style_class.back_color, relief="ridge")
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Stijlen van de Tabel treeview:
 style = ttk.Style()
 style.theme_use("classic")
 # style.configure("Treeview.Scrollbar", foreground='red', background=back_color)
-style.configure("Treeview.Heading", foreground="green", background=BACK_COLOR)
+style.configure(
+    "Treeview.Heading", foreground="green", background=my_style_class.back_color
+)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Geeft aan welke data uit de dictionairy mee te nemen
@@ -265,30 +310,29 @@ for row in data_import:
         tags="body",
     )
 # stijlchoice body text
-treeview.tag_configure("body", background=BACK_COLOR)
+treeview.tag_configure("body", background=my_style_class.back_color)
 
 # Geeft aan waar de tabel in het grid moet
-treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW, pady=10, padx=(5,0))
+treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW, pady=10, padx=(5, 0))
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # sorteert columns naar klik op de headers TODO implementeer slimmere algoritmes
 
 
 def sort_by(tree, col, descending):
-    print("beginning at 0")
-
     # grab values to sort
     header_data = [(tree.set(child, col), child) for child in tree.get_children("")]
     header_data.sort(reverse=descending)
     # TODO if the data to be sorted is numeric change to float
     # data =  change_numeric(data)
 
-    # now sort the data in place
+    # now sort the data in placej
     for ix, item in enumerate(header_data):
         tree.move(item[1], "", ix)
     # switch the heading, so it will sort in the opposite direction.
     tree.heading(
         col, command=lambda local_col=col: sort_by(tree, local_col, int(not descending))
     )
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # SCROLLBAR van tabel
@@ -299,7 +343,7 @@ treeview["xscroll"] = xsb.set
 separator.add(_frame)
 
 # plaatst de scrollbar
-ysb.grid(in_=_frame, row=0, column=1, sticky=NS, pady=10, padx=(0,10))
+ysb.grid(in_=_frame, row=0, column=1, sticky=NS, pady=10, padx=(0, 10))
 xsb.grid(in_=_frame, row=1, column=0, sticky=EW)
 _frame.rowconfigure(0, weight=1)
 _frame.columnconfigure(0, weight=1)
@@ -322,64 +366,251 @@ style.configure(
 
 # *************************************************************************************************
 # Grab info selected row treeview
+#
+# def gamescore_calculator():
+#     if total_info[5] > total_info[4]:
+#         score = total_info[5] / total_info[4]*5
+#         return score
+#     if total_info[4] > total_info[5]:
+#         score = (total_info[4] / total_info[5]*5)+5
+#         return score
+
 
 def cur_treeview(a):
     curItem = treeview.focus()
-    title_game = treeview.item(curItem)
-    info_item = treeview.item(curItem)
-    total_info = info_item.get('values')
-    print(f'sel onscr. in table : total_info = {total_info}')
-    sel_item_label.config(text = f'title = {total_info[0]}')
-    print(f'title = {total_info[0]}')
-
-    selectNegRat_label.config(text = f'neg ratings = {total_info[5]}')
-    print(f'positive ratings = {total_info[4]}')
-
-    selectPosRat_label.config(text = f'pos ratings = {total_info[4]}')
-    print(f'negative ratings = {total_info[5]}')
+    info_string = treeview.item(curItem)
+    print(f'info_string = treeview.item(curItem) = {info_string}')
+    style.configure(
+        "curItem",
+        background="gray",
+        bordercolor="black",
+        troughcolor="black",
+        highlightcolor="white",
+    )
 
 
-treeview.bind('<ButtonRelease-1>', cur_treeview) # <--- grab data from clicked row
+    total_info = info_string.get("values")
+    print(f"sel onscr. in table : total_info = {total_info}")
+    sel_item_label.config(text=total_info[0])
+    print(f"title = {total_info[0]}")
+
+    selectNegRat_label.config(text=total_info[5])
+    print(f"positive ratings = {total_info[4]}")
+
+    selectPosRat_label.config(text=total_info[4])
+    print(f"negative ratings = {total_info[5]}")
+
+    if total_info[5] > total_info[4]:  #<--- neg > pos
+        print(total_info[4] / total_info[5])
+        score = ((total_info[4] / total_info[5])*5)  #<--- creates a factor, then scales to 5 for more neg than pos it keeps it under 5
+        selectgamescore_label.config(text=score, bg='red')
+
+    if total_info[4] > total_info[5]:  #<--- pos > neg
+        print(total_info[5] / total_info[4])
+        score = ((total_info[5] / total_info[4])*5)+5  #<--- creates a factor, then scales to 5 for more pos than neg it keeps it over 5
+        selectgamescore_label.config(text=score, bg='green')
+
+
+treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked row
 
 
 # *************************************************************************************************
+
+
+# De labels die je ziet op scherm
+# TITEL
+Label(
+    root,
+    text="Steam APP Fantastic Five",
+    font=my_style_class.font_title,
+    bg=my_style_class.back_color,
+    fg=my_style_class.font_color,
+    anchor=N,
+    justify=CENTER,
+).place(relx=0.5, rely=0.1, anchor=CENTER)
+
+
 # lefttop frame contents
 
+# Labels
+
+#  clickbuttonlabels
+sel_title_label = Label(
+    frame_lefttop,
+    text="Selected name: ",
+    font=my_style_class.font_main,
+    background="green",
+    fg=my_style_class.font_color,
+)
+sel_title_label.grid(column=0, row=3, padx=20, sticky=W)
+
+sel_item_label = Label(
+    frame_lefttop,
+    text="" "",
+    font=my_style_class.font_main,
+    background=my_style_class.back_color,
+    fg=my_style_class.font_color,
+    width=50,  # <--- without this it does NOT recentre in label after running
+)
+sel_item_label.grid(column=1, row=3, padx=20, sticky=E)
+
+
+sel_pos_label = Label(
+    frame_lefttop,
+    text="Selection positive Ratings: ",
+    font=my_style_class.font_main,
+    background="green",
+    fg=my_style_class.font_color,
+)
+sel_pos_label.grid(column=0, row=4, padx=20, sticky=W)
+
+
+selectPosRat_label = Label(
+    frame_lefttop,
+    text="click on a game for positive ratings",
+    font=my_style_class.font_main,
+    bg=my_style_class.back_color,
+    fg=my_style_class.font_color,
+)
+selectPosRat_label.grid(column=1, row=4, columnspan=2, padx=20, sticky=E)
+
+sel_neg_label = Label(
+    frame_lefttop,
+    text="Selection Negative Ratings: ",
+    font=my_style_class.font_main,
+    background="green",
+    fg=my_style_class.font_color,
+)
+sel_neg_label.grid(column=0, row=5, padx=20, sticky=W)
+
+selectNegRat_label = Label(
+    frame_lefttop,
+    text="select game for negative ratings",
+    font=my_style_class.font_main,
+    bg=my_style_class.back_color,
+    fg=my_style_class.font_color,
+)
+selectNegRat_label.grid(column=1, row=5, columnspan=2, padx=20, sticky=E)
+
+gamescore_label = Label(
+    frame_lefttop,
+    text="Selection game score (under 1 = negative, above 1 = positive:",
+    font=my_style_class.font_main,
+    background="green",
+    fg=my_style_class.font_color,
+)
+gamescore_label.grid(column=0, row=6, padx=20, sticky=W)
+
+selectgamescore_label = Label(
+    frame_lefttop,
+    text="0/10",
+    font=my_style_class.font_main,
+    bg=my_style_class.back_color,
+    fg=my_style_class.font_color,
+)
+selectgamescore_label.grid(column=1, row=6, columnspan=2, padx=20, sticky=E)
+
+
+# Label van eerste spel in lijst:
+
+# Label(
+#     frame_lefttop,
+#     text="First game in list:",
+#     font=my_style_class.font_main,
+#     background=my_style_class.back_color,
+#     fg=my_style_class.font_color,
+# ).grid(column=0, row=2, sticky=W, padx=20)
+
+configurable_label = Label(
+    frame_lefttop,
+    text=first_game_in_json,
+    font=my_style_class.font_main,
+    background="yellow",
+    foreground="black",
+)
+configurable_label.grid(row=0, column=1, pady=50, padx=50, sticky="E")
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   BUTTONS
 # buttonframe for in lefttop frame
 button_frame = Frame(
     master=frame_lefttop,
-    bg=BACK_COLOR,
+    bg=my_style_class.back_color,
     width=20,
     height=10,
     relief=GROOVE,
     borderwidth=7,
 )
-button_frame.grid(row=0, column=0, pady=50, padx=50, sticky="W")
+button_frame.grid(row=0, column=0, pady=50, padx=50, sticky=W)
 
-# TODO button ideas,
 # filters based upon values: ex foldout menu with all the platforms, changes the table to show only all the windows games
 # one for each column
 
-frame = Frame(master=button_frame, bg="gray", relief=GROOVE, borderwidth=7)
+
+def button1():
+    print("clicked a button, well done")
+    configurable_label.config(
+        text=list_first_game_developers()
+    )  # <--- TODO: this command doesnt change when table changes
+
+
+def button2():
+    print("clicked a button, well done")
+    configurable_label.config(
+        text=average_game_price()
+    )  # <--- TODO: this command doesnt change when table changes
+
+
+def button3():
+    print("clicked a button, well done")
+    configurable_label.config(
+        text=first_game_in_json,
+    )  # <--- TODO: this command doesnt change when table changes
+
+
+frame = Frame(master=button_frame, bg="purple", relief=GROOVE, borderwidth=7)
 frame.grid(row=0, column=0, padx=5, pady=5)
+
 button = Button(
     master=frame,
-    text=f"Button 0 0",
-    bg=BACK_COLOR,
-    fg=FONT_COLOR,
-    command=print('clicked a button, well done'),
+    text="first_game_in_json",
+    bg=my_style_class.back_color,
+    fg=my_style_class.font_color,
+    command=button1,
     font=("roboto", 10),
-    width=30
-
+    width=30,
 )
 button.pack()
+
+button2 = Button(
+    master=frame,
+    text="average_game_price",
+    bg=my_style_class.back_color,
+    fg=my_style_class.font_color,
+    command=button2,
+    font=("roboto", 10),
+    width=30,
+)
+button2.pack()
+
+button3 = Button(
+    master=frame,
+    text="list_first_game_developers",
+    bg=my_style_class.back_color,
+    fg=my_style_class.font_color,
+    command=button3,
+    font=("roboto", 10),
+    width=30,
+)
+button3.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Buttons in the mainscreen
 # Button to terminate mainscreen
 Button(
     centering_frame,
     text="Quit Steam Dashboard",
-    font=FONT_MAIN,
+    font=my_style_class.font_main,
     background="red",
     foreground="white",
     command=root.destroy,
@@ -389,118 +620,13 @@ Button(
 Button(
     centering_frame,
     text="About",
-    font=FONT_MAIN,
+    font=my_style_class.font_main,
     background="gray",
-    foreground=FONT_COLOR,
-    command=open_new_window_readme
-    or open_new_window_readme,  # <--- change to open_new_window_readme() to auto start upon launch
+    fg=my_style_class.font_color,
+    # TODO: before final presentation, uncomment this section DO NOT DELETE
+    # command=open_new_window_readme()
+    # or open_new_window_readme,  # <--- change to open_new_window_readme() to auto start upon launch
 ).grid(column=0, row=7, sticky=W, pady=10, padx=20)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#Labels
-
-sel_item_label = Label(
-    frame_lefttop,
-    text= 'click on a game to show title',
-    font=FONT_MAIN,
-    background='green',
-    foreground=FONT_COLOR,
-)
-sel_item_label.grid(column=0, row=1, columnspan=2, padx=20)
-
-selectPosRat_label = Label(
-    frame_lefttop,
-    text= 'click on a game to show total positive ratings',
-    font=FONT_MAIN,
-    background='green',
-    foreground=FONT_COLOR,
-)
-selectPosRat_label.grid(column=0, row=2, columnspan=2, padx=20)
-
-
-selectNegRat_label =Label(
-    frame_lefttop,
-    text= 'click on a game to show total negative ratings',
-    font=FONT_MAIN,
-    background='green',
-    foreground=FONT_COLOR,
-)
-selectNegRat_label.grid(column=0, row=3, columnspan=2, padx=20)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Label van eerste spel in lijst:
-
-Label(
-    frame_lefttop,
-    text="First game in list:",
-    font=FONT_MAIN,
-    background=BACK_COLOR,
-    foreground=FONT_COLOR,
-).grid(column=0, row=4, sticky=W, padx=20)
-
-Label(
-    frame_lefttop,
-    text=first_game_in_json,
-    font=FONT_MAIN,
-    background="yellow",
-    foreground="black",
-).grid(column=0, row=4, sticky=E, padx=20)
-
-# label van gemiddelde prijs van de games:
-Label(
-    frame_lefttop,
-    text="Average game price in USD:",
-    font=FONT_MAIN,
-    background=BACK_COLOR,
-    foreground=FONT_COLOR,
-).grid(column=0, row=5, sticky=W, padx=20)
-Label(
-    frame_lefttop,
-    text=average_game_price(),
-    font=FONT_MAIN,
-    background="yellow",
-    foreground="black",
-).grid(column=0, row=5, sticky=E, padx=20)
-
-# Label van eerste game dev in de lijst:
-Label(
-    frame_lefttop,
-    text="First game developer:",
-    font=FONT_MAIN,
-    background=BACK_COLOR,
-    foreground=FONT_COLOR,
-).grid(column=0, row=6, sticky=W, padx=20)
-Label(
-    frame_lefttop,
-    text=list_first_game_developers(),
-    font=FONT_MAIN,
-    background="yellow",
-    foreground="black",
-).grid(column=0, row=6, sticky=E, padx=20)
-
-# De labels die je ziet op scherm
-# TITEL
-Label(
-    root,
-    text="Steam APP Fantastic Five",
-    font=FONT_LOGO,
-    background=BACK_COLOR,
-    foreground=FONT_COLOR,
-    anchor=N,
-    justify=CENTER,
-).grid(row=0, column=0, columnspan=(2))
-
 
 # *************************************************************************************************
 
@@ -508,15 +634,9 @@ Label(
 """# FIRE ~setup, pickup data, programme, placing"""
 # setup
 
-FIRE_LABEL = Label(
-    root, text="a", font=("TkFixedFont"), bg="black", fg="green"
-)
-FIRE_LABEL2 = Label(
-    root, text="a", font=("TkFixedFont"), bg="black", fg="green"
-)
-FIRE_LABEL3 = Label(
-    root, text="a", font=("TkFixedFont"), bg="black", fg="green"
-)
+FIRE_LABEL = Label(root, text="a", font=("TkFixedFont"), bg="black", fg="green")
+FIRE_LABEL2 = Label(root, text="a", font=("TkFixedFont"), bg="black", fg="green")
+FIRE_LABEL3 = Label(root, text="a", font=("TkFixedFont"), bg="black", fg="green")
 fire1 = glob.glob("fire1.txt")
 fire2 = glob.glob("fire2.txt")
 
