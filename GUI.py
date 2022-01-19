@@ -11,6 +11,9 @@ from PIL import Image, ImageTk
 from main import *
 from steamFunctions import *
 
+import RPi.GPIO as GPIO     # nodig voor Servo
+
+
 # *************************************************************************************************
 """STYLE/COLOR CHOICES
 
