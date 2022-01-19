@@ -29,6 +29,7 @@ class Style_Class:
         font_main,
         window_transparency,
         window_size,
+        flame_speed,
     ):
         self.back_color = back_color
         self.font_color = font_color
@@ -36,6 +37,7 @@ class Style_Class:
         self.font_main = font_main
         self.window_transparency = window_transparency
         self.window_size = window_size  # <--- auto adjusting frame size to needs
+        self.flame_speed = flame_speed
         # self.pack = pack
 
 
@@ -49,7 +51,9 @@ my_style_class = Style_Class(
     ),
     0.9,
     "",  # <--- auto adjusting frame size to needs
+    256,  # <--- flame speed
 )
+
 
 treeview_style_class = Style_Class(
     "black",
@@ -61,13 +65,8 @@ treeview_style_class = Style_Class(
     ),
     "",  # <--- transparency locally adjusted
     "",  # <--- frame size locally adjusted
+    256,  # <--- flame speed
 )
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# TODO: edit following styles out.
-
-
-FLAME_SPEED = 256
 
 
 # *************************************************************************************************
@@ -90,7 +89,7 @@ splashscreen["bg"] = my_style_class.back_color
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # input splashscreen picture order file:
 splashpath = os.path.join("splashscreen", "splash.txt")
-with open(splashpath) as splash_loader_filelist:
+with open(splashpath, encoding="utf-8") as splash_loader_filelist:
     splash_order = splash_loader_filelist.read().splitlines()
     splash_loader_filelist.close()
 
@@ -140,9 +139,10 @@ def delayed_start():
 
 # raspberry PI function to control servo
 
+
 def ratings_calc(neg_reviews, pos_reviews):
     total_reviews = neg_reviews + pos_reviews
-    percentage = round((pos_reviews/total_reviews)*100,2)
+    percentage = round((pos_reviews / total_reviews) * 100, 2)
     selectgamescore_label.config(text=percentage, bg="green")
     gradenaanwijziging(percentage)
     return percentage
@@ -155,8 +155,7 @@ def gradenaanwijziging(
     pwm.ChangeDutyCycle(2)
     sleep(0.1)
     pwm.ChangeDutyCycle(graden)
-    print(f'moving servo to {graden} degrees at percentage {percentage}')
-
+    print(f"moving servo to {graden} degrees at percentage {percentage}")
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -256,7 +255,7 @@ root.wm_attributes("-alpha", my_style_class.window_transparency, "-fullscreen", 
 # *************************************************************************************************
 
 """# MAIN SCREEN ~ Labels and Buttons:"""
-# TODO build a frame to rule them all, and then center on screen
+
 centering_frame = Frame(
     root,
     bg=my_style_class.back_color,
@@ -468,7 +467,7 @@ def scroll_to(line):
 
     treeview.yview_moveto(0)  # <--- resets scroll to top
     sleep(0.001)
-    treeview.yview_scroll(line, "unit")
+    treeview.yview_scroll(line - 1, "unit")
     child_id = treeview.get_children()[
         line
     ]  # <--- picks up on the id of the row in row 1=2
@@ -476,7 +475,7 @@ def scroll_to(line):
     curItem = treeview.focus(
         child_id
     )  # <--- sets curItem as the selected row of child_id
-    treeview.selection_set(child_id)  # <--- colors and sets selection in treeview
+    treeview.selection_set(curItem)  # <--- colors and sets selection in treeview
 
 
 # *************************************************************************************************
@@ -501,9 +500,8 @@ def cur_treeview(a):
 
     # show selected info in buttons:
     total_info = info_string.get("values")
-    positive_ratings = total_info[4]  #<--- assign
-    negative_ratings = total_info[5]  #<--- assign
-
+    positive_ratings = total_info[4]  # <--- assign
+    negative_ratings = total_info[5]  # <--- assign
 
     print(f"sel onscr. in table : total_info = {total_info}")
     sel_item_label.config(text=total_info[0], anchor=E)
@@ -514,13 +512,11 @@ def cur_treeview(a):
 
     print(f"negative ratings = {negative_ratings}")
 
-
     selectNegRat_label.config(text=negative_ratings)
     symbol = "%"
-    ratingsperc = f'{ratings_calc(total_info[5], total_info[4])}{symbol}'
-    configurable_label.config(text=ratingsperc)  #<--- percentagecalc in action
+    ratingsperc = f"{ratings_calc(total_info[5], total_info[4])}{symbol}"
+    configurable_label.config(text=ratingsperc)  # <--- percentagecalc in action
     ratings_calc(negative_ratings, negative_ratings)
-
 
 
 treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked row
@@ -653,9 +649,9 @@ def button1():
     print("clicked a button, well done")
     configurable_label.config(
         text=list_first_game_developers()
-    )  # <--- TODO: this command doesnt change when table changes
+    )
     print(list_first_game_developers())
-    scroll_to()
+    scroll_to(1)
 
 
 def button2():
@@ -678,7 +674,7 @@ def button4():  # <--- button for searching
     # import json
 
     # Het json bestand uitlezen en opslaan als variable.
-    source = open("steam_small.json")
+    source = open("steam_small.json", encoding="utf-8")
     data = json.load(source)
 
     # Lees de titles uit bestand, en voor de eerste die dezelfde als input is, slaat regel op
@@ -828,14 +824,14 @@ def moving_ascii():  # <--- Flame one direction.
     FIRE_LABEL.configure(text=get_txt1())
     FIRE_LABEL3.configure(text=get_txt1())
 
-    FIRE_LABEL.after(FLAME_SPEED, moving_ascii2)
+    FIRE_LABEL.after(my_style_class.flame_speed, moving_ascii2)
 
 
 def moving_ascii2():  # <--- Flame other direction.
     FIRE_LABEL.configure(text=get_txt2())
     FIRE_LABEL3.configure(text=get_txt2())
 
-    FIRE_LABEL.after(FLAME_SPEED, moving_ascii)
+    FIRE_LABEL.after(my_style_class.flame_speed, moving_ascii)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
