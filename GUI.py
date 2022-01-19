@@ -140,6 +140,13 @@ def delayed_start():
 
 # raspberry PI function to control servo
 
+def ratings_calc(neg_reviews, pos_reviews):
+    total_reviews = neg_reviews + pos_reviews
+    percentage = round((pos_reviews/total_reviews)*100,2)
+    selectgamescore_label.config(text=percentage, bg="green")
+    gradenaanwijziging(percentage)
+    return percentage
+
 
 def gradenaanwijziging(
     percentage,
@@ -148,6 +155,8 @@ def gradenaanwijziging(
     pwm.ChangeDutyCycle(2)
     sleep(0.1)
     pwm.ChangeDutyCycle(graden)
+    print(f'moving servo to {graden} degrees at percentage {percentage}')
+
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -492,29 +501,26 @@ def cur_treeview(a):
 
     # show selected info in buttons:
     total_info = info_string.get("values")
+    positive_ratings = total_info[4]  #<--- assign
+    negative_ratings = total_info[5]  #<--- assign
+
+
     print(f"sel onscr. in table : total_info = {total_info}")
-    sel_item_label.config(text=total_info[0])
+    sel_item_label.config(text=total_info[0], anchor=E)
     print(f"title = {total_info[0]}")
 
-    selectNegRat_label.config(text=total_info[5])
-    print(f"positive ratings = {total_info[4]}")
+    print(f"positive ratings = {positive_ratings}")
+    selectPosRat_label.config(text=positive_ratings)
 
-    selectPosRat_label.config(text=total_info[4])
-    print(f"negative ratings = {total_info[5]}")
+    print(f"negative ratings = {negative_ratings}")
 
-    if total_info[5] > total_info[4]:  # <--- neg > pos
-        print(total_info[4] / total_info[5])
-        score = (
-            total_info[4] / total_info[5]
-        ) * 5  # <--- creates a factor, then scales to 5 for more neg than pos it keeps it under 5
-        selectgamescore_label.config(text=score, bg="red")
 
-    if total_info[4] > total_info[5]:  # <--- pos > neg
-        print(total_info[5] / total_info[4])
-        score = (
-            (total_info[5] / total_info[4]) * 5
-        ) + 5  # <--- creates a factor, then scales to 5 for more pos than neg it keeps it over 5
-        selectgamescore_label.config(text=score, bg="green")
+    selectNegRat_label.config(text=negative_ratings)
+    symbol = "%"
+    ratingsperc = f'{ratings_calc(total_info[5], total_info[4])}{symbol}'
+    configurable_label.config(text=ratingsperc)  #<--- percentagecalc in action
+    ratings_calc(negative_ratings, negative_ratings)
+
 
 
 treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked row
@@ -598,7 +604,7 @@ selectNegRat_label.grid(column=1, row=5, columnspan=2, padx=20, sticky=E)
 
 gamescore_label = Label(
     frame_lefttop,
-    text="Selection game score (under 1 = negative, above 1 = positive:",
+    text="Selection game score",
     font=my_style_class.font_main,
     background="green",
     fg=my_style_class.font_color,
@@ -607,7 +613,7 @@ gamescore_label.grid(column=0, row=6, padx=20, sticky=W)
 
 selectgamescore_label = Label(
     frame_lefttop,
-    text="0/10",
+    text="0/100",
     font=my_style_class.font_main,
     bg=my_style_class.back_color,
     fg=my_style_class.font_color,
