@@ -1,17 +1,16 @@
 """GUI of the Application"""
 import os
-import time
-import random
-
+from main import *
 from tkinter import *
+from time import sleep
+import random as random
 from tkinter import ttk
-
+from steamFunctions import *
 from PIL import Image, ImageTk
 
-from main import *
-from steamFunctions import *
 
-import RPi.GPIO as GPIO     # nodig voor Servo
+# TODO: get a working gpio rpio package > then uncomment:
+# import RPi.GPIO as GPIO     # nodig voor Servo
 
 
 # *************************************************************************************************
@@ -122,11 +121,33 @@ def change_label():
         photo_image = ImageTk.PhotoImage(img_var)
         img_label.configure(image=photo_image)  # <--- swap current image with next
         splashscreen.update_idletasks()  # <--- run configure task while still in loop !!!!
-        time.sleep(random.uniform(1, 2.2))
+        sleep(random.uniform(1, 2.2))
 
 
 def delayed_start():
     change_label()
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# raspberry setup GPIO
+#
+# # TODO: uncomment after installing on pi with package:
+# GPIO.setmode(GPIO.BCM)        # Alles hierin nodig voor Servo
+# GPIO.setup(18, GPIO.OUT)    # Servo op ping 18
+#
+# pwm=GPIO.PWM(18, 50)            # zit op pin 18, 50 hz
+# pwm.start(1)
+
+# raspberry PI function to control servo
+
+
+def gradenaanwijziging(
+    percentage,
+):  # Functie om de Servo te laten draaien naar likes percentage
+    graden = percentage / 10 + 2
+    pwm.ChangeDutyCycle(2)
+    sleep(0.1)
+    pwm.ChangeDutyCycle(graden)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -263,7 +284,9 @@ separator = PanedWindow(
 )
 separator.grid(row=1, column=1)
 # rechter onderhoekje:
-_frame = Frame(centering_frame, background=treeview_style_class.back_color, relief="ridge")
+_frame = Frame(
+    centering_frame, background=treeview_style_class.back_color, relief="ridge"
+)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Stijlen van de Tabel treeview:
 style = ttk.Style()
@@ -280,7 +303,7 @@ style.map(
     background=[("selected", treeview_style_class.font_color)],
     foreground=[("selected", treeview_style_class.back_color)],
 )  # <--- this function changes style selected row
-#TODO: change column top colour
+# TODO: change column top colour
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -299,7 +322,7 @@ treeview = ttk.Treeview(
         "Publisher",
     ),
     style="Treeview.Heading",
-)  #<--- this sets up the columns
+)  # <--- this sets up the columns
 
 # Voegt Kolomkoppen toe, command = sorteerfunctie(sortby)
 treeview.heading("#1", text="Name", command=lambda c="#1": sort_by(treeview, c, 0))
@@ -343,8 +366,47 @@ treeview.tag_configure("body", background=my_style_class.back_color)
 treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW, pady=10, padx=(5, 0))
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # sorteert columns naar klik op de headers TODO implementeer slimmere algoritmes
+""""
+https://python-gtk-3-tutorial.readthedocs.io/en/latest/treeview.html
 
-#TODO: make sure its readable
+Setting a custom sort function
+It is also possible to set a custom comparison function in order to change the sorting behaviour. As an example we will create a comparison function that sorts case-sensitive. In the example above the sorted list looked like:
+
+alfred
+Alfred
+benjamin
+Benjamin
+charles
+Charles
+david
+David
+The case-sensitive sorted list will look like:
+
+Alfred
+Benjamin
+Charles
+David
+alfred
+benjamin
+charles
+david
+First of all a comparison function is needed. This function gets two rows and has to return a negative integer if the first one should come before the second one, zero if they are equal and a positive integer if the second one should come before the first one.
+
+def compare(model, row1, row2, user_data):
+    sort_column, _ = model.get_sort_column_id()
+    value1 = model.get_value(row1, sort_column)
+    value2 = model.get_value(row2, sort_column)
+    if value1 < value2:
+        return -1
+    elif value1 == value2:
+        return 0
+    else:
+        return 1
+Then the sort function has to be set by Gtk.TreeSortable.set_sort_func().
+
+model.set_sort_func(0, compare, None)"""
+
+
 def sort_by(tree, col, descending):
     # grab values to sort
     header_data = [(tree.set(child, col), child) for child in tree.get_children("")]
@@ -391,19 +453,35 @@ style.configure(
     highlightcolor="purple",
 )
 
+# TODO implement this into a search function, add select row
+def scroll_to(line):
+    # line=index(average_game_price())
+
+    treeview.yview_moveto(0)  # <--- resets scroll to top
+    sleep(0.001)
+    treeview.yview_scroll(line, "unit")
+    child_id = treeview.get_children()[
+        line
+    ]  # <--- picks up on the id of the row in row 1=2
+    print(f"child_id = {child_id}")
+    curItem = treeview.focus(
+        child_id
+    )  # <--- sets curItem as the selected row of child_id
+    treeview.selection_set(child_id)  # <--- colors and sets selection in treeview
+
+
 # *************************************************************************************************
 # Grab info selected row treeview
-#
-# def gamescore_calculator():
-#     if total_info[5] > total_info[4]:
-#         score = total_info[5] / total_info[4]*5
-#         return score
-#     if total_info[4] > total_info[5]:
-#         score = (total_info[4] / total_info[5]*5)+5
-#         return score
+
+# this block is needed to keep the column sorter running properly in conjunction with cur_treeview:
+child_id = treeview.get_children()[100]  # <--- picks up on the id of the row in row 1=2
+print(f"child_id = {child_id}")
+curItem = treeview.focus(child_id)  # <--- sets curItem as the selected row of child_id
+treeview.selection_set(child_id)  # <--- colors and sets selection in treeview
 
 
 def cur_treeview(a):
+
     curItem = treeview.focus()
     info_string = treeview.item(curItem)
     print(f"info_string = treeview.item(curItem) = {info_string}")
@@ -412,15 +490,7 @@ def cur_treeview(a):
 
     treeview.rowconfigure(treeview.index(curItem), minsize=15)
 
-    #
-    # style.configure(
-    #     "curItem",
-    #     background="gray",
-    #     bordercolor="black",
-    #     troughcolor="black",
-    #     highlightcolor="white",
-    # )
-
+    # show selected info in buttons:
     total_info = info_string.get("values")
     print(f"sel onscr. in table : total_info = {total_info}")
     sel_item_label.config(text=total_info[0])
@@ -447,8 +517,7 @@ def cur_treeview(a):
         selectgamescore_label.config(text=score, bg="green")
 
 
-treeview.bind("<ButtonRelease-1>", cur_treeview
-)  # <--- grab data from clicked row
+treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked row
 
 
 # *************************************************************************************************
@@ -466,11 +535,9 @@ Label(
     justify=CENTER,
 ).place(relx=0.5, rely=0.1, anchor=CENTER)
 
-
 # lefttop frame contents
 
 # Labels
-
 #  clickbuttonlabels
 sel_title_label = Label(
     frame_lefttop,
@@ -546,17 +613,7 @@ selectgamescore_label = Label(
     fg=my_style_class.font_color,
 )
 selectgamescore_label.grid(column=1, row=6, columnspan=2, padx=20, sticky=E)
-
-
 # Label van eerste spel in lijst:
-
-# Label(
-#     frame_lefttop,
-#     text="First game in list:",
-#     font=my_style_class.font_main,
-#     background=my_style_class.back_color,
-#     fg=my_style_class.font_color,
-# ).grid(column=0, row=2, sticky=W, padx=20)
 
 configurable_label = Label(
     frame_lefttop,
@@ -565,7 +622,7 @@ configurable_label = Label(
     background=my_style_class.font_color,
     foreground=my_style_class.back_color,
 )
-configurable_label.grid(row=0, column=1, pady=50, padx=50, sticky="E")
+configurable_label.grid(row=0, column=1, pady=20, padx=50, sticky="E")
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -591,13 +648,15 @@ def button1():
     configurable_label.config(
         text=list_first_game_developers()
     )  # <--- TODO: this command doesnt change when table changes
+    print(list_first_game_developers())
+    scroll_to()
 
 
 def button2():
-    print("clicked a button, well done")
     configurable_label.config(
-        text=average_game_price()
+        text=average_game_price(),
     )  # <--- TODO: this command doesnt change when table changes
+    print("clicked a button, well done")
 
 
 def button3():
@@ -605,6 +664,25 @@ def button3():
     configurable_label.config(
         text=first_game_in_json,
     )  # <--- TODO: this command doesnt change when table changes
+
+
+def button4():  # <--- button for searching
+    print("clicked a button, well done")
+    # Importeer json om steam.json correct uit te lezen.
+    # import json
+
+    # Het json bestand uitlezen en opslaan als variable.
+    source = open("steam_small.json")
+    data = json.load(source)
+
+    # Lees de titles uit bestand, en voor de eerste die dezelfde als input is, slaat regel op
+    for line in data:
+        index = +1  # <--- counts lines
+        if line.get("name") == "Counter-Strike":
+            print(index)
+            scroll_to(index)
+            return index  # TODO add scrolltocursor
+    # <--- TODO: this command doesnt change when table changes
 
 
 frame = Frame(master=button_frame, bg="purple", relief=GROOVE, borderwidth=7)
@@ -615,7 +693,7 @@ button = Button(
     text="first_game_in_json",
     bg=my_style_class.back_color,
     fg=my_style_class.font_color,
-    command=button1 ,
+    command=button1,
     font=("roboto", 10),
     width=30,
     cursor="target",
@@ -642,9 +720,33 @@ button3 = Button(
     command=button3,
     font=("roboto", 10),
     width=30,
-    cursor = "man",
+    cursor="man",
 )
 button3.pack()
+
+txt = Entry(
+    master=frame,
+    bg=my_style_class.font_color,
+    fg=my_style_class.back_color,
+    font=("roboto", 10),
+    cursor="pencil",
+    width=30,
+)
+
+txt.insert(END, """Enter here...""")
+txt.pack(padx=20, pady=20)
+
+button4 = Button(
+    master=frame,
+    text="search",
+    bg=my_style_class.back_color,
+    fg=my_style_class.font_color,
+    command=button4,
+    font=("roboto", 10),
+    width=30,
+    cursor="man",
+)
+button4.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Buttons in the mainscreen
 # Button to terminate mainscreen
@@ -654,7 +756,7 @@ Button(
     font=my_style_class.font_main,
     background="red",
     foreground="white",
-    cursor = "pirate",
+    cursor="pirate",
     command=root.destroy,
 ).grid(column=1, row=7, sticky=E, padx=20)
 
@@ -664,7 +766,7 @@ Button(
     text="About",
     font=my_style_class.font_main,
     background="gray",
-    cursor = "heart",
+    cursor="heart",
     fg=my_style_class.font_color,
     # TODO: before final presentation, uncomment this section DO NOT DELETE
     # command=open_new_window_readme()
@@ -742,6 +844,8 @@ FIRE_LABEL3.after(1, moving_ascii)
 
 """ Run main GUI"""
 root.eval("tk::PlaceWindow . center")  # <--- center screen
-
+# TODO: get a working gpio rpio package
+# pwm.stop()      # Moet aan einde van code. Of hier, of voor de root.mainloop()
+# GPIO.cleanup()
 root.mainloop()
 # *************************************************************************************************

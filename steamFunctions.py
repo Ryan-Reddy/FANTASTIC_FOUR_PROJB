@@ -52,3 +52,6 @@ def list_first_game_developers():
     x = data[0]
     developers = x["developer"]
     return developers # TODO implement this "qualitative variable" to mainscreen
+
+
+
