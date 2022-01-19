@@ -50,7 +50,7 @@ my_style_class = Style_Class(
 
 treeview_style_class = Style_Class(
     "black",
-    "white",
+    "green",
     ("FF Din OT", 14, "bold"),
     (
         "Arial" or "Helvetica",
@@ -259,16 +259,25 @@ separator = PanedWindow(
 )
 separator.grid(row=1, column=1)
 # rechter onderhoekje:
-_frame = Frame(centering_frame, background=my_style_class.back_color, relief="ridge")
+_frame = Frame(centering_frame, background=treeview_style_class.back_color, relief="ridge")
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Stijlen van de Tabel treeview:
 style = ttk.Style()
 style.theme_use("classic")
 style.configure(
-    "Treeview.Heading", foreground=treeview_style_class.font_color,background=treeview_style_class.back_color
+    "Treeview.Heading",
+    rowheight=21,
+    foreground=treeview_style_class.font_color,
+    background=treeview_style_class.back_color,
+)  # <--- creates the basic table style
 
-)
-style.map('Treeview.Heading', background=[('selected', '#BFBFBF')], foreground=[('selected', 'black')])
+style.map(
+    "Treeview.Heading",
+    background=[("selected", treeview_style_class.font_color)],
+    foreground=[("selected", treeview_style_class.back_color)],
+)  # <--- this function changes style selected row
+#TODO: change column top colour
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Geeft aan welke data uit de dictionairy mee te nemen
@@ -286,7 +295,7 @@ treeview = ttk.Treeview(
         "Publisher",
     ),
     style="Treeview.Heading",
-)
+)  #<--- this sets up the columns
 
 # Voegt Kolomkoppen toe, command = sorteerfunctie(sortby)
 treeview.heading("#1", text="Name", command=lambda c="#1": sort_by(treeview, c, 0))
@@ -331,7 +340,7 @@ treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW, pady=10, padx=(5, 0))
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # sorteert columns naar klik op de headers TODO implementeer slimmere algoritmes
 
-
+#TODO: make sure its readable
 def sort_by(tree, col, descending):
     # grab values to sort
     header_data = [(tree.set(child, col), child) for child in tree.get_children("")]
@@ -375,7 +384,7 @@ style.configure(
     background="black",
     bordercolor="black",
     troughcolor="black",
-    highlightcolor="white",
+    highlightcolor="purple",
 )
 
 # *************************************************************************************************
@@ -393,7 +402,7 @@ style.configure(
 def cur_treeview(a):
     curItem = treeview.focus()
     info_string = treeview.item(curItem)
-    print(f'info_string = treeview.item(curItem) = {info_string}')
+    print(f"info_string = treeview.item(curItem) = {info_string}")
     print(curItem)
     print(treeview.index(curItem))
 
@@ -408,7 +417,6 @@ def cur_treeview(a):
     #     highlightcolor="white",
     # )
 
-
     total_info = info_string.get("values")
     print(f"sel onscr. in table : total_info = {total_info}")
     sel_item_label.config(text=total_info[0])
@@ -420,18 +428,23 @@ def cur_treeview(a):
     selectPosRat_label.config(text=total_info[4])
     print(f"negative ratings = {total_info[5]}")
 
-    if total_info[5] > total_info[4]:  #<--- neg > pos
+    if total_info[5] > total_info[4]:  # <--- neg > pos
         print(total_info[4] / total_info[5])
-        score = ((total_info[4] / total_info[5])*5)  #<--- creates a factor, then scales to 5 for more neg than pos it keeps it under 5
-        selectgamescore_label.config(text=score, bg='red')
+        score = (
+            total_info[4] / total_info[5]
+        ) * 5  # <--- creates a factor, then scales to 5 for more neg than pos it keeps it under 5
+        selectgamescore_label.config(text=score, bg="red")
 
-    if total_info[4] > total_info[5]:  #<--- pos > neg
+    if total_info[4] > total_info[5]:  # <--- pos > neg
         print(total_info[5] / total_info[4])
-        score = ((total_info[5] / total_info[4])*5)+5  #<--- creates a factor, then scales to 5 for more pos than neg it keeps it over 5
-        selectgamescore_label.config(text=score, bg='green')
+        score = (
+            (total_info[5] / total_info[4]) * 5
+        ) + 5  # <--- creates a factor, then scales to 5 for more pos than neg it keeps it over 5
+        selectgamescore_label.config(text=score, bg="green")
 
 
-treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked row
+treeview.bind("<ButtonRelease-1>", cur_treeview
+)  # <--- grab data from clicked row
 
 
 # *************************************************************************************************
@@ -545,8 +558,8 @@ configurable_label = Label(
     frame_lefttop,
     text=first_game_in_json,
     font=my_style_class.font_main,
-    background="yellow",
-    foreground="black",
+    background=my_style_class.font_color,
+    foreground=my_style_class.back_color,
 )
 configurable_label.grid(row=0, column=1, pady=50, padx=50, sticky="E")
 
@@ -563,8 +576,6 @@ button_frame = Frame(
     borderwidth=7,
 )
 button_frame.grid(row=0, column=0, pady=50, padx=50, sticky=W)
-
-
 
 
 # filters based upon values: ex foldout menu with all the platforms, changes the table to show only all the windows games
@@ -600,9 +611,10 @@ button = Button(
     text="first_game_in_json",
     bg=my_style_class.back_color,
     fg=my_style_class.font_color,
-    command=button1,
+    command=button1 ,
     font=("roboto", 10),
     width=30,
+    cursor="target",
 )
 button.pack()
 
@@ -614,6 +626,7 @@ button2 = Button(
     command=button2,
     font=("roboto", 10),
     width=30,
+    cursor="exchange",
 )
 button2.pack()
 
@@ -625,6 +638,7 @@ button3 = Button(
     command=button3,
     font=("roboto", 10),
     width=30,
+    cursor = "man",
 )
 button3.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -636,6 +650,7 @@ Button(
     font=my_style_class.font_main,
     background="red",
     foreground="white",
+    cursor = "pirate",
     command=root.destroy,
 ).grid(column=1, row=7, sticky=E, padx=20)
 
@@ -645,6 +660,7 @@ Button(
     text="About",
     font=my_style_class.font_main,
     background="gray",
+    cursor = "heart",
     fg=my_style_class.font_color,
     # TODO: before final presentation, uncomment this section DO NOT DELETE
     # command=open_new_window_readme()
@@ -657,9 +673,27 @@ Button(
 """# FIRE ~setup, pickup data, programme, placing"""
 # setup
 
-FIRE_LABEL = Label(root, text="loading ASCII", font=("TkFixedFont"), bg=my_style_class.back_color, fg="green")
-FIRE_LABEL2 = Label(root, text="loading ASCII", font=("TkFixedFont"), bg=my_style_class.back_color, fg="green")
-FIRE_LABEL3 = Label(root, text="loading ASCII", font=("TkFixedFont"), bg=my_style_class.back_color, fg="green")
+FIRE_LABEL = Label(
+    root,
+    text="loading ASCII",
+    font=("TkFixedFont"),
+    bg=my_style_class.back_color,
+    fg="green",
+)
+FIRE_LABEL2 = Label(
+    root,
+    text="loading ASCII",
+    font=("TkFixedFont"),
+    bg=my_style_class.back_color,
+    fg="green",
+)
+FIRE_LABEL3 = Label(
+    root,
+    text="loading ASCII",
+    font=("TkFixedFont"),
+    bg=my_style_class.back_color,
+    fg="green",
+)
 fire1 = glob.glob("fire1.txt")
 fire2 = glob.glob("fire2.txt")
 
