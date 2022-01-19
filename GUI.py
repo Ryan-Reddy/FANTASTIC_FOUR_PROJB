@@ -1,7 +1,8 @@
 """GUI of the Application"""
 import os
-import random
 import time
+import random
+
 from tkinter import *
 from tkinter import ttk
 
