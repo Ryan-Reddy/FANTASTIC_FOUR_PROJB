@@ -9,7 +9,7 @@ from steamFunctions import *
 from PIL import Image, ImageTk
 
 
-# TODO: get a working gpio rpio package > then uncomment:
+# TODO: RASPBERRY PI  get a working gpio rpio package > then uncomment:
 # import RPi.GPIO as GPIO     # nodig voor Servo
 
 
@@ -70,7 +70,7 @@ treeview_style_class = Style_Class(
 
 
 # *************************************************************************************************
-# TODO: change changeable text at bottom to commits, last minute change
+# TODO: RASPBERRY PI change changeable text at bottom to commits, last minute change
 """# SPLASHSCREEN ~ setup, load list, motion seq., initial fill, main programme"""
 
 splashscreen = Tk()  # <--- setup splashscreen
@@ -846,7 +846,7 @@ FIRE_LABEL3.after(1, moving_ascii)
 
 """ Run main GUI"""
 root.eval("tk::PlaceWindow . center")  # <--- center screen
-# TODO: get a working gpio rpio package
+# TODO: RASPBERRY PI get a working gpio rpio package
 # pwm.stop()      # Moet aan einde van code. Of hier, of voor de root.mainloop()
 # GPIO.cleanup()
 root.mainloop()
