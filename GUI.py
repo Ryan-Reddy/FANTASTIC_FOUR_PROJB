@@ -1,12 +1,14 @@
 """GUI of the Application"""
 import os
-import time
 import random
-from main import *
+import time
 from tkinter import *
 from tkinter import ttk
-from steamFunctions import *
+
 from PIL import Image, ImageTk
+
+from main import *
+from steamFunctions import *
 
 # *************************************************************************************************
 """STYLE/COLOR CHOICES
@@ -46,6 +48,17 @@ my_style_class = Style_Class(
     "",  # <--- auto adjusting frame size to needs
 )
 
+treeview_style_class = Style_Class(
+    "black",
+    "white",
+    ("FF Din OT", 14, "bold"),
+    (
+        "Arial" or "Helvetica",
+        12,
+    ),
+    "",  # <--- transparency locally adjusted
+    "",  # <--- frame size locally adjusted
+)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # TODO: edit following styles out.
@@ -157,7 +170,7 @@ def open_new_window_readme():
     # Achtergrond kleur van de readme (inclusief transparency)
     new_window["bg"] = my_style_class.back_color
     new_window.wait_visibility(new_window)
-    new_window.wm_attributes("-alpha", 0.99)
+    new_window.wm_attributes("-alpha", 1)
 
     # De data van de README.MD
     text = Text(
@@ -176,7 +189,7 @@ def open_new_window_readme():
     scrollbar.grid(row=0, column=1, sticky="ns")
     # Readme scrollbar style
     my_style = ttk.Style()
-    my_style.theme_use("classic")
+    # my_style.theme_use("classic")
     my_style.configure(
         "Scrollbar",
         background="black",
@@ -251,10 +264,11 @@ _frame = Frame(centering_frame, background=my_style_class.back_color, relief="ri
 # Stijlen van de Tabel treeview:
 style = ttk.Style()
 style.theme_use("classic")
-# style.configure("Treeview.Scrollbar", foreground='red', background=back_color)
 style.configure(
-    "Treeview.Heading", foreground="green", background=my_style_class.back_color
+    "Treeview.Heading", foreground=treeview_style_class.font_color,background=treeview_style_class.back_color
+
 )
+style.map('Treeview.Heading', background=[('selected', '#BFBFBF')], foreground=[('selected', 'black')])
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Geeft aan welke data uit de dictionairy mee te nemen
@@ -380,13 +394,19 @@ def cur_treeview(a):
     curItem = treeview.focus()
     info_string = treeview.item(curItem)
     print(f'info_string = treeview.item(curItem) = {info_string}')
-    style.configure(
-        "curItem",
-        background="gray",
-        bordercolor="black",
-        troughcolor="black",
-        highlightcolor="white",
-    )
+    print(curItem)
+    print(treeview.index(curItem))
+
+    treeview.rowconfigure(treeview.index(curItem), minsize=15)
+
+    #
+    # style.configure(
+    #     "curItem",
+    #     background="gray",
+    #     bordercolor="black",
+    #     troughcolor="black",
+    #     highlightcolor="white",
+    # )
 
 
     total_info = info_string.get("values")
@@ -544,6 +564,9 @@ button_frame = Frame(
 )
 button_frame.grid(row=0, column=0, pady=50, padx=50, sticky=W)
 
+
+
+
 # filters based upon values: ex foldout menu with all the platforms, changes the table to show only all the windows games
 # one for each column
 
@@ -634,9 +657,9 @@ Button(
 """# FIRE ~setup, pickup data, programme, placing"""
 # setup
 
-FIRE_LABEL = Label(root, text="a", font=("TkFixedFont"), bg="black", fg="green")
-FIRE_LABEL2 = Label(root, text="a", font=("TkFixedFont"), bg="black", fg="green")
-FIRE_LABEL3 = Label(root, text="a", font=("TkFixedFont"), bg="black", fg="green")
+FIRE_LABEL = Label(root, text="loading ASCII", font=("TkFixedFont"), bg=my_style_class.back_color, fg="green")
+FIRE_LABEL2 = Label(root, text="loading ASCII", font=("TkFixedFont"), bg=my_style_class.back_color, fg="green")
+FIRE_LABEL3 = Label(root, text="loading ASCII", font=("TkFixedFont"), bg=my_style_class.back_color, fg="green")
 fire1 = glob.glob("fire1.txt")
 fire2 = glob.glob("fire2.txt")
 
