@@ -132,7 +132,7 @@ def delayed_start():
 #
 # # TODO: uncomment after installing on pi with package:
 # GPIO.setmode(GPIO.BCM)        # Alles hierin nodig voor Servo
-#GPIO.setup(18, GPIO.OUT)    # Servo op ping 18
+# GPIO.setup(18, GPIO.OUT)    # Servo op ping 18
 #
 # pwm=GPIO.PWM(18, 50)            # zit op pin 18, 50 hz
 # pwm.start(1)
@@ -495,9 +495,6 @@ def cur_treeview(a):
     print(f"info_string = treeview.item(curItem) = {info_string}")
     print(curItem)
     print(treeview.index(curItem))
-    # rowID = treeview.identify('item', event.x, event.y)
-    # print(rowID)
-    # print(f'indetify row: {rowID}')  #<---TODO: implement Returns the item ID of the item at position y.
 
     treeview.rowconfigure(treeview.index(curItem), minsize=15)
 
