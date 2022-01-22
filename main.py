@@ -34,17 +34,26 @@ def get_readme():
 def get_game(steamy):
     return steamy.get("name")
 
-
-# Laadt het .json bestand in een list
 f = open(DATABASE_STEAM)
 data_tree = json.load(f)
 data_import = []
 for line in data_tree:
     data_import.append(line)
+# Laadt het .json bestand in een list
+def first_game_in_json():
 
-# return first_game_in_json
-first_game_in_json = data_import[0]["name"]
-print(data_import[0]["name"])
+    f = open(DATABASE_STEAM)
+    data_tree = json.load(f)
+    data_import = []
+    for line in data_tree:
+        data_import.append(line)
+
+    # return first_game_in_json
+    print(data_import[0]["name"])
+    first_game = data_import[0]["name"]
+    print(first_game)
+    return first_game
+
 
 # sort by gamename, print top
 data_import.sort(key=get_game)
