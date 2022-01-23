@@ -1,6 +1,5 @@
 """GUI of the Application"""
 import os
-import glob
 import json
 from main import *
 from tkinter import *
@@ -9,6 +8,7 @@ import random as random
 from tkinter import ttk
 from steamFunctions import *
 from PIL import Image, ImageTk
+from shutdown_imminent import *
 
 
 # TODO: RASPBERRY PI  get a working gpio rpio package > then uncomment:
@@ -75,8 +75,8 @@ class FrameSize:
 center_frame_class = FrameSize(1200, 600, 0)
 
 class MainScreen:
-    def command(self):
-        root.destroy()
+    def destuctionimminent(self):
+        changecolorloop
 
     def button1game(self):
         print("clicked a button, well done")
@@ -328,7 +328,7 @@ class MainScreen:
             width=30,
             cursor="man",
         )
-        self.button4.pack()  #<--- TODO: SEARCH BUTTON
+        self.button4.pack()
         self.txt.bind("<Return>", self.search_button_command)  #<--- uses event"return"
         self.txt.bind("<KP_Enter>", self.search_button_command)  #<--- uses event"numpad-enter"
         self.button4.bind("<Button-1>", self.search_button_command)  #<--- uses event"mousebutton-1 on button4 widget !"
@@ -342,7 +342,7 @@ class MainScreen:
             background="red",
             foreground="white",
             cursor="pirate",
-            command=root.destroy,
+            command=changecolorloop,
         )
         self.button_quit.grid(column=1, row=7, sticky=E, padx=20)
 
@@ -354,8 +354,7 @@ class MainScreen:
             background="gray",
             cursor="heart",
             fg=my_style_class.font_color,
-            command=open_new_window_readme()
-            or open_new_window_readme,  # <--- change to open_new_window_readme() to auto start upon launch
+            command=open_new_window_readme,  # <--- change to open_new_window_readme() to auto start upon launch
         )
         self.button_about.grid(column=0, row=7, sticky=W, pady=10, padx=20)
 
@@ -451,48 +450,6 @@ def gradenaanwijziging(
     print(f"moving servo to {graden} degrees at percentage {percentage}")
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def open_new_window_readme():
-    new_window = Tk()  # <---     open new window
-    new_window.overrideredirect(True)  # <--- Removes Title bar
-
-    # set the dimensions of the screen based upon earlier code
-    # and where it is placed
-    new_window.geometry("860x875")
-
-
-    # Achtergrond kleur van de readme (inclusief transparency)
-    new_window["bg"] = my_style_class.back_color
-    new_window.wait_visibility(new_window)
-    new_window.wm_attributes("-alpha", 0.99)
-
-    # De data van de README.MD
-    text = Text(
-        new_window,
-        width=120,
-        height=53,
-        font="TkFixedFont",
-        fg=my_style_class.font_color,
-        bg=my_style_class.back_color,
-    )
-    text.pack()  # <--- placement of .grid seperate or scrollbar doesnt compute
-    text.insert(END, get_readme())
-
-    # # Scrollbar
-    # scrollbar = ttk.Scrollbar(new_window, orient="vertical", command=text.yview)
-    # # scrollbar.pack(fill="y",side=RIGHT, expand=TRUE)
-    # # Readme scrollbar style
-    # my_style = ttk.Style()
-    # my_style.theme_use("classic")
-    # my_style.configure(
-    #     "Scrollbar",
-    #     background="black",
-    #     bordercolor="black",
-    #     arrowcolor="black",)
-
-    # close readme
-    Button(new_window, text="close", bg="red", command=new_window.destroy, width=100).pack(padx=25, pady=10
-    )
 # *************************************************************************************************
 # TODO: RASPBERRY PI change changeable text at bottom to commits, last minute change
 """# SPLASHSCREEN ~ setup, load list, motion seq., initial fill, main programme"""
@@ -534,7 +491,7 @@ def change_label():
 
 def delayed_start():
     change_label()
-    root.mainloop()
+
 
 
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -542,9 +499,11 @@ def delayed_start():
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # initial fill splashscreen
-img = Image.open(splash_order[0])
-ph = ImageTk.PhotoImage(img)
-img_label = Label(splashscreen, image=ph)
+from PIL import Image, ImageTk #<--- leave in to ensure proper usage of PIL
+
+img = Image.open('steamlogolarge40.jpg')
+photoimage = ImageTk.PhotoImage(img)
+img_label = Label(splashscreen, image=photoimage)
 img_label.pack()
 splash_label = Label(
     splashscreen, text="loading", bg=my_style_class.back_color, fg="gold"
@@ -553,7 +512,7 @@ splash_label.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    1000,
+    12000,
     splashscreen.destroy,  # TODO <--- 12000ms set to 0 this one to skip splashscreen
 )
 # function should be "delayedstart":
@@ -569,7 +528,6 @@ root = Tk()
 # window format:
 root.eval("tk::PlaceWindow . center")  # <--- window to center screen
 root.wait_visibility(root)  # <---waits, then makes page translucent
-#TODO make valid
 root.wm_attributes("-alpha", my_style_class.window_transparency, "-fullscreen", True)  # <---waits, then makes page translucent and fullscreen
 root.configure(background=my_style_class.back_color)
 mainscreen = MainScreen(root)
@@ -607,6 +565,7 @@ style.map(
     foreground=[("selected", treeview_style_class.back_color)],
 )  # <--- this function changes style selected row
 # TODO: change column top colour
+
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
