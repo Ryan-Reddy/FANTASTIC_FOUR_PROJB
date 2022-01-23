@@ -22,11 +22,7 @@ from shutdown_imminent import *
 Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
 """
 class Style_Class:
-    def __init__(
-        self,
-        back_color,
-        font_color,
-        font_title,
+    def __init__(        self,        back_color,        font_color,        font_title,
         font_main,
         window_transparency,
         window_size,
@@ -40,10 +36,7 @@ class Style_Class:
         self.window_size = window_size  # <--- auto adjusting frame size to needs
         self.flame_speed = flame_speed
 
-my_style_class = Style_Class(
-    "black",
-    "white",
-    ("FF Din OT", 24, "bold"),
+my_style_class = Style_Class(    "black",    "white",    ("FF Din OT", 24, "bold"),
     (
         "Arial" or "Helvetica",
         12,
@@ -614,7 +607,7 @@ splash_label.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    000,
+    12000,
     splashscreen.destroy,  # TODO <--- 12000ms set to 0 this one to skip splashscreen
 )
 # function should be "delayedstart":
@@ -861,7 +854,6 @@ treeview.selection_set(child_id)  # <--- colors and sets selection in treeview
 
 
 def cur_treeview(a):
-    treeview.sort()
 
     curItem = treeview.focus()
     info_string = treeview.item(curItem)
