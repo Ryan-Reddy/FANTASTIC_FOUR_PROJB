@@ -76,7 +76,7 @@ center_frame_class = FrameSize(1200, 600, 0)
 
 class MainScreen:
     def destuctionimminent(self):
-        changecolorloop
+        shutdowncommand  #TODO: fix shutdown routine
 
     def button1game(self):
         print("clicked a button, well done")
@@ -127,15 +127,6 @@ class MainScreen:
         self.centeringframe.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 
-
-
-        # self.button1 = Button(self.centeringframe)
-        # self.button1["text"]= "Hello, World!"
-        # self.button1["background"] = my_style_class.back_color
-        # self.button1["foreground"] = my_style_class.font_color
-        # self.button1["command"] = self.command
-        # self.button1.grid(row=0, column=0, pady=10, padx=5)
-
         self.frame_lefttop = Frame(self.centeringframe)
         self.frame_lefttop['bg']=my_style_class.back_color,
         self.frame_lefttop['width']=center_frame_class.width,
@@ -148,13 +139,6 @@ class MainScreen:
         # )
         self.frame_lefttop.grid(row=1, column=0, pady=15, padx=(15,0),sticky=W)
 
-        # self.button1 = Button(self.centeringframe, background = my_style_class.back_color)
-        # self.button1["text"]= "Hello, World!"
-        # # self.button1["background"] = my_style_class.back_color
-        # self.button1["foreground"] = my_style_class.font_color
-        # self.button1["width"] = 50
-        # self.button1["command"] = self.command
-        # self.button1.grid(row=2, column=0, pady=10, padx=5, sticky=W)
 
         self.labeltitle = Label(
             parent,
@@ -334,17 +318,30 @@ class MainScreen:
         self.button4.bind("<Button-1>", self.search_button_command)  #<--- uses event"mousebutton-1 on button4 widget !"
 
         # *************************************************************************************************
-
+        # Button to shutdown screen
         self.button_quit = Button(
             self.centeringframe,
             text="Quit Steam Dashboard",
             font=my_style_class.font_main,
-            background="red",
-            foreground="white",
-            cursor="pirate",
-            command=changecolorloop,
+            background="gray",
+            foreground=my_style_class.font_color,
+            cursor="cross",
+            command=root.destroy,
         )
         self.button_quit.grid(column=1, row=7, sticky=E, padx=20)
+
+        # Button to VirUSSsss
+        self.button_donotpress = Button(
+            self.centeringframe,
+            text="DO NOT PRESS",
+            font=my_style_class.font_main,
+            background="red",
+            highlightbackground="yellow",
+            foreground="white",
+            cursor="pirate",
+            command=shutdowncommand,
+        )
+        self.button_donotpress.grid(column=0, row=7, padx=20, columnspan=2)
 
         # Button to open readme, also calls itself at start of programme after splash
         self.button_about = Button(
@@ -359,7 +356,7 @@ class MainScreen:
         self.button_about.grid(column=0, row=7, sticky=W, pady=10, padx=20)
 
         def selItemLabelChange():
-            frame_lefttop.sel_item_label['text'] = (total_info[0])
+            self.frame_lefttop.sel_item_label['text'] = (cur_treeview(a)[0])
 
         # *************************************************************************************************
         self.FIRE_LABEL = Label(
@@ -512,7 +509,7 @@ splash_label.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    12000,
+    000,
     splashscreen.destroy,  # TODO <--- 12000ms set to 0 this one to skip splashscreen
 )
 # function should be "delayedstart":
@@ -549,6 +546,27 @@ _frame = Frame(
     root, background=treeview_style_class.back_color, relief="ridge"
 )
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Geeft aan welke data uit de dictionairy mee te nemen
+treeview = ttk.Treeview(
+    root,
+    show="headings",
+    selectmode='extended',  #<--- sets amount of selectable items [browse or extended(standard)]
+    columns=(
+        "Name",
+        "Developer",
+        "Platforms",
+        "Genre",
+        "Positive Ratings",
+        "Negative Ratings",
+        "Required Age",
+        "Publisher",
+    ),
+    style="Treeview.Heading",
+)  # <--- this sets up the columns
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 # Stijlen van de Tabel treeview:
 style = ttk.Style()
 style.theme_use("classic")
@@ -569,23 +587,6 @@ style.map(
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Geeft aan welke data uit de dictionairy mee te nemen
-treeview = ttk.Treeview(
-    root,
-    show="headings",
-    columns=(
-        "Name",
-        "Developer",
-        "Platforms",
-        "Genre",
-        "Positive Ratings",
-        "Negative Ratings",
-        "Required Age",
-        "Publisher",
-    ),
-    style="Treeview.Heading",
-)  # <--- this sets up the columns
-
 # Voegt Kolomkoppen toe, command = sorteerfunctie(sortby)
 treeview.heading("#1", text="Name", command=lambda c="#1": sort_by(treeview, c, 0))
 treeview.heading("#2", text="Developer", command=lambda c="#2": sort_by(treeview, c, 0))
@@ -601,6 +602,7 @@ treeview.heading("#8", text="Publisher", command=lambda c="#8": sort_by(treeview
 treeview.heading(
     "#6", text="Negative Ratings", command=lambda c="#6": sort_by(treeview, c, 0)
 )
+
 # Laadt het .json bestand in een list
 DATABASE_STEAM = "steam.json"
 f = open(DATABASE_STEAM)
@@ -638,7 +640,9 @@ treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
 https://python-gtk-3-tutorial.readthedocs.io/en/latest/treeview.html
 
 Setting a custom sort function
-It is also possible to set a custom comparison function in order to change the sorting behaviour. As an example we will create a comparison function that sorts case-sensitive. In the example above the sorted list looked like:
+It is also possible to set a custom comparison function in order to change the sorting behaviour. 
+As an example we will create a comparison function that sorts case-sensitive. 
+In the example above the sorted list looked like:
 
 alfred
 Alfred
@@ -658,7 +662,10 @@ alfred
 benjamin
 charles
 david
-First of all a comparison function is needed. This function gets two rows and has to return a negative integer if the first one should come before the second one, zero if they are equal and a positive integer if the second one should come before the first one.
+
+First of all a comparison function is needed. This function gets two rows and has to return a negative integer 
+if the first one should come before the second one, 
+zero if they are equal and a positive integer if the second one should come before the first one.
 
 def compare(model, row1, row2, user_data):
     sort_column, _ = model.get_sort_column_id()
@@ -678,14 +685,16 @@ model.set_sort_func(0, compare, None)"""
 def sort_by(tree, col, descending):
     # grab values to sort
     header_data = [(tree.set(child, col), child) for child in tree.get_children("")]
-    header_data.sort(reverse=descending)
+    print(header_data)
+
     # TODO if the data to be sorted is numeric change to float
     # data =  change_numeric(data)
 
-    # now sort the data in placej
     for ix, item in enumerate(header_data):
-        tree.move(item[1], "", ix)
-    # switch the heading, so it will sort in the opposite direction.
+        tree.move(item[1], "", ix)  #<---    # sort the data in place
+        # print(f'ix  {ix}    ---    item[1]{item[1]}')
+    header_data.sort(reverse=descending)    # switch the heading, so it will sort in the opposite direction.
+
     tree.heading(
         col, command=lambda local_col=col: sort_by(tree, local_col, int(not descending))
     )
@@ -747,6 +756,7 @@ treeview.selection_set(child_id)  # <--- colors and sets selection in treeview
 
 
 def cur_treeview(a):
+    treeview.sort()
 
     curItem = treeview.focus()
     info_string = treeview.item(curItem)
@@ -779,7 +789,7 @@ def cur_treeview(a):
     ratingsperc = f"{ratings_calc(total_info[5], total_info[4])}{symbol}"
     mainscreen.configurable_label.config(text=ratingsperc)  # <--- percentagecalc in action
     ratings_calc(negative_ratings, negative_ratings)
-
+    return total_info
 
 treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked row
 

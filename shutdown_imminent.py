@@ -1,10 +1,12 @@
 from tkinter import *
 import time
 # from testing_new_GUI import *
+from PIL import Image, ImageTk
+import os
 
 
 def open_new_window_readme():
-    new_window = Tk()  # <---     open new window
+    new_window = Toplevel()  # <---     open new window
     new_window.overrideredirect(True)  # <--- Removes Title bar
 
     # set the dimensions of the screen based upon earlier code
@@ -33,7 +35,7 @@ def open_new_window_readme():
     )
 
 
-def changecolorloop():
+def shutdowncommand():
     gui = Tk()
     # set window size
     gui.wm_attributes("-alpha", 1, "-fullscreen", True)  # <---waits, then makes page translucent and fullscreen
@@ -43,29 +45,36 @@ def changecolorloop():
     countdown = Label(gui, text="SHUTDOWN IMMINENT", bg=None, font=('countdown', 40))
     countdown.pack(fill='both')
 
+    img = PhotoImage("virus.jpg")
+    img2 = PhotoImage(img)
+    img_label = Label(gui, image=img)
+    img_label.pack()
+
     warning = Label(gui, text='WARNING', bg=None, font=('countdown', 40))
     warning.pack(fill='both', side='bottom', pady=50)
 
     x =0
     print(f'ok go{x}')
     count = 100
-    gui['bg'] = 'yellow'
+    # gui['bg'] = 'yellow'
     time.sleep(3)
 
     while x < 50:
-        if x%4==0:
+        if x%8==0:
             countdown['bg'] = 'red'
             countdown['text'] = f'WARNING: {count}'
             warning['text'] = f'~☠~☠~☠~☠~☠~'
-            warning['fg'] = 'red'
+            countdown['bg'] = 'yellow'
+            gui.update_idletasks()
+
         print(f'ok go{x}')
-        gui.update_idletasks()
         count = count-1
         countdown['text']=f'WARNING: {count}'
         warning['text']=f'SHUTDOWN IMMINENT'
 
         time.sleep(.05)
-        countdown['bg'] = 'yellow'
+        warning['fg'] = 'red'
+
         gui.update_idletasks()
         time.sleep(.05)
         x = x+1
@@ -81,14 +90,11 @@ def changecolorloop():
         Label(cur_gui, text='☠',font=('verdana',100)).pack()
 
         cur_gui.mainloop
-    open_new_window_readme
-    gui.after(1000, changecolorloop)
-    if x ==40:
-        gui.destroy()
 
-    gui.mainloop()
+    # gui.after(1000, shutdowncommand)
+    gui.destroy()
+    cur_gui.destroy()
+    return open_new_window_readme
 
-
-
-
-
+    # gui.mainloop()
+shutdowncommand()
