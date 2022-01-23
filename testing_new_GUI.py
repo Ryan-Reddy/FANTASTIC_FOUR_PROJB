@@ -416,6 +416,111 @@ class MainScreen:
 
 
 # # *************************************************************************************************
+
+
+def open_new_window_readme():
+    new_window = Toplevel()  # <---     open new window
+    new_window.overrideredirect(True)  # <--- Removes Title bar
+
+    # set the dimensions of the screen based upon earlier code
+    # and where it is placed
+    new_window.geometry("860x875")
+
+    # Achtergrond kleur van de readme (inclusief transparency)
+    new_window["bg"] = "black"
+    new_window.wait_visibility(new_window)
+    new_window.wm_attributes("-alpha", 0.99)
+
+    # De data van de README.MD
+    text = Text(
+        new_window,
+        width=120,
+        height=53,
+        font="TkFixedFont",
+        fg="white",
+        bg="black",
+    )
+    text.pack()  # <--- placement of .grid seperate or scrollbar doesnt compute
+    text.insert(END, get_readme())
+
+    # close readme
+    Button(new_window, text="close", bg="red", command=new_window.destroy, width=100).pack(padx=25, pady=10
+    )
+
+
+def shutdowncommand():
+    root.destroy()
+
+    gui = Tk()
+    # set window size
+    gui.wm_attributes("-alpha", 1, "-fullscreen", True)  # <---waits, then makes page translucent and fullscreen
+    gui['bg'] = 'blue'
+    count = 100
+
+    countdown = Label(gui, text="SHUTDOWN IMMINENT", bg=None, font=('countdown', 40))
+    countdown.pack(fill='both')
+
+
+
+    img = Image.open("virus.jpg") #TODO get working
+    img2 = ImageTk.PhotoImage(img)
+    img_label = Label(gui, image=img2, bg='blue')
+    img_label.pack(fill="both", expand=True)
+    gui.update_idletasks()  # <--- run configure task while still in loop !!!!
+
+
+
+
+
+    warning = Label(gui, text='WARNING', bg=None, font=('countdown', 40))
+    warning.pack(fill='both', side='bottom', pady=50)
+
+    x =0
+    print(f'ok go{x}')
+    count = 100
+    # gui['bg'] = 'yellow'
+    time.sleep(0.0001)  #<--- TODO can probably go
+
+    while x < 100:
+        if x%8==0:
+            countdown['bg'] = 'red'
+            countdown['text'] = f'WARNING: {count}'
+            warning['text'] = f'~☠~☠~☠~☠~☠~'
+            countdown['bg'] = 'yellow'
+            gui.update_idletasks()
+
+        print(f'ok go{x}')
+        count = count-0.5
+        countdown['text']=f'WARNING: {count}'
+        warning['text']=f'SHUTDOWN IMMINENT'
+
+        time.sleep(.025)
+        warning['fg'] = 'red'
+
+        gui.update_idletasks()
+        time.sleep(.025)
+        x = x+1
+        count = count-0.5
+
+
+
+        cur_gui = "gui"+str(x)
+        cur_gui = Toplevel()
+        place= str(x * 20)
+        place2= "100x100+"+place+"+"+place
+        cur_gui.geometry(place2)
+        Label(cur_gui, text='☠',font=('verdana',100)).pack()
+
+        cur_gui.mainloop
+
+    # gui.after(1000, shutdowncommand)
+    gui.destroy()
+    # cur_gui.destroy()
+    return
+
+    # gui.mainloop()
+# # *************************************************************************************************
+
 # # raspberry setup GPIO
 # #
 # # # TODO: uncomment after installing on pi with package:
