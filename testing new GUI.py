@@ -98,22 +98,25 @@ class MainScreen:
             text=list_first_game_developers()
         )  # <--- TODO: this command doesnt change when table changes
 
-    def button4(self):  # <--- button for searching
+    def search_button_command(self, event):  # <--- button for searching
         print("clicked a button4, well done")
         # Importeer json om steam.json correct uit te lezen.
         # import json
-
+        search_string = self.txt.get()
         # Het json bestand uitlezen en opslaan als variable.
         source = open("steam_small.json", encoding="utf-8")
         data = json.load(source)
-
+        print(f'searching for: {search_string}')
         # Lees de titles uit bestand, en voor de eerste die dezelfde als input is, slaat regel op
+        # TODO: improve search algo
         for line in data:
+            print(line)
             index = +1  # <--- counts lines
-            if line.get("name") == "Counter-Strike":
-                print(index)
-                scroll_to(index)
-                return index  # TODO add scrolltocursor
+            if line.get("name") == search_string:
+                print(f'found at index: {index}')
+                scroll_to((index*10))
+                return index  # TODO add FIX it, finds Ricochet and Half-Life 2
+
         # <--- TODO: this command doesnt change when table changes
 
     def __init__(self, parent):
@@ -241,7 +244,6 @@ class MainScreen:
 
         self.configurable_label = Label(
             self.frame_lefttop,
-            # TODO uncomment:
             text= "<<<click buttons on the left>>>",
             font=my_style_class.font_main,
             background=my_style_class.font_color,
@@ -293,7 +295,11 @@ class MainScreen:
         )
         self.button3.pack()
 
-        self.txt = Entry(
+
+
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        self.txt = Entry(  #<--- search-entrybox settings
             master=self.button_frame,
             bg=my_style_class.font_color,
             fg=my_style_class.back_color,
@@ -302,20 +308,31 @@ class MainScreen:
             width=30,
         )
 
-        self.txt.insert(END, """Enter here...""")
+        self.txt.insert(END, """Enter here...""")  #<--- standard text in entrybox
         self.txt.pack(padx=20, pady=20)
 
-        self.button4 = Button(
+        def clear_entrybox(event):  #<--- clear the entrybox upon click
+            self.txt.delete(0,"end")
+            return None
+
+        self.txt.bind("<Button-1>", clear_entrybox)  #<--- binds mousebutton1 click to clear_entrybox
+
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        self.button4 = Button(  #<--- SEARCH BUTTON
             master=self.button_frame,
             text="search",
             bg=my_style_class.back_color,
             fg=my_style_class.font_color,
-            command=self.button4,
+            # command=self.search_button_command(self),  #<--- gets a search string from ENTRY: "txt"),
             font=("roboto", 10),
             width=30,
             cursor="man",
         )
         self.button4.pack()  #<--- TODO: SEARCH BUTTON
+        self.txt.bind("<Return>", self.search_button_command)  #<--- uses event"return"
+        self.txt.bind("<KP_Enter>", self.search_button_command)  #<--- uses event"numpad-enter"
+        self.button4.bind("<Button-1>", self.search_button_command)  #<--- uses event"mousebutton-1 on button4 widget !"
+
         # *************************************************************************************************
 
         self.button_quit = Button(
@@ -756,9 +773,7 @@ def scroll_to(line):
         line
     ]  # <--- picks up on the id of the row in row 1=2
     print(f"child_id = {child_id}")
-    curItem = treeview.focus(
-        child_id
-    )  # <--- sets curItem as the selected row of child_id
+    curItem = treeview.focus(child_id)  # <--- sets curItem as the selected row of child_id
     treeview.selection_set(curItem)  # <--- colors and sets selection in treeview
 
 
