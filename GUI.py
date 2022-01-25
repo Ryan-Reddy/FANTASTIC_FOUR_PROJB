@@ -529,7 +529,6 @@ def shutdowncommand():
 def ratings_calc(neg_reviews, pos_reviews):
     total_reviews = neg_reviews + pos_reviews
     percentage = round((pos_reviews / total_reviews) * 100, 2)
-    mainscreen.selectgamescore_label.config(text=percentage, bg="green")
     gradenaanwijziging(percentage)
     return percentage
 
@@ -596,7 +595,7 @@ def delayed_start():
 # initial fill splashscreen
 from PIL import Image, ImageTk #<--- leave in to ensure proper usage of PIL
 
-img = Image.open('steamlogolarge40.jpg')
+img = Image.open('splashscreen\steamlogolarge40.jpg')
 photoimage = ImageTk.PhotoImage(img)
 img_label = Label(splashscreen, image=photoimage)
 img_label.pack()
@@ -607,7 +606,7 @@ splash_label.pack()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    12000,
+    1000,
     splashscreen.destroy,  # TODO <--- 12000ms set to 0 this one to skip splashscreen
 )
 # function should be "delayedstart":
@@ -682,7 +681,21 @@ style.map(
 )  # <--- this function changes style selected row
 # TODO: change column top colour
 
+# Stijlen van de Tabel treeview:
+style = ttk.Style()
+style.theme_use("classic")
+style.configure(
+    "Treeview.Columns",
+    rowheight=21,
+    foreground=treeview_style_class.font_color,
+    background="purple",
+)  # <--- creates the basic table style
 
+style.map(
+    "Treeview.Columns",
+    background=[("selected", treeview_style_class.font_color)],
+    foreground=[("selected", "purple")],
+)  # <--- this function changes style selected row
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Voegt Kolomkoppen toe, command = sorteerfunctie(sortby)
@@ -729,6 +742,7 @@ for row in data_import:
     )
 # stijlchoice body text
 treeview.tag_configure("body", background=my_style_class.back_color)
+treeview.tag_configure("header", background=my_style_class.back_color)
 
 # Geeft aan waar de tabel in het grid moet
 treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
@@ -885,6 +899,8 @@ def cur_treeview(a):
     symbol = "%"
     ratingsperc = f"{ratings_calc(total_info[5], total_info[4])}{symbol}"
     mainscreen.configurable_label.config(text=ratingsperc)  # <--- percentagecalc in action
+    mainscreen.selectgamescore_label.config(text=ratingsperc, bg="green")
+
     ratings_calc(negative_ratings, negative_ratings)
     return total_info
 

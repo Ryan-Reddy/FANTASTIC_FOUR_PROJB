@@ -3,4 +3,4 @@
 2. Black (formatting)
 3. pylint (including PEP8)
 4. #TODO update requirements.txt (tools>sync python requirements)
-
+5. Build final install package
