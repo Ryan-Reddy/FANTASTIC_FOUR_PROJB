@@ -2,7 +2,7 @@
 import json
 
 # Het json bestand uitlezen en opslaan als variable.
-source = open("steam_small.json")
+source = open("lib/steam_small.json")
 data = json.load(source)
 
 

@@ -11,7 +11,7 @@ ws.resizable(0, 0)
 
 conn = None
 
-conn = connect("data1.db")
+conn = connect("datab1.db")
 
 curs = conn.cursor()
 
@@ -23,7 +23,7 @@ if conn is not None:
 
 conn = None
 
-conn = connect("data1.db")
+conn = connect("datab1.db")
 
 curs = conn.cursor()
 
@@ -55,7 +55,7 @@ def show():
     treeview.selection()
     conn = None
     try:
-        conn = connect("data1.db")
+        conn = connect("datab1.db")
         cursor = conn.cursor()
         db = "select * from student"
         cursor.execute(db)
@@ -84,7 +84,7 @@ def search():
         treeview.delete(f)
     conn = None
     try:
-        conn = connect("data1.db")
+        conn = connect("datab1.db")
         core = conn.cursor()
         db = "select * from student where name = '%s' "
         name = ws_ent.get()

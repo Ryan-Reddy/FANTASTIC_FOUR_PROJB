@@ -97,7 +97,7 @@ class MainScreen:
         # import json
         search_string = self.txt.get()
         # Het json bestand uitlezen en opslaan als variable.
-        source = open("steam_small.json", encoding="utf-8")
+        source = open("lib/steam_small.json", encoding="utf-8")
         data = json.load(source)
         print(f'searching for: {search_string}')
         # Lees de titles uit bestand, en voor de eerste die dezelfde als input is, slaat regel op
@@ -373,8 +373,8 @@ class MainScreen:
             bg=my_style_class.back_color,
             fg="green",
         )
-        fire1 = glob.glob("fire1.txt")
-        fire2 = glob.glob("fire2.txt")
+        fire1 = glob.glob("lib/fire1.txt")
+        fire2 = glob.glob("lib/fire2.txt")
 
         def get_txt1():
             text1 = open(fire1[0], "r", encoding="utf-8").read()
@@ -682,7 +682,7 @@ style.map(
 # TODO: change column top colour
 
 # Stijlen van de Tabel treeview:
-style = ttk.Style()
+# style = ttk.Style()
 style.theme_use("classic")
 style.configure(
     "Treeview.Columns",

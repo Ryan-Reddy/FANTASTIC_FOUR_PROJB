@@ -6,6 +6,8 @@
         <entryData>
           <resourceRoots>
             <path value="file://$PROJECT_DIR$/splashscreen" />
+            <path value="file://$PROJECT_DIR$/lib" />
+            <path value="file://$PROJECT_DIR$/treeview working folder" />
           </resourceRoots>
         </entryData>
       </entry>
