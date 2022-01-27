@@ -855,40 +855,25 @@ def cur_treeview(a):  # <--- TODO: reform to sql
 
     curItem = treeview.focus()
     info_string = treeview.item(curItem)
-    print(f"info_string = treeview.item(curItem) = {info_string}")
-    print(curItem)
-    print(treeview.index(curItem))
-    # rowID = treeview.identify('item', event.x, event.y)
-    # print(rowID)
-    # print(f'indetify row: {rowID}')  #<---TODO: implement Returns the item ID of the item at position y.
-
     treeview.rowconfigure(treeview.index(curItem), minsize=15)
 
     # show selected info in buttons:
     total_info = info_string.get("values")
-    positive_ratings = total_info[4]  # <--- assign
-    negative_ratings = total_info[5]  # <--- assign
+    positive_ratings = total_info[3]  # <--- assign
+    negative_ratings = total_info[4]  # <--- assign
+    print(total_info)
 
-    print(f"sel onscr. in table : total_info = {total_info}")
-
-    mainscreen.sel_item_label.config(text=total_info[0], anchor=E)
-    print(f"title = {total_info[0]}")
-
-    print(f"positive ratings = {positive_ratings}")
+    mainscreen.sel_item_label.config(text=total_info[1], anchor=E)
     mainscreen.selectPosRat_label.config(text=positive_ratings)
-
-    print(f"negative ratings = {negative_ratings}")
-
     mainscreen.selectNegRat_label.config(text=negative_ratings)
     symbol = "%"
-    ratingsperc = f"{ratings_calc(total_info[5], total_info[4])}{symbol}"
-    mainscreen.configurable_label.config(
-        text=ratingsperc
-    )  # <--- percentagecalc in action
+
+    ratingsperc = f"{positive_ratings, negative_ratings}{symbol}"
+    mainscreen.configurable_label.config(text=ratingsperc)  # <--- percentagecalc in action
     mainscreen.selectgamescore_label.config(text=ratingsperc, bg="green")
 
     ratings_calc(negative_ratings, negative_ratings)
-    return total_info
+    return
 
 
 treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked row
