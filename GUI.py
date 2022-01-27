@@ -517,11 +517,7 @@ def shutdowncommand():
 # # raspberry PI function to control servo
 
 
-def ratings_calc(neg_reviews, pos_reviews):
-    total_reviews = neg_reviews + pos_reviews
-    percentage = round((pos_reviews / total_reviews) * 100, 2)
-    gradenaanwijziging(percentage)
-    return percentage
+
 
 
 def gradenaanwijziging(
@@ -872,7 +868,14 @@ def cur_treeview(a):  # <--- TODO: reform to sql
     mainscreen.configurable_label.config(text=ratingsperc)  # <--- percentagecalc in action
     mainscreen.selectgamescore_label.config(text=ratingsperc, bg="green")
 
+    def ratings_calc(neg_reviews, pos_reviews):
+        total_reviews = neg_reviews + pos_reviews
+        percentage = round((pos_reviews / total_reviews) * 100, 2)
+        gradenaanwijziging(percentage)
+        return percentage
     ratings_calc(negative_ratings, negative_ratings)
+
+
     return
 
 
