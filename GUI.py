@@ -857,16 +857,21 @@ def cur_treeview(a):  # <--- TODO: reform to sql
     total_info = info_string.get("values")
     positive_ratings = total_info[3]  # <--- assign
     negative_ratings = total_info[4]  # <--- assign
-    print(total_info)
+    symbol = "%"
+    total_reviews = negative_ratings + positive_ratings
+    percentage = round((positive_ratings / total_reviews) * 100)
+    percentagelabeltekst =  f"{percentage}{symbol}"
+    score = f"SCORE: {percentage/10}/10"
+
 
     mainscreen.sel_item_label.config(text=total_info[1], anchor=E)
     mainscreen.selectPosRat_label.config(text=positive_ratings)
     mainscreen.selectNegRat_label.config(text=negative_ratings)
-    symbol = "%"
 
-    ratingsperc = f"{positive_ratings, negative_ratings}{symbol}"
-    mainscreen.configurable_label.config(text=ratingsperc)  # <--- percentagecalc in action
-    mainscreen.selectgamescore_label.config(text=ratingsperc, bg="green")
+    mainscreen.configurable_label.config(text=score)
+    mainscreen.selectgamescore_label.config(text=percentagelabeltekst, bg="green")
+
+    gradenaanwijziging(percentage)  # <--- percentagecalc in action
 
     def ratings_calc(neg_reviews, pos_reviews):
         total_reviews = neg_reviews + pos_reviews
@@ -964,3 +969,8 @@ show_table()
 # GPIO.cleanup()
 
 root.mainloop()
+
+# *************************************************************************************************
+# servo afsluiting
+pwm.stop()      # moet na de .mainloop
+GPIO.cleanup()
