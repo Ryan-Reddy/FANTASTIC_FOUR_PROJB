@@ -200,7 +200,7 @@ def open_new_window_readme():
         bg=my_style_class.back_color,
     )
     text.grid(row=0)  # <--- placement of .grid seperate or scrollbar doesnt compute
-    text.insert(END, get_readme())
+    text.insert_alltime_games_page1(END, get_readme())
 
     # Scrollbar
     scrollbar = ttk.Scrollbar(new_window, orient="vertical", command=text.yview)
