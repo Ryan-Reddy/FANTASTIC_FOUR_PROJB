@@ -368,8 +368,8 @@ class MainScreen:
             bg=my_style_class.back_color,
             fg="green",
         )
-        fire1 = glob.glob("lib/fire1.txt")
-        fire2 = glob.glob("lib/fire2.txt")
+        fire1 = glob.glob("fire1.txt")
+        fire2 = glob.glob("fire2.txt")
 
         def get_txt1():
             text1 = open(fire1[0], "r", encoding="utf-8").read()
@@ -411,7 +411,7 @@ def open_new_window_readme():
 
     # set the dimensions of the screen based upon earlier code
     # and where it is placed
-    new_window.geometry("860x875")
+    new_window.geometry("910x900")
 
     # Achtergrond kleur van de readme (inclusief transparency)
     new_window["bg"] = "black"
@@ -677,7 +677,7 @@ def search(event):
         core = conn.cursor()
         name = src_entry.get()
 
-        db = "select * from games_alltime where name or developer LIKE '%s%s%s' "
+        db = """select * from games_alltime where name or developer LIKE %s %s %s """
         # <--- searches for arguments mentioned below
         if (len(name) < 2) or (not name.isalpha()):
             showerror("fail", "invalid name")
@@ -688,7 +688,7 @@ def search(event):
                 "%",
             )  # <--- infill of arguments, uses search infill + double wildcard
             core.execute(db % (arguments))
-            print(db % (arguments))
+            print('test search: ',db % (arguments))
             data = core.fetchall()
             for d in data:
                 treeview.insert("", END, values=d)
@@ -710,8 +710,10 @@ def sort_by(tree, col, descending):
     try:
         conn = sqlite3.connect(database_filepath)
         core = conn.cursor()
-        db = "SELECT * FROM games_alltime ORDER BY '%s' DESC;"
-        # db = "select * from games_alltime where name or developer = '%s' "
+
+        db = "SELECT * FROM games_alltime ORDER BY name DESC;"
+        # db = "SELECT * FROM games_alltime ORDER BY '%s' DESC;"
+
         print(core.execute(db % (col)))
         data = core.fetchall()
         for d in data:
@@ -958,15 +960,9 @@ src_entry.bind(
 
 show_table()
 
-
 # *************************************************************************************************
 
 """ Run main GUI"""
-
-
-# TODO: RASPBERRY PI get a working gpio rpio package
-# pwm.stop()      # Moet aan einde van code. Of hier, of voor de root.mainloop()
-# GPIO.cleanup()
 
 root.mainloop()
 
