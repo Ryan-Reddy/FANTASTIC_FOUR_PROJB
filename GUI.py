@@ -129,13 +129,14 @@ class MainScreen:
         self.centeringframe = Frame(parent)
         self.centeringframe["width"] = center_frame_class.width
         self.centeringframe["height"] = center_frame_class.height
-        self.centeringframe["background"] = "gray"  # my_style_class.back_color
+        self.centeringframe["background"] = "black"  # my_style_class.back_color
+        self.centeringframe["relief"] = GROOVE
+        self.centeringframe["borderwidth"] = 7
         self.centeringframe.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         self.frame_lefthalf = Frame(self.centeringframe)
         self.frame_lefthalf["bg"] = (my_style_class.back_color,)
         self.frame_lefthalf["width"] = (center_frame_class.width,)
-        self.frame_lefthalf["bg"] = (my_style_class.back_color,)
 
         #     width=800,
         #     height=600,
@@ -688,12 +689,13 @@ def search(event):
                 # "%",
             )  # <--- infill of arguments, uses search infill + double wildcard
             arguments = (name, )
-            curs.execute("""select * from games_alltime where name ='%s'""" % arguments)
+            curs.execute("""select * from games_alltime where name or developer ='%s'""" % arguments)
 
             data = curs.fetchall()
             for d in data:
-                treeview.insert("", END, values=d)
-
+                treeview.insert("", END, values=d, tags="body")
+            treeview.tag_configure(
+                "body", background="black", foreground="green")
     except Exception as e:
         showerror("issue", e)
 
@@ -702,30 +704,31 @@ def search(event):
             conn.close()
 
 #
-def sort_by(tree, col, descending):
-    treeview.selection()
-    fetchdata = treeview.get_children()
-    for f in fetchdata:
-        treeview.delete(f)
-    conn = None
-    try:
-        conn = sqlite3.connect(database_filepath)
-        core = conn.cursor()
-
-        db = "SELECT * FROM games_alltime ORDER BY name DESC;"
-        # db = "SELECT * FROM games_alltime ORDER BY '%s' DESC;"
-
-        print(core.execute(db % (col)))
-        data = core.fetchall()
-        for d in data:
-            treeview.insert("", END, values=d)
-
-    except Exception as e:
-        showerror("issue", e)
-
-    finally:
-        if conn is not None:
-            sqlite3.conn.close()
+# def sort_by(tree, col, descending):
+#     treeview.selection()
+#     fetchdata = treeview.get_children()
+#     # for f in fetchdata:
+#     #     treeview.delete(f)
+#     # conn = None
+#     # try:
+#     #     conn = sqlite3.connect(database_filepath)
+#     #     core = conn.cursor()
+#     #
+#     #     db = "SELECT * FROM games_alltime ORDER BY name DESC;"
+#     #     # db = "SELECT * FROM games_alltime ORDER BY '%s' DESC;"
+#     #
+#     #     print(core.execute(db))
+#     #     data = core.fetchall()
+#     #     # for d in data:
+#     #     #     treeview.insert("", END, values=d)
+#     #
+#     # except Exception as e:
+#     #     showerror("issue", e)
+#     #
+#     # finally:
+#     #     if conn is not None:
+#     #         sqlite3.conn.close()
+#
 # def sort_by(tree, col, descending):
 #     # grab values to sort
 #     header_data = [(tree.set(child, col), child) for child in tree.get_children("")]
@@ -744,6 +747,18 @@ def sort_by(tree, col, descending):
 #     tree.heading(
 #         col, command=lambda local_col=col: sort_by(tree, local_col, int(not descending))
 #     )
+
+def sort_by(tv, col, reverse):
+    l = [(tv.set(k, col), k) for k in tv.get_children('')]
+    l.sort(reverse=reverse)
+
+    # rearrange items in sorted positions
+    for index, (val, k) in enumerate(l):
+        tv.move(k, '', index)
+
+    # reverse sort next time
+    tv.heading(col, command=lambda: \
+               sort_by(tv, col, not reverse))
 
 def reset():
     show_table()
@@ -783,7 +798,7 @@ style.configure(
     "Treeview.Heading",
     rowheight=21,
     foreground="white",
-    background="black",
+    background=my_style_class.back_color,
 )  # <--- creates the heading style
 #
 # style.map(
