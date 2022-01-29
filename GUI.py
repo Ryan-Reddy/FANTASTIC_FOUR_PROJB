@@ -682,9 +682,15 @@ def search(event):
         if (len(name) < 2):
             showerror("fail", "invalid name")
         else:
+            arguments = (
+                #TODO: get wildcards working again
+                # "%",
+                name,
+                # "%",
+            )  # <--- infill of arguments, uses search infill + double wildcard
             wildcard = '%'
-            arguments = (wildcard,name,wildcard, )  # <--- infill of arguments, uses search infill + double wildcard
-            curs.execute("""select * from games_alltime where name LIKE '%s%s%s'""" % arguments)
+            arguments = (wildcard,name,wildcard, )
+            curs.execute("""select * from games_alltime where name or developer LIKE '%s%s%s'""" % arguments)
             data = curs.fetchall()
             for d in data:
                 treeview.insert("", END, values=d, tags="body")
