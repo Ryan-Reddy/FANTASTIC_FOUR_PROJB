@@ -583,7 +583,7 @@ def delayed_start():
 # initial fill splashscreen
 from PIL import Image, ImageTk  # <--- leave in to ensure proper usage of PIL
 
-img = Image.open("splashscreen\steamlogolarge40.jpg")
+img = Image.open("steamlogolarge40.jpg")
 photoimage = ImageTk.PhotoImage(img)
 img_label = Label(splashscreen, image=photoimage)
 img_label.pack()
@@ -688,8 +688,9 @@ def search(event):
                 name,
                 # "%",
             )  # <--- infill of arguments, uses search infill + double wildcard
-            arguments = (name, )
-            curs.execute("""select * from games_alltime where name or developer ='%s'""" % arguments)
+            wildcard = '%'
+            arguments = (wildcard,name,wildcard, )
+            curs.execute("""select * from games_alltime where name or developer LIKE '%s%s%s'""" % arguments)
 
             data = curs.fetchall()
             for d in data:
