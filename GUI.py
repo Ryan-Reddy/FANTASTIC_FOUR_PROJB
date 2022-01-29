@@ -683,9 +683,9 @@ def search(event):
             showerror("fail", "invalid name")
         else:
             arguments = (
-                #TODO: get wildcards working again
+                #TODO: ~ wildcards working ~ Message for Ryan, they are working again
                 # "%",
-                name,
+                # name,
                 # "%",
             )  # <--- infill of arguments, uses search infill + double wildcard
             wildcard = '%'
