@@ -583,7 +583,7 @@ def delayed_start():
 # initial fill splashscreen
 from PIL import Image, ImageTk  # <--- leave in to ensure proper usage of PIL
 
-img = Image.open("splashscreen\steamlogolarge40.jpg")
+img = Image.open("steamlogolarge40.jpg")
 photoimage = ImageTk.PhotoImage(img)
 img_label = Label(splashscreen, image=photoimage)
 img_label.pack()
@@ -682,15 +682,9 @@ def search(event):
         if (len(name) < 2):
             showerror("fail", "invalid name")
         else:
-            arguments = (
-                #TODO: get wildcards working again
-                # "%",
-                name,
-                # "%",
-            )  # <--- infill of arguments, uses search infill + double wildcard
-            arguments = (name, )
-            curs.execute("""select * from games_alltime where name or developer ='%s'""" % arguments)
-
+            wildcard = '%'
+            arguments = (wildcard,name,wildcard, )  # <--- infill of arguments, uses search infill + double wildcard
+            curs.execute("""select * from games_alltime where name LIKE '%s%s%s'""" % arguments)
             data = curs.fetchall()
             for d in data:
                 treeview.insert("", END, values=d, tags="body")
@@ -703,62 +697,17 @@ def search(event):
         if conn is not None:
             conn.close()
 
-#
-# def sort_by(tree, col, descending):
-#     treeview.selection()
-#     fetchdata = treeview.get_children()
-#     # for f in fetchdata:
-#     #     treeview.delete(f)
-#     # conn = None
-#     # try:
-#     #     conn = sqlite3.connect(database_filepath)
-#     #     core = conn.cursor()
-#     #
-#     #     db = "SELECT * FROM games_alltime ORDER BY name DESC;"
-#     #     # db = "SELECT * FROM games_alltime ORDER BY '%s' DESC;"
-#     #
-#     #     print(core.execute(db))
-#     #     data = core.fetchall()
-#     #     # for d in data:
-#     #     #     treeview.insert("", END, values=d)
-#     #
-#     # except Exception as e:
-#     #     showerror("issue", e)
-#     #
-#     # finally:
-#     #     if conn is not None:
-#     #         sqlite3.conn.close()
-#
-# def sort_by(tree, col, descending):
-#     # grab values to sort
-#     header_data = [(tree.set(child, col), child) for child in tree.get_children("")]
-#     print(header_data)
-#
-#     # TODO if the data to be sorted is numeric change to float
-#     # data =  change_numeric(data)
-#
-#     for ix, item in enumerate(header_data):
-#         tree.move(item[1], "", ix)  # <---    # sort the data in place
-#         # print(f'ix  {ix}    ---    item[1]{item[1]}')
-#     header_data.sort(
-#         reverse=descending
-#     )  # switch the heading, so it will sort in the opposite direction.
-#
-#     tree.heading(
-#         col, command=lambda local_col=col: sort_by(tree, local_col, int(not descending))
-#     )
-
-def sort_by(tv, col, reverse):
-    l = [(tv.set(k, col), k) for k in tv.get_children('')]
+def sort_by(treeview, col, reverse):
+    l = [(treeview.set(k, col), k) for k in treeview.get_children('')]
     l.sort(reverse=reverse)
 
     # rearrange items in sorted positions
     for index, (val, k) in enumerate(l):
-        tv.move(k, '', index)
+        treeview.move(k, '', index)
 
     # reverse sort next time
-    tv.heading(col, command=lambda: \
-               sort_by(tv, col, not reverse))
+    treeview.heading(col, command=lambda: \
+               sort_by(treeview, col, not reverse))
 
 def reset():
     show_table()
