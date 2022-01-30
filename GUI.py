@@ -16,7 +16,6 @@ import os
 
 # *************************************************************************************************
 """STYLE/COLOR CHOICES
-
 """
 
 
@@ -48,7 +47,7 @@ my_style_class = Style_Class(
         "Arial" or "Helvetica",
         12,
     ),
-    0.9,
+    0.8,
     "",  # <--- auto adjusting frame size to needs
     256,  # <--- flame speed
 )
@@ -576,7 +575,6 @@ separator.grid(row=1, column=1, pady=15, padx=(15))
 _frame = Frame(root, background=treeview_style_class.back_color, relief="ridge")
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 def show_table():
     src_entry.delete(0, END)
     src_entry.focus()
@@ -610,16 +608,26 @@ def show_table():
             conn.close()
 
 
+def getdata():
+    print('letsgo')
+    children = treeview.get_children()
+    print(children)
+    searchresults_json = open("zoekresultaten.txt", 'w')  # <--- bereid een lege zoekresultaten.json voor
+    for i in children:
+        values = treeview.item(i)["values"]
+        print(values)
+        searchresults_json.write(values+'\n')
+    searchresults_json.close
+    print('closed file ~~~~~~~~~~~~~~~~~~~~~~')
+
+
 def search(event):
-    treeview.selection()
+    # treeview.selection()
     fetchdata = treeview.get_children()
     for f in fetchdata:
         treeview.delete(f)
     conn = None
-
     try:
-        source = open("zoekresultaten.json", 'w')  #<--- bereid een lege zoekresultaten.json voor
-
         conn = sqlite3.connect(database_filepath)
         curs = conn.cursor()
         name = src_entry.get()
@@ -634,14 +642,13 @@ def search(event):
                 (arguments),
             )
             data = curs.fetchall()
-
             for d in data:
                 treeview.insert("", END, values=d, tags="body")
-
             treeview.tag_configure("body", background="black", foreground="green")
+        getdata()
+
     except Exception as e:
         showerror("issue", e)
-
     finally:
         if conn is not None:
             conn.close()
@@ -663,6 +670,70 @@ def sort_by(treeview, col, reverse):
 def reset():
     show_table()
 
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+# Het json bestand uitlezen en opslaan als variable.
+# data = open("zoekresultaten.txt")
+# data = json.load(source)
+
+# Functie voor berekenen gemiddelde prijs van alle games.
+def average_game_price():
+    with open('zoekresultaten.txt') as f:
+        lines = f.readlines()
+        data = lines
+        print(lines)
+        print(type(data))
+        print('partlyyyyy')
+        print(data.split()[1])
+        print('end')
+    # Lees elk spel uit het bestand in en sla het aantal spellen en de totale prijs op.
+    count = 0
+    total = 0
+    for i in data:
+        count += 1
+        total += int(i["price"])
+
+    # Bepaal de gemiddelde prijs van alle spellen en geeft deze waarde terug als getal met 2 decimalen.
+    average = total / count
+    # average = "{:.2f}".format(total/count)
+    formatting = "{average_price:.2f}"
+    return formatting.format(average_price=average) # TODO implement this "quantitative variable" to mainscreen
+
+
+# Functie voor ophalen van alle game developers.
+def list_game_developers():
+
+
+    return developers
+
+
+# Functie voor ophalen van alle game developers.
+def list_first_game_developers():
+    searchresults_json = open("zoekresultaten.txt", 'r')  # <--- bereid een lege zoekresultaten.json voor
+    # Lees alle developers uit het bestand in en sla de namen op, geeft deze namen terug als resultaat.
+    developers = []
+    for i in searchresults_json:
+        x = i
+        print(type(x))
+        print('hello',x)
+        developers.append(x)
+    # Lees de developer(s) uit het bestand in van de eerste game en sla deze op, geeft dit terug als resultaat.
+    print(type(developers))
+    print(developers)
+    print('firsty')
+    dev1 = developers[0]
+    print(dev1)
+    print(type(dev1))
+
+    return dev1
+
+def list_first_game():
+    # Lees de developer(s) uit het bestand in van de eerste game en sla deze op, geeft dit terug als resultaat.
+    x = data[0]
+    game = x["name"]
+    return game
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
