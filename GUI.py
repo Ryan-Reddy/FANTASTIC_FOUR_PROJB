@@ -1,6 +1,7 @@
 """GUI of the Application"""
 import os
 import json
+
 # from main import *
 from tkinter import *
 import glob
@@ -116,12 +117,6 @@ class MainScreen:
         self.frame_lefthalf = Frame(self.centeringframe)
         self.frame_lefthalf["bg"] = (my_style_class.back_color,)
         self.frame_lefthalf["width"] = (center_frame_class.width,)
-
-        #     width=800,
-        #     height=600,
-        #     relief=GROOVE,
-        #     borderwidth=7,
-        # )
         self.frame_lefthalf.grid(row=1, column=0, pady=15, padx=(15, 0), sticky=W)
 
         self.labeltitle = Label(
@@ -269,22 +264,6 @@ class MainScreen:
         )
         self.button3.pack()
 
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        # self.button4 = Button(  #<--- SEARCH BUTTON
-        #     master=self.button_frame,
-        #     text="search",
-        #     bg=my_style_class.back_color,
-        #     fg=my_style_class.font_color,
-        #     # command=self.search_button_command(self),  #<--- gets a search string from ENTRY: "txt"),
-        #     font=("roboto", 10),
-        #     width=30,
-        #     cursor="man",
-        # )
-        # self.button4.pack()
-        # self.txt.bind("<Return>", self.search_button_command)  #<--- uses event"return"
-        # self.txt.bind("<KP_Enter>", self.search_button_command)  #<--- uses event"numpad-enter"
-        # self.button4.bind("<Button-1>", self.search_button_command)  #<--- uses event"mousebutton-1 on button4 widget !"
-
         # *************************************************************************************************
         # Button to shutdown screen
         self.button_quit = Button(
@@ -377,6 +356,7 @@ class MainScreen:
 
 
 # # *************************************************************************************************
+
 
 def get_readme():
     all_readmes = glob.glob("README.md")
