@@ -1,19 +1,15 @@
 """GUI of the Application"""
-import os
-import json
-from main import *
-from tkinter import *
+import glob
 from time import sleep
 import random as random
 from tkinter import ttk
 from steamFunctions import *
-from PIL import Image, ImageTk
-from shutdown_imminent import *
 from tkinter.messagebox import *
 import sqlite3
-import requests
-
-
+from tkinter import *
+import time
+from PIL import Image, ImageTk
+import os
 # TODO: RASPBERRY PI  get a working gpio rpio package > then uncomment:
 # import RPi.GPIO as GPIO     # nodig voor Servo
 
@@ -21,7 +17,6 @@ import requests
 # *************************************************************************************************
 """STYLE/COLOR CHOICES
 
-Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
 """
 
 
@@ -83,14 +78,13 @@ center_frame_class = FrameSize(1200, 600, 0)
 
 
 class MainScreen:
-    def destuctionimminent(self):
-        shutdowncommand  # TODO: fix shutdown routine
+    def destuction_imminent(self):
+        shutdowncommand
 
     def button1game(self):
         print("clicked a button, well done")
         self.configurable_label.config(text=list_first_game())
         print(list_first_game())
-        scroll_to(0)
 
     def button2(self):
         self.configurable_label.config(
@@ -104,27 +98,6 @@ class MainScreen:
             text=list_first_game_developers()
         )  # <--- TODO: this command doesnt change when table changes
 
-    # def search_button_command(self, event):  # <--- button for searching
-    #     print("clicked a button4, well done")
-    #     # Importeer json om steam.json correct uit te lezen.
-    #     # import json
-    #     search_string = self.txt.get()
-    #     # Het json bestand uitlezen en opslaan als variable.
-    #     source = open("lib/steam_small.json", encoding="utf-8")
-    #     data = json.load(source)
-    #     print(f'searching for: {search_string}')
-    #     # Lees de titles uit bestand, en voor de eerste die dezelfde als input is, slaat regel op
-    #     # TODO: improve search algo
-    #     for line in data:
-    #         print(line)
-    #         index = +1  # <--- counts lines
-    #         if line.get("name") == search_string:
-    #             print(f'found at index: {index}')
-    #             scroll_to((index*10))
-    #             return index  # TODO add FIX it, finds Ricochet and Half-Life 2
-
-    # <--- TODO: likely remove
-
     def __init__(self, parent):
         self.centeringframe = Frame(parent)
         self.centeringframe["width"] = center_frame_class.width
@@ -137,12 +110,6 @@ class MainScreen:
         self.frame_lefthalf = Frame(self.centeringframe)
         self.frame_lefthalf["bg"] = (my_style_class.back_color,)
         self.frame_lefthalf["width"] = (center_frame_class.width,)
-
-        #     width=800,
-        #     height=600,
-        #     relief=GROOVE,
-        #     borderwidth=7,
-        # )
         self.frame_lefthalf.grid(row=1, column=0, pady=15, padx=(15, 0), sticky=W)
 
         self.labeltitle = Label(
@@ -290,22 +257,6 @@ class MainScreen:
         )
         self.button3.pack()
 
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        # self.button4 = Button(  #<--- SEARCH BUTTON
-        #     master=self.button_frame,
-        #     text="search",
-        #     bg=my_style_class.back_color,
-        #     fg=my_style_class.font_color,
-        #     # command=self.search_button_command(self),  #<--- gets a search string from ENTRY: "txt"),
-        #     font=("roboto", 10),
-        #     width=30,
-        #     cursor="man",
-        # )
-        # self.button4.pack()
-        # self.txt.bind("<Return>", self.search_button_command)  #<--- uses event"return"
-        # self.txt.bind("<KP_Enter>", self.search_button_command)  #<--- uses event"numpad-enter"
-        # self.button4.bind("<Button-1>", self.search_button_command)  #<--- uses event"mousebutton-1 on button4 widget !"
-
         # *************************************************************************************************
         # Button to shutdown screen
         self.button_quit = Button(
@@ -340,7 +291,7 @@ class MainScreen:
             background="gray",
             cursor="heart",
             fg=my_style_class.font_color,
-            command=open_new_window_readme,  # <--- change to open_new_window_readme() to auto start upon launch
+            command=open_new_window_readme(),  # <--- TODO: change to open_new_window_readme() to auto start upon launch
         )
         self.button_about.grid(column=0, row=7, sticky=W, pady=10, padx=20)
 
@@ -355,13 +306,7 @@ class MainScreen:
             bg=my_style_class.back_color,
             fg="green",
         )
-        # self.FIRE_LABEL2 = Label(
-        #     root,
-        #     text="loading ASCII",
-        #     font=("TkFixedFont"),
-        #     bg=my_style_class.back_color,
-        #     fg="green",
-        # )
+
         self.FIRE_LABEL3 = Label(
             root,
             text="loading ASCII",
@@ -404,6 +349,12 @@ class MainScreen:
 
 
 # # *************************************************************************************************
+
+
+def get_readme():
+    all_readmes = glob.glob("README.md")
+    # return first readme in list
+    return open(all_readmes[0], "r", encoding="utf-8").read()
 
 
 def open_new_window_readme():
@@ -451,7 +402,7 @@ def shutdowncommand():
     countdown = Label(gui, text="SHUTDOWN IMMINENT", bg=None, font=("countdown", 40))
     countdown.pack(fill="both")
 
-    img = Image.open("virus.jpg")  # TODO get working
+    img = Image.open("virus.jpg")
     img2 = ImageTk.PhotoImage(img)
     img_label = Label(gui, image=img2, bg="blue")
     img_label.pack(fill="both", expand=True)
@@ -463,8 +414,6 @@ def shutdowncommand():
     x = 0
     print(f"ok go{x}")
     count = 100
-    # gui['bg'] = 'yellow'
-    time.sleep(0.0001)  # <--- TODO can probably go
 
     while x < 100:
         if x % 8 == 0:
@@ -493,15 +442,13 @@ def shutdowncommand():
         place2 = "100x100+" + place + "+" + place
         cur_gui.geometry(place2)
         Label(cur_gui, text="☠", font=("verdana", 100)).pack()
+        cur_gui.update_idletasks()  # <--- run configure task while still in loop !!!!
 
         cur_gui.mainloop
 
-    # gui.after(1000, shutdowncommand)
     gui.destroy()
-    # cur_gui.destroy()
     return
 
-    # gui.mainloop()
 
 
 # # *************************************************************************************************
@@ -518,9 +465,6 @@ def shutdowncommand():
 # # raspberry PI function to control servo
 
 
-
-
-
 def gradenaanwijziging(
     percentage,
 ):  # Functie om de Servo te laten draaien naar likes percentage
@@ -533,7 +477,6 @@ def gradenaanwijziging(
 
 
 # *************************************************************************************************
-# TODO: RASPBERRY PI change changeable text at bottom to commits, last minute change
 """# SPLASHSCREEN ~ setup, load list, motion seq., initial fill, main programme"""
 
 splashscreen = Tk()  # <--- setup splashscreen
@@ -679,23 +622,19 @@ def search(event):
         name = src_entry.get()
 
         # <--- searches for arguments mentioned below
-        if (len(name) < 2):
+        if len(name) < 2:
             showerror("fail", "invalid name")
         else:
-            arguments = (
-                #TODO: ~ wildcards working ~ Message for Ryan, they are working again
-                # "%",
-                # name,
-                # "%",
-            )  # <--- infill of arguments, uses search infill + double wildcard
-            wildcard = '%'
-            arguments = (wildcard,name,wildcard, )
-            curs.execute("""select * from games_alltime where name or developer LIKE '%s%s%s'""" % arguments)
+            wildcard = "%"
+            arguments = (wildcard + name + wildcard,)
+            curs.execute(
+                """select * from games_alltime where (name || developer) LIKE ?""",
+                (arguments),
+            )
             data = curs.fetchall()
             for d in data:
                 treeview.insert("", END, values=d, tags="body")
-            treeview.tag_configure(
-                "body", background="black", foreground="green")
+            treeview.tag_configure("body", background="black", foreground="green")
     except Exception as e:
         showerror("issue", e)
 
@@ -703,17 +642,19 @@ def search(event):
         if conn is not None:
             conn.close()
 
+
 def sort_by(treeview, col, reverse):
-    l = [(treeview.set(k, col), k) for k in treeview.get_children('')]
+    l = [(treeview.set(k, col), k) for k in treeview.get_children("")]
+    print(l)
     l.sort(reverse=reverse)
 
     # rearrange items in sorted positions
     for index, (val, k) in enumerate(l):
-        treeview.move(k, '', index)
+        treeview.move(k, "", index)
 
     # reverse sort next time
-    treeview.heading(col, command=lambda: \
-               sort_by(treeview, col, not reverse))
+    treeview.heading(col, command=lambda: sort_by(treeview, col, not reverse))
+
 
 def reset():
     show_table()
@@ -725,14 +666,14 @@ def reset():
 treeview = ttk.Treeview(
     separator, columns=("#1", "#2", "#3", "#4", "#5"), show="headings", height=21
 )  # <--- maakt treeview headings
-treeview.pack()
+treeview.grid()
 
 treeview.heading("#1", text="Appid", command=lambda c="#1": sort_by(treeview, c, 0))
-treeview.column("#1", minwidth=10, width=50, stretch=0)
+treeview.column("#1", minwidth=10, width=50, stretch=False)
 treeview.heading("#2", text="Name", command=lambda c="#2": sort_by(treeview, c, 0))
-treeview.column("#2", minwidth=10, width=220, stretch=0)
+treeview.column("#2", minwidth=10, width=220, stretch=False)
 treeview.heading("#3", text="Developer", command=lambda c="#3": sort_by(treeview, c, 0))
-treeview.column("#3", minwidth=10, width=120, stretch=0)
+treeview.column("#3", minwidth=10, width=120, stretch=False)
 treeview.heading(
     "#4", text="Positive Ratings", command=lambda c="#4": sort_by(treeview, c, 0)
 )
@@ -755,54 +696,9 @@ style.configure(
     foreground="white",
     background=my_style_class.back_color,
 )  # <--- creates the heading style
-#
-# style.map(
-#     "Treeview.Heading",
-#     background=[("selected", "purple")],
-#     foreground=[("selected", "black")],
-# )  # <--- this function changes style selected row
-
-# Geeft aan waar de tabel in het grid moet
-# treeview.grid(in_=_frame, row=0, column=0, sticky=NSEW)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# sorteert columns naar klik op de headers TODO implementeer slimmere algoritmes dmv SQL updates, see search
-# def sort_by(tree, col, descending):
-#     # grab values to sort
-#     header_data = [(tree.set(child, col), child) for child in tree.get_children("")]
-#     print(header_data)
-#
-#     # TODO if the data to be sorted is numeric change to float
-#     # data =  change_numeric(data)
-#
-#     for ix, item in enumerate(header_data):
-#         tree.move(item[1], "", ix)  # <---    # sort the data in place
-#         # print(f'ix  {ix}    ---    item[1]{item[1]}')
-#     header_data.sort(
-#         reverse=descending
-#     )  # switch the heading, so it will sort in the opposite direction.
-#
-#     tree.heading(
-#         col, command=lambda local_col=col: sort_by(tree, local_col, int(not descending))
-#     )
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-xscrollbar = Scrollbar(
-    _frame, orient=HORIZONTAL, troughcolor="green", command=treeview.xview
-)
-yscrollbar = Scrollbar(_frame, orient=VERTICAL, command=treeview.yview)
-yscrollbar.config()
-yscrollbar.pack(side=RIGHT, fill="y")
-xscrollbar.pack(side=BOTTOM, fill="x")
-
-
-# # plaatst de scrollbar
-# ysb.grid(in_=_frame, row=0, column=1, sticky=NS, pady=10, padx=(0, 10))
-# xsb.grid(in_=_frame, row=1, column=0, sticky=EW)
-# _frame.rowconfigure(0, weight=1)
-# _frame.columnconfigure(0, weight=1)
-# # attempt to color scrollbar
+# attempt to color scrollbar
 
 style.configure(
     "Vertical.TScrollbar",
@@ -819,8 +715,18 @@ style.configure(
     highlightcolor="purple",
 )
 
+# Creates the scrollbar:
+xscrollbar = Scrollbar(separator, orient=HORIZONTAL, command=treeview.xview)
+yscrollbar = Scrollbar(
+    separator, orient=VERTICAL, command=treeview.yview, background="black"
+)
 
-def cur_treeview(a):  # <--- TODO: reform to sql
+# # Places the scrollbar
+yscrollbar.grid(row=0, column=1, sticky=NS, pady=10, padx=(0, 10))
+# xscrollbar.grid(row=1, column=0, sticky=EW)
+
+
+def cur_treeview(a):
 
     curItem = treeview.focus()
     info_string = treeview.item(curItem)
@@ -833,9 +739,8 @@ def cur_treeview(a):  # <--- TODO: reform to sql
     symbol = "%"
     total_reviews = negative_ratings + positive_ratings
     percentage = round((positive_ratings / total_reviews) * 100)
-    percentagelabeltekst =  f"{percentage}{symbol}"
+    percentagelabeltekst = f"{percentage}{symbol}"
     score = f"SCORE: {percentage/10}/10"
-
 
     mainscreen.sel_item_label.config(text=total_info[1], anchor=E)
     mainscreen.selectPosRat_label.config(text=positive_ratings)
@@ -851,8 +756,8 @@ def cur_treeview(a):  # <--- TODO: reform to sql
         percentage = round((pos_reviews / total_reviews) * 100, 2)
         gradenaanwijziging(percentage)
         return percentage
-    ratings_calc(negative_ratings, negative_ratings)
 
+    ratings_calc(negative_ratings, negative_ratings)
 
     return
 
@@ -939,5 +844,5 @@ root.mainloop()
 
 # *************************************************************************************************
 # servo afsluiting
-pwm.stop()      # moet na de .mainloop
+pwm.stop()  # moet na de .mainloop
 GPIO.cleanup()
