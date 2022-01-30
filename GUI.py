@@ -1,21 +1,15 @@
 """GUI of the Application"""
-import os
-import json
-
-# from main import *
-from tkinter import *
 import glob
 from time import sleep
 import random as random
 from tkinter import ttk
 from steamFunctions import *
-from PIL import Image, ImageTk
-from shutdown_imminent import *
 from tkinter.messagebox import *
 import sqlite3
-import requests
-
-
+from tkinter import *
+import time
+from PIL import Image, ImageTk
+import os
 # TODO: RASPBERRY PI  get a working gpio rpio package > then uncomment:
 # import RPi.GPIO as GPIO     # nodig voor Servo
 
@@ -23,7 +17,6 @@ import requests
 # *************************************************************************************************
 """STYLE/COLOR CHOICES
 
-Tkinter kleurkeuzes ***Alleen deze wijzigen!***:
 """
 
 
@@ -85,7 +78,7 @@ center_frame_class = FrameSize(1200, 600, 0)
 
 
 class MainScreen:
-    def destuctionimminent(self):
+    def destuction_imminent(self):
         shutdowncommand
 
     def button1game(self):
@@ -449,15 +442,13 @@ def shutdowncommand():
         place2 = "100x100+" + place + "+" + place
         cur_gui.geometry(place2)
         Label(cur_gui, text="☠", font=("verdana", 100)).pack()
+        cur_gui.update_idletasks()  # <--- run configure task while still in loop !!!!
 
         cur_gui.mainloop
 
-    # gui.after(1000, shutdowncommand)
     gui.destroy()
-    # cur_gui.destroy()
     return
 
-    # gui.mainloop()
 
 
 # # *************************************************************************************************
@@ -678,11 +669,11 @@ treeview = ttk.Treeview(
 treeview.grid()
 
 treeview.heading("#1", text="Appid", command=lambda c="#1": sort_by(treeview, c, 0))
-treeview.column("#1", minwidth=10, width=50, stretch=0)
+treeview.column("#1", minwidth=10, width=50, stretch=False)
 treeview.heading("#2", text="Name", command=lambda c="#2": sort_by(treeview, c, 0))
-treeview.column("#2", minwidth=10, width=220, stretch=0)
+treeview.column("#2", minwidth=10, width=220, stretch=False)
 treeview.heading("#3", text="Developer", command=lambda c="#3": sort_by(treeview, c, 0))
-treeview.column("#3", minwidth=10, width=120, stretch=0)
+treeview.column("#3", minwidth=10, width=120, stretch=False)
 treeview.heading(
     "#4", text="Positive Ratings", command=lambda c="#4": sort_by(treeview, c, 0)
 )
