@@ -616,11 +616,13 @@ def search(event):
     for f in fetchdata:
         treeview.delete(f)
     conn = None
+
     try:
+        source = open("zoekresultaten.json", 'w')  #<--- bereid een lege zoekresultaten.json voor
+
         conn = sqlite3.connect(database_filepath)
         curs = conn.cursor()
         name = src_entry.get()
-
         # <--- searches for arguments mentioned below
         if len(name) < 2:
             showerror("fail", "invalid name")
@@ -632,8 +634,10 @@ def search(event):
                 (arguments),
             )
             data = curs.fetchall()
+
             for d in data:
                 treeview.insert("", END, values=d, tags="body")
+
             treeview.tag_configure("body", background="black", foreground="green")
     except Exception as e:
         showerror("issue", e)
