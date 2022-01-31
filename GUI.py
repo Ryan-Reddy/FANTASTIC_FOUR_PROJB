@@ -10,6 +10,13 @@ from tkinter import *
 import time
 from PIL import Image, ImageTk
 import os
+from working_API_to_sql import *
+from threading import Thread
+import sqlite3
+import json
+import requests
+
+
 # TODO: RASPBERRY PI  get a working gpio rpio package > then uncomment:
 # import RPi.GPIO as GPIO     # nodig voor Servo
 
@@ -313,8 +320,8 @@ class MainScreen:
             bg=my_style_class.back_color,
             fg="green",
         )
-        fire1 = glob.glob("fire1.txt")
-        fire2 = glob.glob("fire2.txt")
+        fire1 = glob.glob("lib/fire1.txt")
+        fire2 = glob.glob("lib/fire2.txt")
 
         def get_txt1():
             text1 = open(fire1[0], "r", encoding="utf-8").read()
@@ -401,7 +408,7 @@ def shutdowncommand():
     countdown = Label(gui, text="SHUTDOWN IMMINENT", bg=None, font=("countdown", 40))
     countdown.pack(fill="both")
 
-    img = Image.open("virus.jpg")
+    img = Image.open("lib/virus.jpg")
     img2 = ImageTk.PhotoImage(img)
     img_label = Label(gui, image=img2, bg="blue")
     img_label.pack(fill="both", expand=True)
@@ -503,19 +510,25 @@ with open(splashpath, encoding="utf-8") as splash_loader_filelist:
 
 def change_label():
     for i in splash_order:
-        splash_label.configure(
-            text=i
-        )  # <--- change bottom screen text each imagechange
+        # splash_label.configure(
+        #     text=i
+        # )  # <--- change bottom screen text each imagechange
         filename = i
         img_var = Image.open(filename)  # <--- load next image
         photo_image = ImageTk.PhotoImage(img_var)
         img_label.configure(image=photo_image)  # <--- swap current image with next
         splashscreen.update_idletasks()  # <--- run configure task while still in loop !!!!
-        sleep(random.uniform(1, 2.2))
+        if i == 'steamlogolarge60.jpg':
+            insert_alltime_games_page1()
+        sleep(random.uniform(1, 1.5))
 
 
 def delayed_start():
-    change_label()
+    if __name__=='__main__':
+        Thread(target = change_label).start()
+        time.sleep(3)
+        Thread(target = API_PULL).start()
+
 
 
 # # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -530,23 +543,103 @@ photoimage = ImageTk.PhotoImage(img)
 img_label = Label(splashscreen, image=photoimage)
 img_label.pack()
 splash_label = Label(
-    splashscreen, text="loading", bg=my_style_class.back_color, fg="gold"
+    splashscreen, text="made by Ryan Reddy, Jeffrey Vizility, Tuur Neex219, Léon Phj1969, Souf", bg=my_style_class.back_color, fg="gold"
 )
 splash_label.pack()
+# *************************************************************************************************
+# API
+def create():
+    try:
+        curs.execute(
+            """CREATE TABLE IF NOT EXISTS games_alltime(
+        app_id INTEGER PRIMARY KEY, 
+        name TEXT NOT NULL, 
+        developer TEXT NOT NULL,
+        positive INTEGER NOT NULL,
+        negative INTEGER NOT NULL
+        )"""
+        )
+    except:
+        print('cant create')
+        pass
 
+
+def insert_alltime_games_page1():
+    # TODO: make multiple inserts/databases: ---> https://steamspy.com/api.php
+
+    url = "https://steamspy.com/api.php?request=all&page=0"
+    data = requests.get(url).json()
+    for game_id, game in data.items():  # <--- unpacks the dictionairy in dictionairy
+        print(game)
+        app_id = game.get("appid", "no_data")
+        name = game.get(
+            "name", "no_name_found"
+        )  # <--- 'no_name_found' option as backup for .get
+        developer = game.get("developer", "no_data")
+        positive = game.get("positive", "no_data")
+        negative = game.get("negative", "no_data")
+
+        arguments = (
+            app_id,
+            name,
+            developer,
+            positive,
+            negative,
+        )
+
+        splash_label.configure(
+            text=arguments
+        )  # <--- change bottom screen text each imagechange
+        splashscreen.update_idletasks()  # <--- run configure task while still in loop !!!!
+
+        try:
+            curs.execute(
+                """INSERT INTO games_alltime(
+            app_id, 
+            name, 
+            developer, 
+            positive, 
+            negative) VALUES(?, ?, ?, ?, ?)""",
+                arguments,
+            )
+        except:
+            pass
+
+
+def select():
+    sql = "SELECT * FROM games_alltime"
+    recs = curs.execute(sql)
+    if True:
+        for row in recs:
+            print(row)
+
+
+def API_PULL():
+    conn = None
+    conn = sqlite3.connect("lib/steam_database.db")
+    curs = conn.cursor()
+    create()
+    insert_alltime_games_page1()
+    conn.commit()  # <--- commit needed
+    select()
+    curs.close()
+    if conn is not None:
+        conn.close()
+
+# *************************************************************************************************
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # splashscreen programme:
 splashscreen.after(
-    1000,
+    12000,
     splashscreen.destroy,  # TODO <--- 12000ms set to 0 this one to skip splashscreen
 )
 # function should be "delayedstart":
 splashscreen.after(2000, delayed_start)
-splashscreen.after(0, print("starting splashscreen"))
 
 splashscreen.eval("tk::PlaceWindow . center")  # <--- center splashscreen
 
 splashscreen.mainloop()
+
 # *************************************************************************************************
 # TREEVIEW
 root = Tk()
@@ -612,14 +705,14 @@ def getdata():
     print('letsgo')
     children = treeview.get_children()
     print(children)
-    searchresults_json = open("zoekresultaten.txt", 'w')  # <--- bereid een lege zoekresultaten.json voor
+    searchresults_json = open("lib/zoekresultaten.txt", 'w')  # <--- bereid een lege zoekresultaten.json voor
     for i in children:
         values = treeview.item(i)["values"]
         print(values)
-        searchresults_json.write(values+'\n')
+        searchresults_json.write(values,'\n')
     searchresults_json.close
     print('closed file ~~~~~~~~~~~~~~~~~~~~~~')
-
+    return
 
 def search(event):
     # treeview.selection()
@@ -647,8 +740,8 @@ def search(event):
             treeview.tag_configure("body", background="black", foreground="green")
         getdata()
 
-    except Exception as e:
-        showerror("issue", e)
+    # except Exception as e:
+    #     showerror("issue", e)
     finally:
         if conn is not None:
             conn.close()
@@ -680,7 +773,7 @@ def reset():
 
 # Functie voor berekenen gemiddelde prijs van alle games.
 def average_game_price():
-    with open('zoekresultaten.txt') as f:
+    with open('lib/zoekresultaten.txt') as f:
         lines = f.readlines()
         data = lines
         print(lines)
@@ -711,7 +804,7 @@ def list_game_developers():
 
 # Functie voor ophalen van alle game developers.
 def list_first_game_developers():
-    searchresults_json = open("zoekresultaten.txt", 'r')  # <--- bereid een lege zoekresultaten.json voor
+    searchresults_json = open("lib/zoekresultaten.txt", 'r')  # <--- bereid een lege zoekresultaten.json voor
     # Lees alle developers uit het bestand in en sla de namen op, geeft deze namen terug als resultaat.
     developers = []
     for i in searchresults_json:
@@ -842,7 +935,7 @@ treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked 
 
 # *************************************************************************************************
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-database_filepath = "steam_database.db"
+database_filepath = "lib/steam_database.db"
 
 
 ws_lbl = Label(
