@@ -87,18 +87,14 @@ class MainScreen:
         shutdowncommand
 
     def button1game(self):
-        print("clicked a button, well done")
         self.configurable_label.config(text=list_first_game())
-        print(list_first_game())
 
     def button2(self):
         self.configurable_label.config(
             text=average_game_price(),
         )  # <--- TODO: this command doesnt change when table changes
-        print("clicked a button, well done")
 
     def button3(self):
-        print("clicked a button, well done")
         self.configurable_label.config(
             text=list_first_game_developers()
         )  # <--- TODO: this command doesnt change when table changes
@@ -417,7 +413,6 @@ def shutdowncommand():
     warning.pack(fill="both", side="bottom", pady=50)
 
     x = 0
-    print(f"ok go{x}")
     count = 100
 
     while x < 100:
@@ -428,7 +423,6 @@ def shutdowncommand():
             countdown["bg"] = "yellow"
             gui.update_idletasks()
 
-        print(f"ok go{x}")
         count = count - 0.5
         countdown["text"] = f"WARNING: {count}"
         warning["text"] = f"SHUTDOWN IMMINENT"
@@ -441,12 +435,13 @@ def shutdowncommand():
         x = x + 1
         count = count - 0.5
 
-        cur_gui = "gui" + str(x)
+        # cur_gui = "gui" + str(x)
         cur_gui = Toplevel()
         place = str(x * 20)
         place2 = "100x100+" + place + "+" + place
         cur_gui.geometry(place2)
-        Label(cur_gui, text="☠", font=("verdana", 100)).pack()
+        pirate = Label(cur_gui, text="☠", font=("verdana", 100))
+        pirate.pack()
         cur_gui.update_idletasks()  # <--- run configure task while still in loop !!!!
 
         cur_gui.mainloop
@@ -565,8 +560,8 @@ def insert_alltime_games_page1():
 
     url = "https://steamspy.com/api.php?request=all&page=0"
     data = requests.get(url).json()
+
     for game_id, game in data.items():  # <--- unpacks the dictionairy in dictionairy
-        print(game)
         app_id = game.get("appid", "no_data")
         name = game.get(
             "name", "no_name_found"
@@ -603,12 +598,12 @@ def insert_alltime_games_page1():
 
 
 
-def select():
-    sql = "SELECT * FROM games_alltime"
-    recs = curs.execute(sql)
-    if True:
-        for row in recs:
-            print(row)
+# def select():
+#     sql = "SELECT * FROM games_alltime"
+#     recs = curs.execute(sql)
+#     if True:
+#         for row in recs:
+#             print(row)
 
 
 def API_PULL():
@@ -621,7 +616,7 @@ def API_PULL():
         text="made by Ryan Reddy, Jeffrey Vizility, Tuur Neex219, Léon Phj1969, Souf with love ~~~", bg=my_style_class.back_color,
         fg="white")
     conn.commit()  # <--- commit needed
-    select()
+    # select()
     curs.close()
     if conn is not None:
         conn.close()
@@ -703,16 +698,12 @@ def show_table():
 
 
 def getdata():
-    print('letsgo')
     children = treeview.get_children()
-    print(children)
     searchresults_json = open("lib/zoekresultaten.txt", 'w')  # <--- bereid een lege zoekresultaten.json voor
     for i in children:
         values = treeview.item(i)["values"]
-        print(values)
         searchresults_json.write(values,'\n')
     searchresults_json.close
-    print('closed file ~~~~~~~~~~~~~~~~~~~~~~')
     return
 
 def search(event):
@@ -898,37 +889,41 @@ yscrollbar.grid(row=0, column=1, sticky=NS, pady=10, padx=(0, 10))
 def cur_treeview(a):
 
     curItem = treeview.focus()
+    print(f'curitem {curItem}')
     info_string = treeview.item(curItem)
-    treeview.rowconfigure(treeview.index(curItem), minsize=15)
+    print(f'info_string {info_string}')
 
-    # show selected info in buttons:
-    total_info = info_string.get("values")
-    positive_ratings = total_info[3]  # <--- assign
-    negative_ratings = total_info[4]  # <--- assign
-    symbol = "%"
-    total_reviews = negative_ratings + positive_ratings
-    percentage = round((positive_ratings / total_reviews) * 100)
-    percentagelabeltekst = f"{percentage}{symbol}"
-    score = f"SCORE: {percentage/10}/10"
+    if len(curItem)==0:  #<--- skips headerclicks
+        return
+    if len(curItem)!=0:
+        treeview.rowconfigure(treeview.index(curItem), minsize=115)
+            # show selected info in buttons:
+        total_info = info_string.get("values")
+        positive_ratings = total_info[3]  # <--- assign
+        negative_ratings = total_info[4]  # <--- assign
+        symbol = "%"
+        total_reviews = negative_ratings + positive_ratings
+        percentage = round((positive_ratings / total_reviews) * 100)
+        percentagelabeltekst = f"{percentage}{symbol}"
+        score = f"SCORE: {percentage/10}/10"
 
-    mainscreen.sel_item_label.config(text=total_info[1], anchor=E)
-    mainscreen.selectPosRat_label.config(text=positive_ratings)
-    mainscreen.selectNegRat_label.config(text=negative_ratings)
+        mainscreen.sel_item_label.config(text=total_info[1], anchor=E)
+        mainscreen.selectPosRat_label.config(text=positive_ratings)
+        mainscreen.selectNegRat_label.config(text=negative_ratings)
 
-    mainscreen.configurable_label.config(text=score)
-    mainscreen.selectgamescore_label.config(text=percentagelabeltekst, bg="green")
+        mainscreen.configurable_label.config(text=score)
+        mainscreen.selectgamescore_label.config(text=percentagelabeltekst, bg="green")
 
-    gradenaanwijziging(percentage)  # <--- percentagecalc in action
+        gradenaanwijziging(percentage)  # <--- percentagecalc in action
 
-    def ratings_calc(neg_reviews, pos_reviews):
-        total_reviews = neg_reviews + pos_reviews
-        percentage = round((pos_reviews / total_reviews) * 100, 2)
-        gradenaanwijziging(percentage)
-        return percentage
+        def ratings_calc(neg_reviews, pos_reviews):
+            total_reviews = neg_reviews + pos_reviews
+            percentage = round((pos_reviews / total_reviews) * 100, 2)
+            gradenaanwijziging(percentage)
+            return percentage
 
-    ratings_calc(negative_ratings, negative_ratings)
+        ratings_calc(negative_ratings, negative_ratings)
 
-    return
 
 
 treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked row
