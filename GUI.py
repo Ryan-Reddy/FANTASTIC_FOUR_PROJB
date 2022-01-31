@@ -5,7 +5,6 @@ import random as random
 from tkinter import ttk
 from steamFunctions import *
 from tkinter.messagebox import *
-import sqlite3
 from tkinter import *
 import time
 from PIL import Image, ImageTk
@@ -530,9 +529,6 @@ def delayed_start():
         Thread(target = API_PULL).start()
 
 
-
-# # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # initial fill splashscreen
@@ -589,7 +585,7 @@ def insert_alltime_games_page1():
 
         splash_label.configure(
             text=arguments
-        )  # <--- change bottom screen text each imagechange
+        )  # <--- change bottom screen text each api line request
         splashscreen.update_idletasks()  # <--- run configure task while still in loop !!!!
 
         try:
@@ -606,6 +602,7 @@ def insert_alltime_games_page1():
             pass
 
 
+
 def select():
     sql = "SELECT * FROM games_alltime"
     recs = curs.execute(sql)
@@ -620,11 +617,15 @@ def API_PULL():
     curs = conn.cursor()
     create()
     insert_alltime_games_page1()
+    splash_label.configure(
+        text="made by Ryan Reddy, Jeffrey Vizility, Tuur Neex219, Léon Phj1969, Souf with love ~~~", bg=my_style_class.back_color,
+        fg="white")
     conn.commit()  # <--- commit needed
     select()
     curs.close()
     if conn is not None:
         conn.close()
+
 
 # *************************************************************************************************
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
