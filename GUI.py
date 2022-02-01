@@ -360,7 +360,7 @@ def get_readme():
 
 def open_new_window_readme():
     new_window = Toplevel()  # <---     open new window
-    new_window.overrideredirect(True)  # <--- Removes Title bar
+    # new_window.overrideredirect(True)  # <--- Removes Title bar
 
     # set the dimensions of the screen based upon earlier code
     # and where it is placed
