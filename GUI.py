@@ -532,12 +532,12 @@ splashscreen.overrideredirect(True)  # <--- Removes TITELBALK
 
 splashscreen.call("wm", "attributes", ".", "-topmost", "true")  # <--- # topmost screen
 #
-# splashscreen.geometry(
-#     "960x307"
-# )  # <--- # size of screen + positie (steam-logo-large.jpg = 960x307)
 splashscreen.geometry(
-    my_style_class.window_size
-)  # <--- autoadjust overrides upper geometry
+    "965x337"
+)  # <--- # size of screen + positie (steam-logo-large.jpg = 960x307)
+# splashscreen.geometry(
+#     my_style_class.window_size
+# )  # <--- autoadjust overrides upper geometry
 
 # Achtergrond kleur van de readme (inclusief transparency)
 splashscreen["bg"] = my_style_class.back_color
