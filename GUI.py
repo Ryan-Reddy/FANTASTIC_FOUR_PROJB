@@ -442,7 +442,7 @@ def shutdowncommand():
     countdown = Label(gui, text="SHUTDOWN IMMINENT", bg=None, font=("countdown", 40))
     countdown.pack(fill="both")
 
-    img = Image.open("lib/virus.jpg")
+    img = Image.open("virus.jpg")
     img2 = ImageTk.PhotoImage(img)
     img_label = Label(gui, image=img2, bg="blue")
     img_label.pack(fill="both", expand=True)
