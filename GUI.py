@@ -13,12 +13,11 @@ from steamFunctions import *
 from tkinter.messagebox import *
 from tkinter import *
 import time
-from PIL import Image, ImageTk
-import os
+# from PIL import Image, ImageTk
+# import os
 from working_API_to_sql import *
 from threading import Thread
 import sqlite3
-import json
 import requests
 
 
@@ -123,6 +122,12 @@ class MainScreen:
         self.frame_lefthalf["width"] = (center_frame_class.width,)
         self.frame_lefthalf.grid(row=1, column=0, pady=15, padx=(15, 0), sticky=W)
 
+        """
+        //  *************************************************************************************************  
+        //  Onscreen labels
+        //  *************************************************************************************************  
+        """
+
         self.labeltitle = Label(
             parent,
             text="Steam APP Fantastic Five",
@@ -220,8 +225,11 @@ class MainScreen:
         )
         self.configurable_label.grid(row=0, column=1, pady=20, padx=50, sticky="E")
 
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        # buttonframe for in lefttop frame
+        """
+        //  *************************************************************************************************  
+        //  Left top frame and buttons
+        //  *************************************************************************************************  
+        """
         self.button_frame = Frame(
             master=self.frame_lefthalf,
             bg="purple",
@@ -268,7 +276,12 @@ class MainScreen:
         )
         self.button3.pack()
 
-        # *************************************************************************************************
+        """
+        //  *************************************************************************************************  
+        //  Bottom of screen buttons
+        //  *************************************************************************************************  
+        """
+
         # Button to shutdown screen
         self.button_quit = Button(
             self.centeringframe,
@@ -302,7 +315,7 @@ class MainScreen:
             background="gray",
             cursor="heart",
             fg=my_style_class.font_color,
-            command=open_new_window_readme(),  # <--- TODO: change to open_new_window_readme() to auto start upon launch
+            command=open_new_window_readme() or open_new_window_readme  # <--- added "()" to auto start upon launch
         )
         self.button_about.grid(column=0, row=7, sticky=W, pady=10, padx=20)
 
@@ -330,8 +343,8 @@ class MainScreen:
             bg=my_style_class.back_color,
             fg="green",
         )
-        fire1 = glob.glob("lib/fire1.txt")
-        fire2 = glob.glob("lib/fire2.txt")
+        fire1 = glob.glob("fire1.txt")
+        fire2 = glob.glob("fire2.txt")
 
         def get_txt1():
             text1 = open(fire1[0], "r", encoding="utf-8").read()
@@ -529,7 +542,7 @@ splashscreen.geometry(
 splashscreen["bg"] = my_style_class.back_color
 """~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
                                                         #TODO: create note: input splashscreen picture order file:
-splashpath = os.path.join("splashscreen", "splash.txt")
+splashpath = "splash.txt"
 with open(splashpath, encoding="utf-8") as splash_loader_filelist:
     splash_order = splash_loader_filelist.read().splitlines()
     splash_loader_filelist.close()
@@ -589,7 +602,7 @@ def create():
         )"""
         )
     except:
-        print('cant create')
+        print('Table exists- cant create')
         pass
 
 
@@ -646,7 +659,7 @@ def insert_alltime_games_page1():
 
 def API_PULL():
     conn = None
-    conn = sqlite3.connect("lib/steam_database.db")
+    conn = sqlite3.connect("steam_database.db")
     curs = conn.cursor()
     create()
     insert_alltime_games_page1()
@@ -747,9 +760,9 @@ def show_table():
             conn.close()
 
 
-def getdata():
+def write_searchresults():
     children = treeview.get_children()
-    searchresults_json = open("lib/zoekresultaten.txt", 'w')  # <--- bereid een lege zoekresultaten.json voor
+    searchresults_json = open("zoekresultaten.txt", 'w')  # <--- bereid een lege zoekresultaten.json voor
     for i in children:
         values = treeview.item(i)["values"]
         searchresults_json.write(values,'\n')
@@ -780,7 +793,7 @@ def search(event):
             for d in data:
                 treeview.insert("", END, values=d, tags="body")
             treeview.tag_configure("body", background="black", foreground="green")
-        getdata()
+        write_searchresults()
 
     # except Exception as e:
     #     showerror("issue", e)
@@ -812,22 +825,17 @@ def reset():
 //  AI functions
 //=============================================================================
 """
+# Het bron bestand uitlezen en opslaan als variable.
 
+import json
 
-# Het json bestand uitlezen en opslaan als variable.
-# data = open("zoekresultaten.txt")
-# data = json.load(source)
+#source = open("lib/zoekresultaten.txt")
+source = open("steam.json")
+data = json.load(source)
+
 
 # Functie voor berekenen gemiddelde prijs van alle games.
 def average_game_price():
-    with open('lib/zoekresultaten.txt') as f:
-        lines = f.readlines()
-        data = lines
-        print(lines)
-        print(type(data))
-        print('partlyyyyy')
-        print(data.split()[1])
-        print('end')
     # Lees elk spel uit het bestand in en sla het aantal spellen en de totale prijs op.
     count = 0
     total = 0
@@ -844,30 +852,21 @@ def average_game_price():
 
 # Functie voor ophalen van alle game developers.
 def list_game_developers():
-
+    # Lees alle developers uit het bestand in en sla de namen op, geeft deze namen terug als resultaat.
+    developers = set()
+    for i in data:
+        x = str(i["developer"])
+        developers.add(x)
 
     return developers
 
 
 # Functie voor ophalen van alle game developers.
 def list_first_game_developers():
-    searchresults_json = open("lib/zoekresultaten.txt", 'r')  # <--- bereid een lege zoekresultaten.json voor
-    # Lees alle developers uit het bestand in en sla de namen op, geeft deze namen terug als resultaat.
-    developers = []
-    for i in searchresults_json:
-        x = i
-        print(type(x))
-        print('hello',x)
-        developers.append(x)
     # Lees de developer(s) uit het bestand in van de eerste game en sla deze op, geeft dit terug als resultaat.
-    print(type(developers))
-    print(developers)
-    print('firsty')
-    dev1 = developers[0]
-    print(dev1)
-    print(type(dev1))
-
-    return dev1
+    x = data[0]
+    developers = x["developer"]
+    return developers
 
 def list_first_game():
     # Lees de developer(s) uit het bestand in van de eerste game en sla deze op, geeft dit terug als resultaat.
@@ -875,6 +874,28 @@ def list_first_game():
     game = x["name"]
     return game
 
+def average_positive_game_rating():
+    # Lees het aantal positieve ratings van elk spel uit de selectie in en bereken het gemiddelde, geef dit weer als een geheel getal.
+    game_count = 0
+    total_positive_ratings = 0
+    for i in data:
+        game_count += 1
+        total_positive_ratings += int(i["positive_ratings"])
+    average = total_positive_ratings / game_count
+    formatting = "{average_positive_rating:.0f}"
+    return formatting.format(average_positive_rating=average)
+
+
+def average_negative_game_rating():
+    # Lees het aantal negatieve ratings van elk spel uit de selectie in en bereken het gemiddelde, geef dit weer als een geheel getal.
+    game_count = 0
+    total_negative_ratings = 0
+    for i in data:
+        game_count += 1
+        total_negative_ratings += int(i["negative_ratings"])
+    average = total_negative_ratings / game_count
+    formatting = "{average_negative_rating:.0f}"
+    return formatting.format(average_negative_rating=average)
 
 """
 //=============================================================================
@@ -1002,7 +1023,7 @@ treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked 
 //=============================================================================
 """
 
-database_filepath = "lib/steam_database.db"
+database_filepath = "steam_database.db"
 
 
 ws_lbl = Label(
@@ -1074,6 +1095,9 @@ show_table()  #<--- grabs data from the sql for in treeview
 root.mainloop()
 
 # *************************************************************************************************
+
 # servo afsluiting
 pwm.stop()  # moet na de .mainloop
 GPIO.cleanup()
+
+# *************************************************************************************************

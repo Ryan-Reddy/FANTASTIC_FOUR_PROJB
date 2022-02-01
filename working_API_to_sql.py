@@ -64,7 +64,7 @@ def select():
 
 
 conn = None
-conn = sqlite3.connect("lib/steam_database.db")
+conn = sqlite3.connect("steam_database.db")
 curs = conn.cursor()
 create()
 insert_alltime_games_page1()
