@@ -680,7 +680,7 @@ def API_PULL():
 """
 
 splashscreen.after(
-    12000,
+    10000,
     splashscreen.destroy,  # TODO <--- 12000ms set to 0 this one to skip splashscreen
 )
 # function should be "delayedstart":
