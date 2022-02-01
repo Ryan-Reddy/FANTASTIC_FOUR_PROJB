@@ -62,7 +62,9 @@
 
 
                     Een software module met GUI, die de huidige games in steam weer kan geven en sorteren.
-                    Eventueel met een bijpassende "steam-indicator"
+                    De data wordt bij het opstarten opgehaald vanaf steamspy.api.
+                    Kan gebruikt worden met behulp van  met een bijpassende steam-indicator: "Review-O-Meter 2000".
+
  
 
                                  ▀ ▄▀▀▄ ▄▀   ▓▄▄  ▄▀▀▄ ▓   ▓   ▄▀▀▄ ▄▀▀▄ ▓▄▄  ▄▀▀  ▄▀
@@ -73,8 +75,9 @@
                         1.  Clone the repository from GitHub or dev_azure.
                         2.  Create a virtual environment.
                         3.  Install all dependencies. (noted in requirements.txt)
-                        3.  Play.
-                        3.  Support the software developers. If you like this game, BUY IT!
+                        4.  Plug in Review-O-Meter 2000
+                        5.  Play.
+                        6.  Support the software developers. If you like this game, BUY IT!
     
                         DEV_AZURE:
                         https://dev.azure.com/HU-HBO-ICT/_git/2021-Prop-B-KlasO-T3
@@ -92,7 +95,7 @@
                                     * Léon 1809101 (Phj1969)
                 
                                     License:
-                                    MIT License(c) [2022]
+                                    The project is licensed under MIT License(c) [2022]
                     
                     
                       ÜÛÛÜ                                                                   ÜÛÛÜ
