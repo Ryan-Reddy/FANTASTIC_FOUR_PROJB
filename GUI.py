@@ -567,9 +567,12 @@ def change_label():
 
 def delayed_start():
     if __name__=='__main__':
-        Thread(target = change_label).start()
+        # Thread(target = change_label).start()
+        # Thread(target=API_PULL).start()
+        API_PULL()
         time.sleep(3)
-        Thread(target = API_PULL).start()
+        change_label()
+
 
 """~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
 
