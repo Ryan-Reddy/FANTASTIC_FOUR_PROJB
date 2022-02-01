@@ -570,7 +570,6 @@ def delayed_start():
         # Thread(target = change_label).start()
         # Thread(target=API_PULL).start()
         API_PULL()
-        time.sleep(3)
         change_label()
 
 
