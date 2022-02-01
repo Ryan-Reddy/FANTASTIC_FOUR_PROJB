@@ -561,7 +561,7 @@ def change_label():
         splashscreen.update_idletasks()  # <--- run configure task while still in loop !!!!
         if i == 'steamlogolarge60.jpg':
             insert_alltime_games_page1()
-        sleep(random.uniform(0.5, 1.2))
+        sleep(random.uniform(1, 1.5))
 
 
 def delayed_start():
