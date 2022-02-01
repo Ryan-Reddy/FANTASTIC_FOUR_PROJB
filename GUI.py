@@ -1,5 +1,10 @@
-"""GUI of the Application"""
+"""
 //=============================================================================
+//  GUI of the Application
+//=============================================================================
+"""
+
+
 import glob
 from time import sleep
 import random as random
@@ -22,8 +27,12 @@ import requests
 
 
 # *************************************************************************************************
-"""STYLE/COLOR CHOICES
 """
+//=============================================================================
+//  Tkinter style/GUI classes
+//=============================================================================
+"""
+
 
 
 class Style_Class:
@@ -300,7 +309,12 @@ class MainScreen:
         def selItemLabelChange():
             self.frame_lefthalf.sel_item_label["text"] = cur_treeview(a)[0]
 
-        # *************************************************************************************************
+
+        """
+        //  *************************************************************************************************  
+        //  FIRE ASCII animation
+        //  *************************************************************************************************  
+        """
         self.FIRE_LABEL = Label(
             root,
             text="loading ASCII",
@@ -350,7 +364,11 @@ class MainScreen:
         self.FIRE_LABEL3.after(1, moving_ascii)
 
 
-# # *************************************************************************************************
+"""
+//=============================================================================
+//  Readme launcher
+//=============================================================================
+"""
 
 
 def get_readme():
@@ -388,6 +406,13 @@ def open_new_window_readme():
     Button(
         new_window, text="close", bg="red", command=new_window.destroy, width=100
     ).pack(padx=25, pady=10)
+
+
+"""
+//=============================================================================
+//  Do-not-press programme (virus)
+//=============================================================================
+"""
 
 
 def shutdowncommand():
@@ -451,8 +476,11 @@ def shutdowncommand():
     return
 
 
-
-# # *************************************************************************************************
+"""
+//=============================================================================
+//  Review-O-Meter 2000 (review-score-servo)
+//=============================================================================
+"""
 
 # # raspberry setup GPIO
 # #
@@ -477,8 +505,14 @@ def gradenaanwijziging(
     print(f"moving servo to {graden} degrees at percentage {percentage}")
 
 
-# *************************************************************************************************
-"""# SPLASHSCREEN ~ setup, load list, motion seq., initial fill, main programme"""
+
+
+"""
+//=============================================================================
+//  SPLASHSCREEN ~ setup, load list, motion seq., initial fill, main programme
+//=============================================================================
+"""
+
 
 splashscreen = Tk()  # <--- setup splashscreen
 splashscreen.overrideredirect(True)  # <--- Removes TITELBALK
@@ -493,15 +527,14 @@ splashscreen.geometry(
 )  # <--- autoadjust overrides upper geometry
 # Achtergrond kleur van de readme (inclusief transparency)
 splashscreen["bg"] = my_style_class.back_color
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# input splashscreen picture order file:
+"""~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
+                                                        #TODO: create note: input splashscreen picture order file:
 splashpath = os.path.join("splashscreen", "splash.txt")
 with open(splashpath, encoding="utf-8") as splash_loader_filelist:
     splash_order = splash_loader_filelist.read().splitlines()
     splash_loader_filelist.close()
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+"""~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
 
 def change_label():
     for i in splash_order:
@@ -524,8 +557,7 @@ def delayed_start():
         time.sleep(3)
         Thread(target = API_PULL).start()
 
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
 
 # initial fill splashscreen
 from PIL import Image, ImageTk  # <--- leave in to ensure proper usage of PIL
@@ -538,8 +570,13 @@ splash_label = Label(
     splashscreen, text="made by Ryan Reddy, Jeffrey Vizility, Tuur Neex219, Léon Phj1969, Souf", bg=my_style_class.back_color, fg="gold"
 )
 splash_label.pack()
-# *************************************************************************************************
-# API
+
+"""
+//=============================================================================
+//  API pulling programme
+//=============================================================================
+"""
+
 def create():
     try:
         curs.execute(
@@ -623,9 +660,12 @@ def API_PULL():
         conn.close()
 
 
-# *************************************************************************************************
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# splashscreen programme:
+"""
+//=============================================================================
+//  splashscreen programme:
+//=============================================================================
+"""
+
 splashscreen.after(
     12000,
     splashscreen.destroy,  # TODO <--- 12000ms set to 0 this one to skip splashscreen
@@ -637,8 +677,12 @@ splashscreen.eval("tk::PlaceWindow . center")  # <--- center splashscreen
 
 splashscreen.mainloop()
 
-# *************************************************************************************************
-# TREEVIEW
+"""
+//=============================================================================
+//  Treeview programme:
+//=============================================================================
+"""
+
 root = Tk()
 # window format:
 root.eval("tk::PlaceWindow . center")  # <--- window to center screen
@@ -650,7 +694,12 @@ root.configure(background=my_style_class.back_color)
 mainscreen = MainScreen(root)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-"""# TREEVIEW ~ window, style, data, scrollbar, column-sorting-function """
+"""
+//=============================================================================
+//  TREEVIEW ~ window, style, data, scrollbar, column-sorting-function
+//=============================================================================
+"""
+
 # Maakt een raamwerk in de root aan voor de tabel
 separator = PanedWindow(
     mainscreen.centeringframe,
@@ -741,9 +790,9 @@ def search(event):
 
 
 def sort_by(treeview, col, reverse):
-    l = [(treeview.set(k, col), k) for k in treeview.get_children("")]
+    l = [(treeview.set(k, col), k) for k in treeview.get_children("")]  #<--- grabs columnvalues and titles
     print(l)
-    l.sort(reverse=reverse)
+    l.sort(reverse=reverse)  #<--- uses treeview.sort
 
     # rearrange items in sorted positions
     for index, (val, k) in enumerate(l):
@@ -757,7 +806,12 @@ def reset():
     show_table()
 
 
-# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+"""
+//=============================================================================
+//  AI functions
+//=============================================================================
+"""
 
 
 # Het json bestand uitlezen en opslaan als variable.
@@ -821,7 +875,12 @@ def list_first_game():
     game = x["name"]
     return game
 
-# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+"""
+//=============================================================================
+//  TREEVIEW ~ Data insert, styles
+//=============================================================================
+"""
 
 
 treeview = ttk.Treeview(
@@ -887,6 +946,12 @@ yscrollbar.grid(row=0, column=1, sticky=NS, pady=10, padx=(0, 10))
 # xscrollbar.grid(row=1, column=0, sticky=EW)
 
 
+"""
+//=============================================================================
+//  TREEVIEW ~ grab current selection
+//=============================================================================
+"""
+
 def cur_treeview(a):
 
     curItem = treeview.focus()
@@ -930,8 +995,13 @@ def cur_treeview(a):
 treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked row
 
 
-# *************************************************************************************************
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+"""
+//=============================================================================
+//  Search in database - show in treeview
+//=============================================================================
+"""
+
 database_filepath = "lib/steam_database.db"
 
 
@@ -983,28 +1053,24 @@ ws_btn2 = Button(
 )
 ws_btn2.pack(side=RIGHT)
 
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 def clear_entrybox(event):  # <--- clear the entrybox upon click
     src_entry.delete(0, "end")
     return None
-
 
 src_entry.bind(
     "<Button-1>", clear_entrybox
 )  # <--- binds mousebutton1 click to clear_entrybox
 
 
-# *************************************************************************************************
+"""
+//=============================================================================
+//  GUI - main programme
+//=============================================================================
+"""
 
-show_table()
-
-# *************************************************************************************************
-
-""" Run main GUI"""
-
+show_table()  #<--- grabs data from the sql for in treeview
 root.mainloop()
 
 # *************************************************************************************************
