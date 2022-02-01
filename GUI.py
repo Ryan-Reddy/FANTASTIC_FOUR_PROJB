@@ -543,14 +543,15 @@ splashscreen.geometry(
 splashscreen["bg"] = my_style_class.back_color
 """~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
                                                         #TODO: create note: input splashscreen picture order file:
-splashpath = "splash.txt"
-with open(splashpath, encoding="utf-8") as splash_loader_filelist:
-    splash_order = splash_loader_filelist.read().splitlines()
-    splash_loader_filelist.close()
 
 """~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
 
 def change_label():
+    splashpath = "splash.txt"
+    with open(splashpath, encoding="utf-8") as splash_loader_filelist:
+        splash_order = splash_loader_filelist.read().splitlines()
+        splash_loader_filelist.close()
+
     for i in splash_order:
         # splash_label.configure(
         #     text=i
@@ -686,7 +687,7 @@ splashscreen.after(
     splashscreen.destroy,  # TODO <--- 12000ms set to 0 this one to skip splashscreen
 )
 # function should be "delayedstart":
-splashscreen.after(2000, delayed_start)
+splashscreen.after(10, delayed_start)
 
 splashscreen.eval("tk::PlaceWindow . center")  # <--- center splashscreen
 
