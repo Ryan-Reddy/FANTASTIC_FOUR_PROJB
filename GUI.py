@@ -538,6 +538,7 @@ splashscreen.geometry(
 splashscreen.geometry(
     my_style_class.window_size
 )  # <--- autoadjust overrides upper geometry
+
 # Achtergrond kleur van de readme (inclusief transparency)
 splashscreen["bg"] = my_style_class.back_color
 """~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
@@ -648,7 +649,6 @@ def insert_alltime_games_page1():
             pass
 
 
-
 # def select():
 #     sql = "SELECT * FROM games_alltime"
 #     recs = curs.execute(sql)
@@ -688,6 +688,7 @@ splashscreen.after(2000, delayed_start)
 
 splashscreen.eval("tk::PlaceWindow . center")  # <--- center splashscreen
 
+
 splashscreen.mainloop()
 
 """
@@ -698,7 +699,7 @@ splashscreen.mainloop()
 
 root = Tk()
 # window format:
-root.eval("tk::PlaceWindow . center")  # <--- window to center screen
+# root.eval("tk::PlaceWindow . center")  # <--- window to center screen
 root.wait_visibility(root)  # <---waits, then makes page translucent
 root.wm_attributes(
     "-alpha", my_style_class.window_transparency, "-fullscreen", True
