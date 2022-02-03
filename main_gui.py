@@ -3,38 +3,32 @@
 //  GUI of the Application
 //=============================================================================
 """
-
-
-import glob
+# import glob
 from time import sleep
-import random as random
+import random
 from tkinter import ttk
-from steamFunctions import *
 from tkinter.messagebox import *
 from tkinter import *
 import time
-# from PIL import Image, ImageTk
-# import os
-from working_API_to_sql import *
-from threading import Thread
 import sqlite3
+import json
 import requests
-
+from PIL import Image, ImageTk  # <--- leave in to ensure proper usage of PIL
 
 # TODO: RASPBERRY PI  get a working gpio rpio package > then uncomment:
 # import RPi.GPIO as GPIO     # nodig voor Servo
-
-
-# *************************************************************************************************
 """
 //=============================================================================
 //  Tkinter style/GUI classes
 //=============================================================================
+Set these up for overview, and to have the style at the start of document before the functions.
 """
 
 
-
-class Style_Class:
+class StyleClass:
+    """
+    basic styleclass for the entire GUI
+    """
     def __init__(
         self,
         back_color,
@@ -54,7 +48,7 @@ class Style_Class:
         self.flame_speed = flame_speed
 
 
-my_style_class = Style_Class(
+my_style_class = StyleClass(
     "black",
     "white",
     ("FF Din OT", 24, "bold"),
@@ -67,7 +61,7 @@ my_style_class = Style_Class(
     256,  # <--- flame speed
 )
 
-treeview_style_class = Style_Class(
+treeview_style_class = StyleClass(
     "black",
     "green",
     ("FF Din OT", 14, "bold"),
@@ -82,31 +76,40 @@ treeview_style_class = Style_Class(
 
 
 class FrameSize:
+    """ Center frame size as a class
+    """
     def __init__(self, width, height, count):
         self.width = width
         self.height = height
         self.count = count
-
-
 center_frame_class = FrameSize(1200, 600, 0)
 
 
 class MainScreen:
+    """Mainscreen class with buttons and functions
+    """
     def destuction_imminent(self):
         shutdowncommand
 
     def button1game(self):
         self.configurable_label.config(text=list_first_game())
 
-    def button2(self):
-        self.configurable_label.config(
-            text=average_game_price(),
-        )  # <--- TODO: this command doesnt change when table changes
+    # def button2(self):
+    #     self.configurable_label.config(
+    #         text=average_game_price(),
+    #     )
 
     def button3(self):
-        self.configurable_label.config(
-            text=list_first_game_developers()
-        )  # <--- TODO: this command doesnt change when table changes
+        self.configurable_label.config(text=first_gameDev_inlist())
+
+    def button4(self):
+        self.configurable_label.config(text=avg_pos_game_rating())
+
+    def button5(self):
+        self.configurable_label.config(text=avg_neg_game_rating())
+
+    def button6(self):
+        self.configurable_label.config(text=avg_gamescore())
 
     def __init__(self, parent):
         self.centeringframe = Frame(parent)
@@ -121,13 +124,9 @@ class MainScreen:
         self.frame_lefthalf["bg"] = (my_style_class.back_color,)
         self.frame_lefthalf["width"] = (center_frame_class.width,)
         self.frame_lefthalf.grid(row=1, column=0, pady=15, padx=(15, 0), sticky=W)
-
-        """
-        //  *************************************************************************************************  
+        """ *************************************************************************************
         //  Onscreen labels
-        //  *************************************************************************************************  
-        """
-
+        //  *************************************************************************************"""
         self.labeltitle = Label(
             parent,
             text="Steam APP Fantastic Five",
@@ -168,14 +167,14 @@ class MainScreen:
         )
         self.sel_pos_label.grid(column=0, row=4, padx=20, sticky=W)
 
-        self.selectPosRat_label = Label(
+        self.selectposrat_label = Label(
             self.frame_lefthalf,
             text="click on a game for positive ratings",
             font=my_style_class.font_main,
             bg=my_style_class.back_color,
             fg=my_style_class.font_color,
         )
-        self.selectPosRat_label.grid(column=1, row=4, columnspan=2, padx=20, sticky=E)
+        self.selectposrat_label.grid(column=1, row=4, columnspan=2, padx=20, sticky=E)
 
         self.sel_neg_label = Label(
             self.frame_lefthalf,
@@ -186,14 +185,14 @@ class MainScreen:
         )
         self.sel_neg_label.grid(column=0, row=5, padx=20, sticky=W)
 
-        self.selectNegRat_label = Label(
+        self.selectnegrat_label = Label(
             self.frame_lefthalf,
             text="select game for negative ratings",
             font=my_style_class.font_main,
             bg=my_style_class.back_color,
             fg=my_style_class.font_color,
         )
-        self.selectNegRat_label.grid(column=1, row=5, columnspan=2, padx=20, sticky=E)
+        self.selectnegrat_label.grid(column=1, row=5, columnspan=2, padx=20, sticky=E)
 
         self.gamescore_label = Label(
             self.frame_lefthalf,
@@ -224,12 +223,9 @@ class MainScreen:
             foreground=my_style_class.back_color,
         )
         self.configurable_label.grid(row=0, column=1, pady=20, padx=50, sticky="E")
-
-        """
-        //  *************************************************************************************************  
+        """ *************************************************************************************
         //  Left top frame and buttons
-        //  *************************************************************************************************  
-        """
+        //  *************************************************************************************"""
         self.button_frame = Frame(
             master=self.frame_lefthalf,
             bg="purple",
@@ -242,7 +238,7 @@ class MainScreen:
 
         self.button = Button(
             master=self.button_frame,
-            text="first_game_in_json",
+            text="Top search result",
             bg=my_style_class.back_color,
             fg=my_style_class.font_color,
             command=self.button1game,
@@ -252,21 +248,21 @@ class MainScreen:
         )
         self.button.pack()
 
-        self.button2 = Button(
-            master=self.button_frame,
-            text="average_game_price",
-            bg=my_style_class.back_color,
-            fg=my_style_class.font_color,
-            command=self.button2,
-            font=("roboto", 10),
-            width=30,
-            cursor="exchange",
-        )
-        self.button2.pack()
+        # self.button2 = Button(
+        #     master=self.button_frame,
+        #     text="average_game_price",
+        #     bg=my_style_class.back_color,
+        #     fg=my_style_class.font_color,
+        #     command=self.button2,
+        #     font=("roboto", 10),
+        #     width=30,
+        #     cursor="exchange",
+        # )
+        # self.button2.pack()
 
         self.button3 = Button(
             master=self.button_frame,
-            text="list_first_game_developer",
+            text="Top game developer",
             bg=my_style_class.back_color,
             fg=my_style_class.font_color,
             command=self.button3,
@@ -276,12 +272,44 @@ class MainScreen:
         )
         self.button3.pack()
 
-        """
-        //  *************************************************************************************************  
-        //  Bottom of screen buttons
-        //  *************************************************************************************************  
-        """
+        self.button4 = Button(
+            master=self.button_frame,
+            text="Average Positive ratings",
+            bg=my_style_class.back_color,
+            fg=my_style_class.font_color,
+            command=self.button4,
+            font=("roboto", 10),
+            width=30,
+            cursor="man",
+        )
+        self.button4.pack()
 
+        self.button5 = Button(
+            master=self.button_frame,
+            text="Average Negative ratings",
+            bg=my_style_class.back_color,
+            fg=my_style_class.font_color,
+            command=self.button5,
+            font=("roboto", 10),
+            width=30,
+            cursor="man",
+        )
+        self.button5.pack()
+
+        self.button6 = Button(
+            master=self.button_frame,
+            text="Average Gamescore results",
+            bg=my_style_class.back_color,
+            fg=my_style_class.font_color,
+            command=self.button6,
+            font=("roboto", 10),
+            width=30,
+            cursor="man",
+        )
+        self.button6.pack()
+        """ *************************************************************************************
+        //  Bottom of screen buttons
+        //  *************************************************************************************"""
         # Button to shutdown screen
         self.button_quit = Button(
             self.centeringframe,
@@ -315,93 +343,100 @@ class MainScreen:
             background="gray",
             cursor="heart",
             fg=my_style_class.font_color,
-            command=open_new_window_readme() or open_new_window_readme  # <--- added "()" to auto start upon launch
+            command=open_new_window_readme()
+            or open_new_window_readme,  # <--- added "()" to auto start upon launch
         )
         self.button_about.grid(column=0, row=7, sticky=W, pady=10, padx=20)
 
-        def selItemLabelChange():
-            self.frame_lefthalf.sel_item_label["text"] = cur_treeview(a)[0]
-
-
-        """
-        //  *************************************************************************************************  
+        # def selItemLabelChange():
+        #     self.frame_lefthalf.sel_item_label["text"] = cur_treeview(a)[0]
+        """ *************************************************************************************
         //  FIRE ASCII animation
-        //  *************************************************************************************************  
-        """
-        self.FIRE_LABEL = Label(
+        //  *************************************************************************************
+        Self built ASCII animation, based upon an image turned ASCII
+        mirrored the two, and built a little loop that constantly alternates between the two"""
+        self.fire_label = Label(
+            root,
+            text="loading ASCII",
+            font="TkFixedFont",
+            bg=my_style_class.back_color,
+            fg="green",
+        )
+        self.fire_label2 = Label(
             root,
             text="loading ASCII",
             font=("TkFixedFont"),
             bg=my_style_class.back_color,
             fg="green",
         )
-
-        self.FIRE_LABEL3 = Label(
-            root,
-            text="loading ASCII",
-            font=("TkFixedFont"),
-            bg=my_style_class.back_color,
-            fg="green",
-        )
-        fire1 = glob.glob("fire1.txt")
-        fire2 = glob.glob("fire2.txt")
 
         def get_txt1():
-            text1 = open(fire1[0], "r", encoding="utf-8").read()
+            """Grabs ASCII for first flame
+            :return: text as string
+            """
+            text1 = open("fire1.txt", "r", encoding="utf-8").read()
             return text1
 
         def get_txt2():
-            text2 = open(fire2[0], "r", encoding="utf-8").read()
+            """Grabs ASCII for second flame
+            :return: text as string
+            """
+            text2 = open("fire2.txt", "r", encoding="utf-8").read()
             return text2
 
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         # FIRE programma zelf
 
-        def moving_ascii():  # <--- Flame one direction.
-            self.FIRE_LABEL.configure(text=get_txt1())
-            self.FIRE_LABEL3.configure(text=get_txt1())
+        def moving_ascii():
+            """Flame one direction.
+            :return: None
+            """
+            self.fire_label.configure(text=get_txt1())
+            self.fire_label2.configure(text=get_txt1())
+            self.fire_label.after(my_style_class.flame_speed, moving_ascii2)
 
-            self.FIRE_LABEL.after(my_style_class.flame_speed, moving_ascii2)
+        def moving_ascii2():
+            """Flame other direction.
+            :return: None
+            """
+            self.fire_label.configure(text=get_txt2())
+            self.fire_label2.configure(text=get_txt2())
+            self.fire_label.after(my_style_class.flame_speed, moving_ascii)
 
-        def moving_ascii2():  # <--- Flame other direction.
-            self.FIRE_LABEL.configure(text=get_txt2())
-            self.FIRE_LABEL3.configure(text=get_txt2())
-
-            self.FIRE_LABEL.after(my_style_class.flame_speed, moving_ascii)
-
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         # PLaatsting FIRE
-        self.FIRE_LABEL.place(relx=0.25, rely=1, anchor=S)
-        self.FIRE_LABEL3.place(relx=0.75, rely=1, anchor=S)
-        self.FIRE_LABEL.after(1, moving_ascii)
-        self.FIRE_LABEL3.after(1, moving_ascii)
+        self.fire_label.place(relx=0.25, rely=1, anchor=S)
+        self.fire_label2.place(relx=0.75, rely=1, anchor=S)
+        self.fire_label.after(1, moving_ascii)
+        self.fire_label2.after(1, moving_ascii)
 
 
 """
 //=============================================================================
 //  Readme launcher
 //=============================================================================
+get_readme:                 Grabs the readme from the projectfolder
+open_new_window_readme:     runs a new tkinter window with readme data
 """
 
 
 def get_readme():
-    all_readmes = glob.glob("README.md")
-    # return first readme in list
-    return open(all_readmes[0], "r", encoding="utf-8").read()
+    """Grabs readme file
+    :return: readme as string
+    """
+    return open("README.md", "r", encoding="utf-8").read()
 
 
 def open_new_window_readme():
+    """Opens a new window and displays readme with ASCII correctly
+    :return: None
+    """
     new_window = Toplevel()  # <---     open new window
     # new_window.overrideredirect(True)  # <--- Removes Title bar
-
-    # set the dimensions of the screen based upon earlier code
-    # and where it is placed
     new_window.geometry("910x900")
-
-    # Achtergrond kleur van de readme (inclusief transparency)
     new_window["bg"] = "black"
     new_window.wait_visibility(new_window)
-    new_window.wm_attributes("-alpha", 0.99)
+    new_window.wm_attributes("-alpha", 0.99)  # <--- Transparency readme
 
     # De data van de README.MD
     text = Text(
@@ -425,10 +460,14 @@ def open_new_window_readme():
 //=============================================================================
 //  Do-not-press programme (virus)
 //=============================================================================
+Little easter egg
 """
 
 
 def shutdowncommand():
+    """runs a basic countdown timer that updates screen
+    :return: destroys GUI
+    """
     root.destroy()
 
     gui = Tk()
@@ -439,54 +478,44 @@ def shutdowncommand():
     gui["bg"] = "blue"
     count = 100
 
-    countdown = Label(gui, text="SHUTDOWN IMMINENT", bg=None, font=("countdown", 40))
+    countdown = Label(gui, text="SHUTDOWN IMMINENT", font=("countdown", 40))
     countdown.pack(fill="both")
-
-    img = Image.open("virus.jpg")
-    img2 = ImageTk.PhotoImage(img)
-    img_label = Label(gui, image=img2, bg="blue")
-    img_label.pack(fill="both", expand=True)
+    virus_image = Image.open("virus.jpg")
+    virus_image_tk = ImageTk.PhotoImage(virus_image)
+    virus_image_label = Label(gui, image=virus_image_tk, bg="blue")
+    virus_image_label.pack(fill="both", expand=True)
     gui.update_idletasks()  # <--- run configure task while still in loop !!!!
-
-    warning = Label(gui, text="WARNING", bg=None, font=("countdown", 40))
+    warning = Label(gui, text="WARNING", font=("countdown", 40))
     warning.pack(fill="both", side="bottom", pady=50)
 
     x = 0
     count = 100
-
     while x < 100:
         if x % 8 == 0:
             countdown["bg"] = "red"
             countdown["text"] = f"WARNING: {count}"
-            warning["text"] = f"~☠~☠~☠~☠~☠~"
+            warning["text"] = "~☠~☠~☠~☠~☠~"
             countdown["bg"] = "yellow"
             gui.update_idletasks()
 
-        count = count - 0.5
+        count = count - 0.5  # <--- onscreen countdown speed
         countdown["text"] = f"WARNING: {count}"
-        warning["text"] = f"SHUTDOWN IMMINENT"
+        warning["text"] = "SHUTDOWN IMMINENT"
 
-        time.sleep(0.025)
+        time.sleep(0.025)  # <--- actual countdown speed
         warning["fg"] = "red"
 
         gui.update_idletasks()
-        time.sleep(0.025)
+        time.sleep(0.025)  # <--- actual countdown speed
         x = x + 1
         count = count - 0.5
-
-        # cur_gui = "gui" + str(x)
         cur_gui = Toplevel()
         place = str(x * 20)
         place2 = "100x100+" + place + "+" + place
         cur_gui.geometry(place2)
-        pirate = Label(cur_gui, text="☠", font=("verdana", 100))
-        pirate.pack()
-        cur_gui.update_idletasks()  # <--- run configure task while still in loop !!!!
-
-        cur_gui.mainloop
-
-    gui.destroy()
-    return
+        popup = Label(cur_gui, text="☠", font=("TkFixedFont", 100))
+        popup.pack()
+    return gui.destroy()
 
 
 """
@@ -494,22 +523,23 @@ def shutdowncommand():
 //  Review-O-Meter 2000 (review-score-servo)
 //=============================================================================
 """
-
-# # raspberry setup GPIO
-# #
 # # # TODO: uncomment after installing on pi with package:
 # # GPIO.setmode(GPIO.BCM)        # Alles hierin nodig voor Servo
 # #GPIO.setup(18, GPIO.OUT)    # Servo op ping 18
-# #
 # # pwm=GPIO.PWM(18, 50)            # zit op pin 18, 50 hz
 # # pwm.start(1)
-#
 # # raspberry PI function to control servo
 
 
 def gradenaanwijziging(
     percentage,
-):  # Functie om de Servo te laten draaien naar likes percentage
+):
+    """
+    function to change position servo based upon input
+    :param percentage: a number between 0-100
+    :return: sends a signal to the GPIO
+    """
+
     graden = percentage / 10 + 2
     print("error: ~~~~ goto line 430ish gradenaanwijzing() and uncomment")
     # pwm.ChangeDutyCycle(2)
@@ -518,40 +548,32 @@ def gradenaanwijziging(
     print(f"moving servo to {graden} degrees at percentage {percentage}")
 
 
-
+gradenaanwijziging(50)  # <--- keeps servo quiet till command
 
 """
 //=============================================================================
 //  SPLASHSCREEN ~ setup, load list, motion seq., initial fill, main programme
 //=============================================================================
+Basic set up of splashscreen
 """
-
-
 splashscreen = Tk()  # <--- setup splashscreen
-splashscreen.overrideredirect(True)  # <--- Removes TITELBALK
-
-splashscreen.call("wm", "attributes", ".", "-topmost", "true")  # <--- # topmost screen
-#
+splashscreen.overrideredirect(True)  # <--- Removes titlebar
+splashscreen.call("wm", "attributes", ".", "-topmost", "true")  # <--- topmost screen
 splashscreen.geometry(
     "965x337"
 )  # <--- # size of screen + positie (steam-logo-large.jpg = 960x307)
-# splashscreen.geometry(
-#     my_style_class.window_size
-# )  # <--- autoadjust overrides upper geometry
+splashscreen["bg"] = my_style_class.back_color  # <--- background colour splash
 
-# Achtergrond kleur van de readme (inclusief transparency)
-splashscreen["bg"] = my_style_class.back_color
-"""~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
-                                                        #TODO: create note: input splashscreen picture order file:
-
-"""~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
 
 def change_label():
+    """
+    Runs through a list to change loading image
+    :return: None
+    """
     splashpath = "splash.txt"
     with open(splashpath, encoding="utf-8") as splash_loader_filelist:
         splash_order = splash_loader_filelist.read().splitlines()
         splash_loader_filelist.close()
-
     for i in splash_order:
         # splash_label.configure(
         #     text=i
@@ -561,62 +583,74 @@ def change_label():
         photo_image = ImageTk.PhotoImage(img_var)
         img_label.configure(image=photo_image)  # <--- swap current image with next
         splashscreen.update_idletasks()  # <--- run configure task while still in loop !!!!
-        if i == 'steamlogolarge60.jpg':
+        if i == "steamlogolarge60.jpg":
             insert_alltime_games_page1()
         sleep(random.uniform(1, 1.5))
 
 
 def delayed_start():
-    if __name__=='__main__':
+    """
+    Basic splashscreen programme (.after to update tkinter while running)
+    :return: None
+    """
+    if __name__ == "__main__":
         # Thread(target = change_label).start()
         # Thread(target=API_PULL).start()
         API_PULL()
         change_label()
 
 
-"""~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
-
-# initial fill splashscreen
-from PIL import Image, ImageTk  # <--- leave in to ensure proper usage of PIL
+"""~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
+# initial filling splashscreen
 
 img = Image.open("steamlogolarge40.jpg")
 photoimage = ImageTk.PhotoImage(img)
 img_label = Label(splashscreen, image=photoimage)
 img_label.pack()
 splash_label = Label(
-    splashscreen, text="made by Ryan Reddy, Jeffrey Vizility, Tuur Neex219, Léon Phj1969, Souf", bg=my_style_class.back_color, fg="gold"
+    splashscreen,
+    text="made by Ryan Reddy, Jeffrey Vizility, Tuur Neex219, Léon Phj1969, Souf",
+    bg=my_style_class.back_color,
+    fg="gold",
 )
 splash_label.pack()
-
 """
 //=============================================================================
 //  API pulling programme
 //=============================================================================
 """
 
+
 def create():
+    """
+    Creates a database, if exists, then pass
+    :return: None
+    """
     try:
+        conn = sqlite3.connect("steam_database.db")
+        curs = conn.cursor()
         curs.execute(
-            """CREATE TABLE IF NOT EXISTS games_alltime(
-        app_id INTEGER PRIMARY KEY, 
-        name TEXT NOT NULL, 
+        """CREATE TABLE IF NOT EXISTS games_alltime(
+        app_id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
         developer TEXT NOT NULL,
         positive INTEGER NOT NULL,
         negative INTEGER NOT NULL
         )"""
         )
     except:
-        print('Table exists- cant create')
+        print("Table exists- cant create")
         pass
 
 
 def insert_alltime_games_page1():
-    # TODO: make multiple inserts/databases: ---> https://steamspy.com/api.php
-
+    """
+    requests data from API and INSERTS this into a SQL
+    :return: None
+    """
     url = "https://steamspy.com/api.php?request=all&page=0"
-    data = requests.get(url).json()
-
-    for game_id, game in data.items():  # <--- unpacks the dictionairy in dictionairy
+    api_data = requests.get(url).json()
+    for game_id, game in api_data.items():  # <--- unpacks the dictionairy in dictionairy
         app_id = game.get("appid", "no_data")
         name = game.get(
             "name", "no_name_found"
@@ -639,6 +673,8 @@ def insert_alltime_games_page1():
         splashscreen.update_idletasks()  # <--- run configure task while still in loop !!!!
 
         try:
+            conn = sqlite3.connect("steam_database.db")
+            curs = conn.cursor()
             curs.execute(
                 """INSERT INTO games_alltime(
             app_id, 
@@ -652,23 +688,21 @@ def insert_alltime_games_page1():
             pass
 
 
-# def select():
-#     sql = "SELECT * FROM games_alltime"
-#     recs = curs.execute(sql)
-#     if True:
-#         for row in recs:
-#             print(row)
-
-
 def API_PULL():
+    """
+    loop to run through an api pull and message into splash
+    :return: None
+    """
     conn = None
     conn = sqlite3.connect("steam_database.db")
     curs = conn.cursor()
     create()
     insert_alltime_games_page1()
     splash_label.configure(
-        text="made by Ryan Reddy, Jeffrey Vizility, Tuur Neex219, Léon Phj1969, Souf with love ~~~", bg=my_style_class.back_color,
-        fg="white")
+        text="made by Ryan Reddy, Jeffrey Vizility, Tuur Neex219, Léon Phj1969, Souf with love ~~~",
+        bg=my_style_class.back_color,
+        fg="white",
+    )
     conn.commit()  # <--- commit needed
     # select()
     curs.close()
@@ -680,65 +714,34 @@ def API_PULL():
 //=============================================================================
 //  splashscreen programme:
 //=============================================================================
-"""
+This loading screen, keeps the user entertained while retrieving data from steamspyAPI"""
 
 splashscreen.after(
-    10000,
-    splashscreen.destroy,  # TODO <--- 12000ms set to 0 this one to skip splashscreen
+    10000,  # <--- ending timer for splashscreen in ms
+    splashscreen.destroy,
 )
-# function should be "delayedstart":
 splashscreen.after(10, delayed_start)
-
 splashscreen.eval("tk::PlaceWindow . center")  # <--- center splashscreen
-
-
 splashscreen.mainloop()
 
 """
 //=============================================================================
-//  Treeview programme:
+//  Database functions - Search in database - show in treeview
 //=============================================================================
 """
 
-root = Tk()
-# window format:
-# root.eval("tk::PlaceWindow . center")  # <--- window to center screen
-root.wait_visibility(root)  # <---waits, then makes page translucent
-root.wm_attributes(
-    "-alpha", my_style_class.window_transparency, "-fullscreen", True
-)  # <---waits, then makes page translucent and fullscreen
-root.configure(background=my_style_class.back_color)
-mainscreen = MainScreen(root)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-"""
-//=============================================================================
-//  TREEVIEW ~ window, style, data, scrollbar, column-sorting-function
-//=============================================================================
-"""
-
-# Maakt een raamwerk in de root aan voor de tabel
-separator = PanedWindow(
-    mainscreen.centeringframe,
-    bd=0,
-    bg=my_style_class.back_color,
-    sashwidth=2,
-    height=400,
-    width=400,
-)
-separator.grid(row=1, column=1, pady=15, padx=(15))
-# rechter onderhoekje:
-_frame = Frame(root, background=treeview_style_class.back_color, relief="ridge")
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 def show_table():
+    """shows the database that was built from the api request
+    :return: None
+    """
     src_entry.delete(0, END)
     src_entry.focus()
     treeview.selection()
     conn = None
 
     try:
-        conn = sqlite3.connect(database_filepath)
+        conn = sqlite3.connect(DATABASE_FILEPATH)
         curs = conn.cursor()
         curs.execute("SELECT * FROM games_alltime")
 
@@ -764,23 +767,31 @@ def show_table():
             conn.close()
 
 
-def write_searchresults():
+def write_searchresults(data):
+    """Clears old searchresults and stores search results in a *.json, for use in the AI search functions.
+    :param data: data
+    :return: None
+    """
     children = treeview.get_children()
-    searchresults_json = open("zoekresultaten.txt", 'w')  # <--- bereid een lege zoekresultaten.json voor
+    searchresults_json = open("searchresults.json", "w")
     for i in children:
         values = treeview.item(i)["values"]
-        searchresults_json.write(values,'\n')
+    searchresults_json.write(json.dumps(data, indent=4))
+
     searchresults_json.close
-    return
+
 
 def search(event):
-    # treeview.selection()
+    """Searches in the DB using user input and SQL query
+    :param event: Filled in entrybox and pressed<enter>/clicked<searchbutton>
+    :return: None
+    """
     fetchdata = treeview.get_children()
     for f in fetchdata:
         treeview.delete(f)
     conn = None
     try:
-        conn = sqlite3.connect(database_filepath)
+        conn = sqlite3.connect(DATABASE_FILEPATH)
         curs = conn.cursor()
         name = src_entry.get()
         # <--- searches for arguments mentioned below
@@ -797,19 +808,27 @@ def search(event):
             for d in data:
                 treeview.insert("", END, values=d, tags="body")
             treeview.tag_configure("body", background="black", foreground="green")
-        write_searchresults()
-
-    # except Exception as e:
-    #     showerror("issue", e)
+            write_searchresults(data)  # <--- saves search res. in .sjon
+    except Exception as e:
+        showerror("issue", e)
     finally:
         if conn is not None:
             conn.close()
 
 
 def sort_by(treeview, col, reverse):
-    l = [(treeview.set(k, col), k) for k in treeview.get_children("")]  #<--- grabs columnvalues and titles
+    """Sorts data based on alphabetical or numeric order
+    :param treeview:        {set, get_children, move, heading}
+    :param col:             column name
+    :param reverse:         reverse order or not
+    :return:                None
+    """
+
+    l = [
+        (treeview.set(k, col), k) for k in treeview.get_children("")
+    ]  # <--- grabs columnvalues and titles
     print(l)
-    l.sort(reverse=reverse)  #<--- uses treeview.sort
+    l.sort(reverse=reverse)  # <--- uses treeview.sort
 
     # rearrange items in sorted positions
     for index, (val, k) in enumerate(l):
@@ -820,215 +839,53 @@ def sort_by(treeview, col, reverse):
 
 
 def reset():
+    """Resets table to pre-search status
+    :return: None
+    """
     show_table()
 
 
-
 """
 //=============================================================================
-//  AI functions
-//=============================================================================
-"""
-# Het bron bestand uitlezen en opslaan als variable.
-
-import json
-
-#source = open("lib/zoekresultaten.txt")
-source = open("steam.json")
-data = json.load(source)
-
-
-# Functie voor berekenen gemiddelde prijs van alle games.
-def average_game_price():
-    # Lees elk spel uit het bestand in en sla het aantal spellen en de totale prijs op.
-    count = 0
-    total = 0
-    for i in data:
-        count += 1
-        total += int(i["price"])
-
-    # Bepaal de gemiddelde prijs van alle spellen en geeft deze waarde terug als getal met 2 decimalen.
-    average = total / count
-    # average = "{:.2f}".format(total/count)
-    formatting = "{average_price:.2f}"
-    return formatting.format(average_price=average) # TODO implement this "quantitative variable" to mainscreen
-
-
-# Functie voor ophalen van alle game developers.
-def list_game_developers():
-    # Lees alle developers uit het bestand in en sla de namen op, geeft deze namen terug als resultaat.
-    developers = set()
-    for i in data:
-        x = str(i["developer"])
-        developers.add(x)
-
-    return developers
-
-
-# Functie voor ophalen van alle game developers.
-def list_first_game_developers():
-    # Lees de developer(s) uit het bestand in van de eerste game en sla deze op, geeft dit terug als resultaat.
-    x = data[0]
-    developers = x["developer"]
-    return developers
-
-def list_first_game():
-    # Lees de developer(s) uit het bestand in van de eerste game en sla deze op, geeft dit terug als resultaat.
-    x = data[0]
-    game = x["name"]
-    return game
-
-def average_positive_game_rating():
-    # Lees het aantal positieve ratings van elk spel uit de selectie in en bereken het gemiddelde, geef dit weer als een geheel getal.
-    game_count = 0
-    total_positive_ratings = 0
-    for i in data:
-        game_count += 1
-        total_positive_ratings += int(i["positive_ratings"])
-    average = total_positive_ratings / game_count
-    formatting = "{average_positive_rating:.0f}"
-    return formatting.format(average_positive_rating=average)
-
-
-def average_negative_game_rating():
-    # Lees het aantal negatieve ratings van elk spel uit de selectie in en bereken het gemiddelde, geef dit weer als een geheel getal.
-    game_count = 0
-    total_negative_ratings = 0
-    for i in data:
-        game_count += 1
-        total_negative_ratings += int(i["negative_ratings"])
-    average = total_negative_ratings / game_count
-    formatting = "{average_negative_rating:.0f}"
-    return formatting.format(average_negative_rating=average)
-
-"""
-//=============================================================================
-//  TREEVIEW ~ Data insert, styles
+//  Treeview programme:
 //=============================================================================
 """
 
-
-treeview = ttk.Treeview(
-    separator, columns=("#1", "#2", "#3", "#4", "#5"), show="headings", height=21
-)  # <--- maakt treeview headings
-treeview.grid()
-
-treeview.heading("#1", text="Appid", command=lambda c="#1": sort_by(treeview, c, 0))
-treeview.column("#1", minwidth=10, width=50, stretch=False)
-treeview.heading("#2", text="Name", command=lambda c="#2": sort_by(treeview, c, 0))
-treeview.column("#2", minwidth=10, width=220, stretch=False)
-treeview.heading("#3", text="Developer", command=lambda c="#3": sort_by(treeview, c, 0))
-treeview.column("#3", minwidth=10, width=120, stretch=False)
-treeview.heading(
-    "#4", text="Positive Ratings", command=lambda c="#4": sort_by(treeview, c, 0)
+root = Tk()
+# window format:
+# root.eval("tk::PlaceWindow . center")  # <--- window to center screen
+root.wait_visibility(root)  # <---waits, then makes page translucent
+root.wm_attributes(
+    "-alpha", my_style_class.window_transparency, "-fullscreen", True
+)  # <---waits, then makes page translucent and fullscreen
+root.configure(background=my_style_class.back_color)
+mainscreen = MainScreen(root)
+"""
+//=============================================================================
+//  TREEVIEW ~ window, style, data, scrollbar, column-sorting-function
+//=============================================================================
+"""
+# Maakt een raamwerk in de root aan voor de tabel
+separator = PanedWindow(
+    mainscreen.centeringframe,
+    bd=0,
+    bg=my_style_class.back_color,
+    sashwidth=2,
+    height=400,
+    width=400,
 )
-treeview.column("#4", stretch=YES, width=60)
-treeview.heading(
-    "#5", text="Negative Ratings", command=lambda c="#5": sort_by(treeview, c, 0)
-)
-treeview.column("#5", stretch=YES, width=50)
-treeview.tag_configure(
-    "body", background="black", foreground="green"
-)  # <--- colors table body
-
-
-style = ttk.Style()
-style.theme_use("default")
-style.map("Treeview")
-style.configure(
-    "Treeview.Heading",
-    rowheight=21,
-    foreground="white",
-    background=my_style_class.back_color,
-)  # <--- creates the heading style
-
+separator.grid(row=1, column=1, pady=15, padx=(15))
+# rechter onderhoekje:
+_frame = Frame(root, background=treeview_style_class.back_color, relief="ridge")
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# attempt to color scrollbar
 
-style.configure(
-    "Vertical.TScrollbar",
-    background="black",
-    bordercolor="black",
-    troughcolor="black",
-    highlightcolor="white",
-)
-style.configure(
-    "Horizontal.TScrollbar",
-    background="black",
-    bordercolor="black",
-    troughcolor="black",
-    highlightcolor="purple",
-)
-
-# Creates the scrollbar:
-xscrollbar = Scrollbar(separator, orient=HORIZONTAL, command=treeview.xview)
-yscrollbar = Scrollbar(
-    separator, orient=VERTICAL, command=treeview.yview, background="black"
-)
-
-# # Places the scrollbar
-yscrollbar.grid(row=0, column=1, sticky=NS, pady=10, padx=(0, 10))
-# xscrollbar.grid(row=1, column=0, sticky=EW)
-
+DATABASE_FILEPATH = "steam_database.db"
 
 """
 //=============================================================================
-//  TREEVIEW ~ grab current selection
+//  Search function Tkinter layout
 //=============================================================================
 """
-
-def cur_treeview(a):
-
-    curItem = treeview.focus()
-    print(f'curitem {curItem}')
-    info_string = treeview.item(curItem)
-    print(f'info_string {info_string}')
-
-    if len(curItem)==0:  #<--- skips headerclicks
-        return
-    if len(curItem)!=0:
-        treeview.rowconfigure(treeview.index(curItem), minsize=115)
-            # show selected info in buttons:
-        total_info = info_string.get("values")
-        positive_ratings = total_info[3]  # <--- assign
-        negative_ratings = total_info[4]  # <--- assign
-        symbol = "%"
-        total_reviews = negative_ratings + positive_ratings
-        percentage = round((positive_ratings / total_reviews) * 100)
-        percentagelabeltekst = f"{percentage}{symbol}"
-        score = f"SCORE: {percentage/10}/10"
-
-        mainscreen.sel_item_label.config(text=total_info[1], anchor=E)
-        mainscreen.selectPosRat_label.config(text=positive_ratings)
-        mainscreen.selectNegRat_label.config(text=negative_ratings)
-
-        mainscreen.configurable_label.config(text=score)
-        mainscreen.selectgamescore_label.config(text=percentagelabeltekst, bg="green")
-
-        gradenaanwijziging(percentage)  # <--- percentagecalc in action
-
-        def ratings_calc(neg_reviews, pos_reviews):
-            total_reviews = neg_reviews + pos_reviews
-            percentage = round((pos_reviews / total_reviews) * 100, 2)
-            gradenaanwijziging(percentage)
-            return percentage
-
-        ratings_calc(negative_ratings, negative_ratings)
-
-
-
-treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked row
-
-
-
-"""
-//=============================================================================
-//  Search in database - show in treeview
-//=============================================================================
-"""
-
-database_filepath = "steam_database.db"
-
 
 ws_lbl = Label(
     mainscreen.button_frame,
@@ -1039,7 +896,6 @@ ws_lbl = Label(
 )
 ws_lbl.pack(pady=(20, 0))
 
-
 src_entry = Entry(
     mainscreen.button_frame,
     bg=my_style_class.font_color,
@@ -1047,12 +903,10 @@ src_entry = Entry(
     font=("roboto", 10),
     width=30,
 )
-
 src_entry.insert(END, """Enter here...""")  # <--- standard text in entrybox
 src_entry.pack(padx=20, pady=(20))
 src_entry.bind("<Return>", search)  # <--- uses event"return"
 src_entry.bind("<KP_Enter>", search)  # <--- uses event"numpad-enter"
-
 
 src_button = Button(
     mainscreen.button_frame,
@@ -1078,30 +932,204 @@ ws_btn2 = Button(
 )
 ws_btn2.pack(side=RIGHT)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-def clear_entrybox(event):  # <--- clear the entrybox upon click
+def clear_entrybox(event):  # <---
+    """clear the entrybox upon click
+    :param event: mouseclick upon entrybox
+    :return: None
+    """
     src_entry.delete(0, "end")
-    return None
 
-src_entry.bind(
-    "<Button-1>", clear_entrybox
-)  # <--- binds mousebutton1 click to clear_entrybox
 
+src_entry.bind("<Button-1>", clear_entrybox)  # <--- empties entrybox upon mouseclick
+"""
+//=============================================================================
+//  AI search functions
+//=============================================================================
+"""
+
+
+def get_lastsearch():
+    """Grabs the data from the last search saved remotely as json
+    :return: data as json object
+    """
+    source = open("searchresults.json")
+    data = json.load(source)
+    return data
+
+
+def list_first_game():
+    """Picks first game in search results
+    :return: First game-title as string
+    """
+    data = get_lastsearch()
+    x = data[0]
+    game = x[1]
+    return game
+
+
+def list_game_developers():
+    """Lists all game devs from last search, returns names as a list.
+    :return: a list object
+    """
+    developers = []
+    data = get_lastsearch()
+    for i in data:
+        x = str(i[2])
+        developers.append(x)
+    return developers
+
+
+def first_gameDev_inlist():
+    """calls list_game_developers, returns first developer as string
+    :return:  a string object
+    """
+    data = list_game_developers()
+    first_developers = data[0]
+    return first_developers
+
+
+def avg_pos_game_rating():
+    """Calculates average positive game ratings of last search
+    :return: An integer
+    """
+    data = get_lastsearch()
+    game_count = 0
+    total_positive_ratings = 0
+    for i in data:
+        game_count += 1
+        total_positive_ratings += int(i[3])
+    average = total_positive_ratings / game_count
+    formatting = "{average_positive_rating:.0f}"
+    return formatting.format(average_positive_rating=average)
+
+
+def avg_neg_game_rating():
+    """Calculates average negative game ratings of last search
+    :return: an integer
+    """
+    data = get_lastsearch()
+    game_count = 0
+    total_negative_ratings = 0
+    for i in data:
+        game_count += 1
+        total_negative_ratings += int(i[4])
+    average = total_negative_ratings / game_count
+    formatting = "{average_negative_rating:.0f}"
+    return formatting.format(average_negative_rating=average)
+
+
+def avg_gamescore():
+    """Calculates average game score of last search
+    :return: an integer between 0-100
+    """
+    positivo = int(avg_pos_game_rating())
+    negativo = int(avg_neg_game_rating())
+    totalito = positivo + negativo
+    factorito = (positivo / totalito) * 100
+    total = round(factorito)
+    return total
+
+
+""" //=============================================================================
+    //  TREEVIEW ~ Data insert, styles
+    //============================================================================="""
+treeview = ttk.Treeview(
+    separator, columns=("#1", "#2", "#3", "#4", "#5"), show="headings", height=21
+)  # <--- maakt treeview headings
+treeview.grid()
+
+treeview.heading("#1", text="Appid", command=lambda c="#1": sort_by(treeview, c, 0))
+treeview.column("#1", minwidth=10, width=50, stretch=False)
+treeview.heading("#2", text="Name", command=lambda c="#2": sort_by(treeview, c, 0))
+treeview.column("#2", minwidth=10, width=220, stretch=False)
+treeview.heading("#3", text="Developer", command=lambda c="#3": sort_by(treeview, c, 0))
+treeview.column("#3", minwidth=10, width=120, stretch=False)
+treeview.heading(
+    "#4", text="Positive Ratings", command=lambda c="#4": sort_by(treeview, c, 0)
+)
+treeview.column("#4", stretch=YES, width=60)
+treeview.heading(
+    "#5", text="Negative Ratings", command=lambda c="#5": sort_by(treeview, c, 0)
+)
+treeview.column("#5", stretch=YES, width=50)
+treeview.tag_configure(
+    "body", background="black", foreground="green"
+)  # <--- colors table body
+style = ttk.Style()
+style.theme_use("default")
+style.map("Treeview")
+style.configure(
+    "Treeview.Heading",
+    rowheight=21,
+    foreground="white",
+    background=my_style_class.back_color,
+)  # <--- creates the heading style
+
+"""
+//=============================================================================
+//  TREEVIEW ~ grab current selection
+//=============================================================================
+"""
+
+
+def cur_treeview(a):
+    """Grabs data from selected row in treeview
+    :param a: a placeholder (useless)
+    :return: None
+    """
+    Cur_Item = treeview.focus()
+    info_string = treeview.item(Cur_Item)
+
+    if len(Cur_Item) == 0:  # <--- skips headerclicks
+        return
+    if len(Cur_Item) != 0:
+        treeview.rowconfigure(treeview.index(Cur_Item), minsize=115)
+        # show selected info in buttons:
+        total_info = info_string.get("values")
+        positive_ratings = total_info[3]  # <--- assign
+        negative_ratings = total_info[4]  # <--- assign
+        symbol = "%"
+        total_reviews = negative_ratings + positive_ratings
+        percentage = round((positive_ratings / total_reviews) * 100)
+        percentagelabeltekst = f"{percentage}{symbol}"
+        score = f"SCORE: {percentage/10}/10"
+
+        mainscreen.sel_item_label.config(text=total_info[1], anchor=E)
+        mainscreen.selectposrat_label.config(text=positive_ratings)
+        mainscreen.selectnegrat_label.config(text=negative_ratings)
+
+        mainscreen.configurable_label.config(text=score)
+        mainscreen.selectgamescore_label.config(text=percentagelabeltekst, bg="green")
+
+        def ratings_calc(neg_reviews, pos_reviews):
+            """
+            Calculates
+            :param neg_reviews: Total negative reviews of selection
+            :param pos_reviews: Total positive reviews of selection
+            :return: Float rounded on 2 decimals
+            """
+            total_reviews = neg_reviews + pos_reviews
+            percentage = round((pos_reviews / total_reviews) * 100, 2)
+            gradenaanwijziging(percentage)
+            return percentage
+
+        ratings_calc(negative_ratings, negative_ratings)
+
+
+treeview.bind("<ButtonRelease-1>", cur_treeview)  # <--- grab data from clicked row
 
 """
 //=============================================================================
 //  GUI - main programme
 //=============================================================================
 """
+data = [
+    ["Search first!", "I need some data!", "Search first!", 69, 420],
+] * 5
+write_searchresults(data)  # <--- saves an empty search res. in .sjon before start
 
-show_table()  #<--- grabs data from the sql for in treeview
+show_table()  # <--- grabs data from the sql for in treeview
 root.mainloop()
-
-# *************************************************************************************************
-
-# servo afsluiting
-pwm.stop()  # moet na de .mainloop
+pwm.stop()  # must be after mainloop
 GPIO.cleanup()
-
-# *************************************************************************************************
